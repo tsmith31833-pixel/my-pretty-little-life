@@ -22,3 +22,11 @@ Then open http://localhost:3000.
 
 - The site asks search engines not to index it (`public/robots.txt` and page metadata).
 - Never commit passwords or secret keys. Keys live in Vercel's environment settings.
+
+## Login and database
+
+- Login: email + password, then a 6-digit authenticator code (`src/app/login`, `src/app/verify`).
+- `src/proxy.ts` sends anyone not fully signed in to the login page.
+- Database tables and privacy rules: `supabase/schema.sql` (run it in Supabase → SQL Editor).
+- Needed environment variables (set in Vercel): `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`.
+  For local development, put them in a `.env.local` file (never committed).

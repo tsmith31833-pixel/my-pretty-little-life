@@ -17,9 +17,9 @@ const NAV: (string | NavItem)[] = [
   { label: "Settings", icon: "gear" },
 ];
 
-type Props = { open: boolean; onSoon: (label: string) => void };
+type Props = { open: boolean; onSoon: (label: string) => void; onSignOut: () => void };
 
-export function Sidebar({ open, onSoon }: Props) {
+export function Sidebar({ open, onSoon, onSignOut }: Props) {
   return (
     <aside className={`sidebar${open ? " open" : ""}`} id="sidebar" aria-label="Main navigation">
       <div className="brand">
@@ -58,6 +58,7 @@ export function Sidebar({ open, onSoon }: Props) {
         <span className="av"><Icon name="lock" /></span>
         <div><b>Private planner</b>Only you can see this</div>
       </div>
+      <button type="button" className="signout" onClick={onSignOut}>Sign out</button>
     </aside>
   );
 }

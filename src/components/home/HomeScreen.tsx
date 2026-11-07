@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { useRouter } from "next/navigation";
 import { Icon } from "../Icon";
 import { OrnamentDefs } from "../Ornaments";
 import { Sidebar } from "./Sidebar";
@@ -15,6 +16,7 @@ import { WellnessTracker } from "./WellnessTracker";
 import { DailyWins } from "./DailyWins";
 import { usePlannerStore } from "@/lib/planner-store";
 import { MONTHS } from "@/lib/dates";
+import { supabase } from "@/lib/supabase/client";
 
 type Theme = "light" | "dark";
 const THEME_KEY = "mpll-theme";
@@ -28,7 +30,10 @@ function initialTheme(): Theme {
 }
 
 export function HomeScreen({ now }: { now: Date }) {
-  const { day, week, todayIdx, updateDay, toggleHabit } = usePlannerStore(now);
+  const { status, day, week, todayIdx, updateDay, toggleHabit } = usePlannerStore(now, () =>
+    toast("That change didn't save. Check your internet connection and try again."),
+  );
+  const router = useRouter();
   const [navOpen, setNavOpen] = useState(false);
   const [theme, setTheme] = useState<Theme>(initialTheme);
   const [toastMsg, setToastMsg] = useState<{ text: string; id: number } | null>(null);
@@ -63,6 +68,20 @@ export function HomeScreen({ now }: { now: Date }) {
     } catch {}
   }
 
+  async function signOut() {
+    await supabase().auth.signOut();
+    router.replace("/login");
+  }
+
+  if (status !== "ready") {
+    return (
+      <div className="loading" role="status">
+        <span className="s">My Pretty Little Life</span>
+        <p>{status === "loading" ? "Getting your day ready…" : "Your planner couldn't load. Check your internet connection, then refresh the page."}</p>
+      </div>
+    );
+  }
+
   const nowMinutes = now.getHours() * 60 + now.getMinutes();
   const prioritiesLeft = day.priorities.filter((p) => !p.done).length;
   const reduceMotion = () => window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -71,7 +90,7 @@ export function HomeScreen({ now }: { now: Date }) {
     <>
       <OrnamentDefs />
       <div className="app">
-        <Sidebar open={navOpen} onSoon={soon} />
+        <Sidebar open={navOpen} onSoon={soon} onSignOut={signOut} />
         {navOpen && <div className="scrim" onClick={() => setNavOpen(false)} />}
 
         <main className="main" id="top">
@@ -83,9 +102,9 @@ export function HomeScreen({ now }: { now: Date }) {
             <h1>Today</h1>
             <span className="crumb">{MONTHS[now.getMonth()]} {now.getDate()}</span>
             <span className="sp" />
-            <span className="pill" title="These are example entries. Your real data arrives when login and the database are connected.">
+            <span className="pill" title="Priorities, habits, water, mood and wins are yours and saved privately. Agenda, events, money and business show examples until those sections are built.">
               <Icon name="sparkle" />
-              <span className="lbl">Sample data preview</span>
+              <span className="lbl">Some cards show examples</span>
             </span>
             <button className="toggle" type="button" aria-label="Switch light or dark theme" onClick={switchTheme}>
               <span className="knob"><Icon name={theme === "dark" ? "sun" : "moon"} /></span>

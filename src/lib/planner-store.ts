@@ -1,79 +1,93 @@
 "use client";
 
-import { useCallback, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { HABITS } from "./sample-data";
 import { addDays, isoDate } from "./dates";
+import { supabase } from "./supabase/client";
 
-// For now your entries are saved in this browser only.
-// Phase 1 moves this into your private Supabase database so it syncs across devices.
+// Loads and saves your daily entries in your private Supabase database
+// (tables: day_entries and habit_weeks — see supabase/schema.sql).
 
 export type Priority = { text: string; done: boolean };
 export type DayState = { priorities: Priority[]; water: number; mood: string; wins: string[] };
 export type WeekState = Record<string, boolean[]>;
-type Saved = { days: Record<string, DayState>; weeks: Record<string, WeekState> };
 
-const KEY = "mpll-planner-v1";
+const emptyDay = (): DayState => ({
+  priorities: [0, 1, 2].map(() => ({ text: "", done: false })),
+  water: 0,
+  mood: "",
+  wins: [],
+});
 
-function sampleDay(): DayState {
-  return {
-    priorities: [
-      { text: "Send the Debt-Free by Spring invite", done: true },
-      { text: "Order birthday flowers for Mom", done: false },
-      { text: "Meal-prep lunches for the week", done: false },
-    ],
-    water: 5,
-    mood: "Happy",
-    wins: ["Woke up before my alarm", "Said no to an impulse buy"],
-  };
-}
+const emptyWeek = (): WeekState => Object.fromEntries(HABITS.map((h) => [h.id, Array(7).fill(false)]));
 
-function sampleWeek(todayIdx: number): WeekState {
-  const w: WeekState = {};
-  for (const h of HABITS) {
-    w[h.id] = h.sample.split("").map((c, i) => (i < todayIdx ? c === "1" : i === todayIdx && h.id === "skin"));
-  }
-  return w;
-}
+type Status = "loading" | "ready" | "error";
 
-function read(): Saved {
-  try {
-    const raw = localStorage.getItem(KEY);
-    if (raw) return JSON.parse(raw) as Saved;
-  } catch {}
-  return { days: {}, weeks: {} };
-}
-
-export function usePlannerStore(today: Date) {
+export function usePlannerStore(today: Date, onSaveError: () => void) {
   const dayKey = isoDate(today);
   const todayIdx = today.getDay();
   const weekKey = isoDate(addDays(today, -todayIdx));
 
-  const [saved, setSaved] = useState<Saved>(() => {
-    const s = read();
-    s.days[dayKey] ??= sampleDay();
-    s.weeks[weekKey] ??= sampleWeek(todayIdx);
-    return s;
+  const [status, setStatus] = useState<Status>("loading");
+  const [day, setDay] = useState<DayState>(emptyDay);
+  const [week, setWeek] = useState<WeekState>(emptyWeek);
+  const onError = useRef(onSaveError);
+  useEffect(() => {
+    onError.current = onSaveError;
   });
 
-  const persist = useCallback((next: Saved) => {
-    setSaved(next);
-    try {
-      localStorage.setItem(KEY, JSON.stringify(next));
-    } catch {}
-  }, []);
+  useEffect(() => {
+    let cancelled = false;
+    const db = supabase();
+    Promise.all([
+      db.from("day_entries").select("priorities, water, mood, wins").eq("day", dayKey).maybeSingle(),
+      db.from("habit_weeks").select("checks").eq("week_start", weekKey).maybeSingle(),
+    ]).then(([d, w]) => {
+      if (cancelled) return;
+      if (d.error || w.error) {
+        setStatus("error");
+        return;
+      }
+      const base = emptyDay();
+      if (d.data) {
+        const saved = (d.data.priorities as Priority[]) ?? [];
+        setDay({
+          priorities: base.priorities.map((p, i) => saved[i] ?? p),
+          water: d.data.water ?? 0,
+          mood: d.data.mood ?? "",
+          wins: (d.data.wins as string[]) ?? [],
+        });
+      } else {
+        setDay(base);
+      }
+      setWeek({ ...emptyWeek(), ...((w.data?.checks as WeekState) ?? {}) });
+      setStatus("ready");
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, [dayKey, weekKey]);
 
-  const day = saved.days[dayKey] ?? sampleDay();
-  const week = saved.weeks[weekKey] ?? sampleWeek(todayIdx);
+  function updateDay(fn: (d: DayState) => DayState) {
+    const next = fn(day);
+    setDay(next);
+    supabase()
+      .from("day_entries")
+      .upsert({ day: dayKey, ...next, mood: next.mood || null, updated_at: new Date().toISOString() })
+      .then(({ error }) => error && onError.current());
+  }
 
-  const updateDay = (fn: (d: DayState) => DayState) =>
-    persist({ ...saved, days: { ...saved.days, [dayKey]: fn(day) } });
-
-  const toggleHabit = (id: string, dayIdx: number) => {
+  function toggleHabit(id: string, dayIdx: number) {
     const row = [...(week[id] ?? Array(7).fill(false))];
     row[dayIdx] = !row[dayIdx];
-    persist({ ...saved, weeks: { ...saved.weeks, [weekKey]: { ...week, [id]: row } } });
+    const next = { ...week, [id]: row };
+    setWeek(next);
+    supabase()
+      .from("habit_weeks")
+      .upsert({ week_start: weekKey, checks: next, updated_at: new Date().toISOString() })
+      .then(({ error }) => error && onError.current());
     return row[dayIdx];
-  };
+  }
 
-  return { day, week, todayIdx, updateDay, toggleHabit };
+  return { status, day, week, todayIdx, updateDay, toggleHabit };
 }

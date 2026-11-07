@@ -20,7 +20,7 @@ export function Priorities({ priorities, onChange, toast }: Props) {
 
   function rename(i: number, text: string) {
     const t = text.trim();
-    if (!t || t === priorities[i].text) return;
+    if (t === priorities[i].text) return;
     onChange(priorities.map((p, j) => (j === i ? { ...p, text: t } : p)));
   }
 
@@ -50,6 +50,7 @@ export function Priorities({ priorities, onChange, toast }: Props) {
               defaultValue={p.text}
               key={p.text}
               aria-label={`Priority ${i + 1}`}
+              placeholder={`Add priority ${i + 1}`}
               onBlur={(e) => rename(i, e.currentTarget.value)}
               onKeyDown={(e) => {
                 if (e.key === "Enter") {
