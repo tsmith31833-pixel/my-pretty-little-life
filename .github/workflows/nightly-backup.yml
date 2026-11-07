@@ -1,0 +1,74 @@
+# Nightly encrypted backup of the planner database.
+# Runs every night at about 3:13 am Eastern (08:13 UTC; GitHub schedules run in UTC
+# and can start a few minutes late). You can also run it any time from
+# GitHub → Actions → Nightly backup → Run workflow.
+#
+# Needs two repository secrets (GitHub → Settings → Secrets and variables → Actions):
+#   SUPABASE_DB_URL     the "Session pooler" connection string, with your database password in it
+#   BACKUP_PASSPHRASE   a long passphrase that locks each backup file (keep a copy in your password manager)
+#
+# Each backup is kept for 30 days under the run's "Artifacts". How to restore: docs/BACKUPS.md
+
+name: Nightly backup
+
+on:
+  schedule:
+    - cron: "13 8 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: nightly-backup
+  cancel-in-progress: false
+
+jobs:
+  backup:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - name: Install Postgres 17 tools
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq postgresql-common
+          sudo /usr/share/postgresql-common/pgdg/apt.postgresql.org.sh -y
+          sudo apt-get install -y -qq postgresql-client-17
+
+      - name: Export and encrypt the planner data
+        env:
+          SUPABASE_DB_URL: ${{ secrets.SUPABASE_DB_URL }}
+          BACKUP_PASSPHRASE: ${{ secrets.BACKUP_PASSPHRASE }}
+        run: |
+          set -euo pipefail
+          if [ -z "${SUPABASE_DB_URL}" ] || [ -z "${BACKUP_PASSPHRASE}" ]; then
+            echo "::error::A secret is missing. Add SUPABASE_DB_URL and BACKUP_PASSPHRASE in GitHub → Settings → Secrets and variables → Actions."
+            exit 1
+          fi
+
+          stamp="$(date -u +%Y-%m-%d)"
+          /usr/lib/postgresql/17/bin/pg_dump "${SUPABASE_DB_URL}" \
+            --schema=public --no-owner --no-privileges \
+            --format=custom --file=planner.dump
+
+          size="$(stat -c%s planner.dump)"
+          echo "Backup size: ${size} bytes"
+          if [ "${size}" -lt 1000 ]; then
+            echo "::error::The backup file is unexpectedly small, so it was not saved."
+            exit 1
+          fi
+
+          mkdir -p out
+          gpg --batch --yes --pinentry-mode loopback --passphrase-fd 3 \
+            --symmetric --cipher-algo AES256 \
+            --output "out/planner-${stamp}.dump.gpg" planner.dump 3<<< "${BACKUP_PASSPHRASE}"
+          rm -f planner.dump
+          echo "STAMP=${stamp}" >> "${GITHUB_ENV}"
+
+      - name: Keep the encrypted backup for 30 days
+        uses: actions/upload-artifact@v4
+        with:
+          name: planner-backup-${{ env.STAMP }}
+          path: out/
+          retention-days: 30
+          if-no-files-found: error
