@@ -1,10 +1,14 @@
 "use client";
 
 import { useSyncExternalStore } from "react";
-import { HomeScreen } from "./HomeScreen";
+import { HomeScreen } from "../home/HomeScreen";
+import { PlannerScreen } from "../planner/PlannerScreen";
+import { CalendarScreen } from "../planner/CalendarScreen";
 
-// The home screen depends on your local date and time, so it renders in the
-// browser (never on the server) and refreshes once a minute.
+// Pages depend on your local date and time, so they render in the browser
+// (never on the server) and refresh once a minute.
+
+const SCREENS = { today: HomeScreen, planner: PlannerScreen, calendar: CalendarScreen };
 
 function subscribe(onChange: () => void) {
   const id = setInterval(onChange, 15_000);
@@ -13,7 +17,7 @@ function subscribe(onChange: () => void) {
 const currentMinute = () => Math.floor(Date.now() / 60_000);
 const serverMinute = () => null;
 
-export function ClientClock() {
+export function ClientClock({ screen }: { screen: keyof typeof SCREENS }) {
   const minute = useSyncExternalStore(subscribe, currentMinute, serverMinute);
   if (minute === null) {
     return (
@@ -23,5 +27,6 @@ export function ClientClock() {
       </div>
     );
   }
-  return <HomeScreen now={new Date(minute * 60_000)} />;
+  const Screen = SCREENS[screen];
+  return <Screen now={new Date(minute * 60_000)} />;
 }

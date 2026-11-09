@@ -11,6 +11,7 @@ export const metadata: Metadata = {
   description: "My private personal planner.",
   // Private site: ask search engines not to list it.
   robots: { index: false, follow: false, nocache: true },
+  appleWebApp: { capable: true, title: "Pretty Life", statusBarStyle: "default" },
 };
 
 export const viewport: Viewport = {

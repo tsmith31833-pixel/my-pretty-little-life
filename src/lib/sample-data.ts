@@ -1,25 +1,5 @@
-// Example content shown until login and the database are connected (phase 1).
-// Everything here is a placeholder, not real data.
-
-export type AgendaItem = { start: number; minutes: number; title: string; tag: "Me time" | "Wellness" | "Business" | "Friends" };
-
-export const AGENDA: AgendaItem[] = [
-  { start: 420, minutes: 45, title: "Skincare, coffee & quiet time", tag: "Me time" },
-  { start: 570, minutes: 60, title: "Pilates at the studio", tag: "Wellness" },
-  { start: 660, minutes: 45, title: "Debt-free coaching call", tag: "Business" },
-  { start: 780, minutes: 75, title: "Lunch with Mia", tag: "Friends" },
-  { start: 930, minutes: 90, title: "Content shoot: debt payoff reel", tag: "Business" },
-  { start: 1170, minutes: 60, title: "Bubble bath + journal", tag: "Me time" },
-];
-
-/** [days from today, title, time] */
-export const UPCOMING: [number, string, string][] = [
-  [1, "Brunch & mimosas with the girls", "11:00 am"],
-  [3, "Hair gloss appointment", "4:00 pm"],
-  [5, "Debt-Free by Spring workshop", "6:00 pm"],
-  [9, "Mom's birthday dinner", "7:00 pm"],
-  [14, "Holiday market with Mia", "10:00 am"],
-];
+// Example content for the cards that aren't built yet (money and business),
+// plus the habit list and daily quotes.
 
 /** Glow-up 2027 habits. `sample` pre-fills earlier days of the week (1 = done). */
 export const HABITS = [

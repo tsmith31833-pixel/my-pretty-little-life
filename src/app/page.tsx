@@ -1,5 +1,5 @@
-import { ClientClock } from "@/components/home/ClientClock";
+import { ClientClock } from "@/components/shell/ClientClock";
 
 export default function TodayPage() {
-  return <ClientClock />;
+  return <ClientClock screen="today" />;
 }

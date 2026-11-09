@@ -1,12 +1,13 @@
+import Link from "next/link";
 import { Icon } from "../Icon";
 import { Bow } from "../Ornaments";
 import type { IconName } from "@/lib/icons";
 
-type NavItem = { label: string; icon: IconName; current?: boolean };
+type NavItem = { label: string; icon: IconName; href?: string };
 const NAV: (string | NavItem)[] = [
-  { label: "Today", icon: "sun", current: true },
-  { label: "Planner", icon: "planner" },
-  { label: "Calendar", icon: "calendar" },
+  { label: "Today", icon: "sun", href: "/" },
+  { label: "Planner", icon: "planner", href: "/planner" },
+  { label: "Calendar", icon: "calendar", href: "/calendar" },
   { label: "Wellness", icon: "heart" },
   { label: "Journal", icon: "journal" },
   "Money",
@@ -17,9 +18,15 @@ const NAV: (string | NavItem)[] = [
   { label: "Settings", icon: "gear" },
 ];
 
-type Props = { open: boolean; onSoon: (label: string) => void; onSignOut: () => void };
+type Props = {
+  open: boolean;
+  pathname: string;
+  onNavigate: () => void;
+  onSoon: (label: string) => void;
+  onSignOut: () => void;
+};
 
-export function Sidebar({ open, onSoon, onSignOut }: Props) {
+export function Sidebar({ open, pathname, onNavigate, onSoon, onSignOut }: Props) {
   return (
     <aside className={`sidebar${open ? " open" : ""}`} id="sidebar" aria-label="Main navigation">
       <div className="brand">
@@ -32,23 +39,25 @@ export function Sidebar({ open, onSoon, onSignOut }: Props) {
         <Bow className="bow" />
       </div>
       <nav className="nav">
-        {NAV.map((n) =>
-          typeof n === "string" ? (
-            <div className="group" key={n}>{n}</div>
-          ) : (
-            <button
-              type="button"
-              key={n.label}
-              className={n.current ? "on" : ""}
-              aria-current={n.current ? "page" : undefined}
-              onClick={n.current ? undefined : () => onSoon(n.label)}
-            >
+        {NAV.map((n) => {
+          if (typeof n === "string") return <div className="group" key={n}>{n}</div>;
+          if (n.href) {
+            const current = pathname === n.href;
+            return (
+              <Link key={n.label} href={n.href} className={current ? "on" : ""} aria-current={current ? "page" : undefined} onClick={onNavigate}>
+                <Icon name={n.icon} />
+                <span>{n.label}</span>
+              </Link>
+            );
+          }
+          return (
+            <button type="button" key={n.label} onClick={() => onSoon(n.label)}>
               <Icon name={n.icon} />
               <span>{n.label}</span>
-              {!n.current && <span className="soon">Soon</span>}
+              <span className="soon">Soon</span>
             </button>
-          ),
-        )}
+          );
+        })}
       </nav>
       <div className="note">
         <span className="eyebrow">Note to self</span>
