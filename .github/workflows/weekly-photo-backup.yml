@@ -1,0 +1,95 @@
+# Weekly encrypted backup of your journal photos.
+# Runs every Sunday at about 3:43 am Eastern (08:43 UTC). You can also run it any time from
+# GitHub → Actions → Weekly photo backup → Run workflow.
+#
+# Uses these repository secrets (GitHub → Settings → Secrets and variables → Actions):
+#   SUPABASE_DB_URL       already added for the nightly backup (used to list the photo files)
+#   BACKUP_PASSPHRASE     already added for the nightly backup (locks the backup file)
+#   SUPABASE_URL          your Project URL, like https://abcdefgh.supabase.co
+#   SUPABASE_SECRET_KEY   your Supabase secret key (sb_secret_…), used only here to download the photos
+#
+# Each photo backup is kept for 15 days (about two weekly copies). How to restore: docs/BACKUPS.md
+
+name: Weekly photo backup
+
+on:
+  schedule:
+    - cron: "43 8 * * 0"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: photo-backup
+  cancel-in-progress: false
+
+jobs:
+  photos:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - name: Install Postgres 17 tools
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq postgresql-common
+          sudo /usr/share/postgresql-common/pgdg/apt.postgresql.org.sh -y
+          sudo apt-get install -y -qq postgresql-client-17
+
+      - name: Download, pack and encrypt the photos
+        env:
+          SUPABASE_DB_URL: ${{ secrets.SUPABASE_DB_URL }}
+          BACKUP_PASSPHRASE: ${{ secrets.BACKUP_PASSPHRASE }}
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SECRET_KEY: ${{ secrets.SUPABASE_SECRET_KEY }}
+        run: |
+          set -euo pipefail
+          for v in SUPABASE_DB_URL BACKUP_PASSPHRASE SUPABASE_URL SUPABASE_SECRET_KEY; do
+            if [ -z "${!v}" ]; then
+              echo "::error::The secret ${v} is missing. Add it in GitHub → Settings → Secrets and variables → Actions."
+              exit 1
+            fi
+          done
+          base="${SUPABASE_URL%/}"
+
+          # Newer secret keys (sb_secret_…) go in the apikey header only; older service_role keys also need Authorization.
+          headers=(-H "apikey: ${SUPABASE_SECRET_KEY}")
+          case "${SUPABASE_SECRET_KEY}" in sb_*) ;; *) headers+=(-H "Authorization: Bearer ${SUPABASE_SECRET_KEY}") ;; esac
+
+          /usr/lib/postgresql/17/bin/psql "${SUPABASE_DB_URL}" -At \
+            -c "select name from storage.objects where bucket_id = 'journal-photos' and name not like '%/.emptyFolderPlaceholder' order by name" > list.txt
+          count="$(wc -l < list.txt | tr -d ' ')"
+          echo "Photos to back up: ${count}"
+
+          mkdir -p photos
+          failed=0
+          while IFS= read -r path; do
+            [ -n "${path}" ] || continue
+            mkdir -p "photos/$(dirname "${path}")"
+            if ! curl -fsS --retry 3 "${headers[@]}" -o "photos/${path}" "${base}/storage/v1/object/authenticated/journal-photos/${path}"; then
+              echo "::warning::Could not download one photo (${path##*/})."
+              failed=$((failed + 1))
+            fi
+          done < list.txt
+          if [ "${count}" -gt 0 ] && [ "${failed}" -eq "${count}" ]; then
+            echo "::error::No photos could be downloaded. Check SUPABASE_URL and SUPABASE_SECRET_KEY."
+            exit 1
+          fi
+
+          stamp="$(date -u +%Y-%m-%d)"
+          tar -czf photos.tar.gz photos list.txt
+          echo "Archive size: $(du -h photos.tar.gz | cut -f1)"
+          mkdir -p out
+          gpg --batch --yes --pinentry-mode loopback --passphrase-fd 3 \
+            --symmetric --cipher-algo AES256 \
+            --output "out/photos-${stamp}.tar.gz.gpg" photos.tar.gz 3<<< "${BACKUP_PASSPHRASE}"
+          rm -rf photos photos.tar.gz
+          echo "STAMP=${stamp}" >> "${GITHUB_ENV}"
+
+      - name: Keep the encrypted photo backup for 15 days
+        uses: actions/upload-artifact@v4
+        with:
+          name: photo-backup-${{ env.STAMP }}
+          path: out/
+          retention-days: 15
+          if-no-files-found: error

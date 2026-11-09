@@ -41,3 +41,30 @@ in each table to your new ID.
 - Keep the backup passphrase in your password manager. Without it, backups can't be opened.
 - Never paste the connection string, database password or passphrase into a chat or a file in this repository.
 - Every three months, test a restore into a spare Supabase project.
+
+## Photo backups
+
+Every Sunday at about 3:43 am Eastern, the **Weekly photo backup** job
+(`.github/workflows/weekly-photo-backup.yml`) downloads every journal photo,
+packs them into one file, locks it with the same backup passphrase, and keeps it
+for 15 days (about two weekly copies) under that run's **Artifacts**.
+
+It needs two extra secrets besides the nightly ones: `SUPABASE_URL` and
+`SUPABASE_SECRET_KEY`.
+
+To restore photos:
+
+1. Download and unzip the `photo-backup-YYYY-MM-DD` artifact.
+2. Unlock and unpack it:
+   ```bash
+   gpg --output photos.tar.gz --decrypt photos-YYYY-MM-DD.tar.gz.gpg
+   ```
+   ```bash
+   tar -xzf photos.tar.gz
+   ```
+3. The `photos/` folder has the same folder layout as the `journal-photos` bucket.
+   Upload them back to Supabase Storage (ask Claude to help).
+
+GitHub's free plan includes 500 MB of backup storage in total for private
+repositories. The log line "Archive size" shows how big each photo backup is.
+If it grows past about 200 MB, move photo backups somewhere larger.
