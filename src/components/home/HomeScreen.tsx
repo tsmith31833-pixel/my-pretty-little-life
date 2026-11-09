@@ -12,7 +12,7 @@ import { BusinessSnapshot } from "./BusinessSnapshot";
 import { WellnessTracker } from "./WellnessTracker";
 import { DailyWins } from "./DailyWins";
 import { usePlannerStore } from "@/lib/planner-store";
-import { useSettings } from "@/lib/settings";
+import { useProfile, useSettings } from "@/lib/settings";
 import { listEvents, type PlannerEvent } from "@/lib/data";
 import { MONTHS, addDays, isoDate } from "@/lib/dates";
 
@@ -32,6 +32,7 @@ function HomeBody({ now }: { now: Date }) {
   const saveError = () => toast("That change didn't save. Check your internet connection and try again.");
   const { status, day, week, todayIdx, updateDay, toggleHabit } = usePlannerStore(now, saveError);
   const { loaded, habits } = useSettings(saveError);
+  const profile = useProfile();
 
   // Events from the start of this month through the next 30 days (agenda, upcoming list, calendar dots).
   const today = isoDate(now);
@@ -53,7 +54,7 @@ function HomeBody({ now }: { now: Date }) {
     };
   }, [from, to, version]);
 
-  if (status !== "ready" || !loaded) {
+  if (status !== "ready" || !loaded || !profile) {
     return (
       <div className="loading inline" role="status">
         <p>{status === "loading" ? "Getting your day ready…" : "Your planner couldn't load. Check your internet connection, then refresh the page."}</p>
@@ -70,6 +71,7 @@ function HomeBody({ now }: { now: Date }) {
     <>
       <WelcomeBanner
         now={now}
+        name={profile.name}
         eventsAhead={agendaLeft(todays, nowMinutes)}
         prioritiesLeft={prioritiesLeft}
         habitsLeft={habitsLeftToday(habits, week, todayIdx)}
@@ -84,6 +86,8 @@ function HomeBody({ now }: { now: Date }) {
         <FinancialSnapshot now={now} />
         <BusinessSnapshot now={now} />
         <WellnessTracker
+          sleepGoal={profile.sleepGoalHours * 60}
+          stepGoal={profile.stepGoal}
           sleepMinutes={day.sleep_minutes}
           steps={day.steps}
           water={day.water}

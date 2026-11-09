@@ -15,7 +15,7 @@ const NAV: (string | NavItem)[] = [
   { label: "Money & Grace Co.", icon: "gem", href: "/business" },
   "Life",
   { label: "Home", icon: "home", href: "/home" },
-  { label: "Settings", icon: "gear" },
+  { label: "Settings", icon: "gear", href: "/settings" },
 ];
 
 type Props = {

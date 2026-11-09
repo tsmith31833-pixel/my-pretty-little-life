@@ -31,7 +31,7 @@ function RevenueTrend({ months, goal }: { months: { label: string; total: number
         {goal > 0 && (
           <>
             <line x1={pl} x2={W - pr} y1={Y(goal)} y2={Y(goal)} stroke="var(--gold)" strokeDasharray="3 4" />
-            <text x={W - pr + 4} y={Y(goal) + 3} fontSize="9" fill="var(--gold)">Goal</text>
+            <text x={W - pr + 4} y={Y(goal) + 3} fontSize="9" fill="var(--gold-text)">Goal</text>
           </>
         )}
         <line x1={pl} x2={W - pr} y1={H - pb} y2={H - pb} stroke="var(--line)" />

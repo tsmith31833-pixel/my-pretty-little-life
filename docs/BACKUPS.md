@@ -68,3 +68,12 @@ To restore photos:
 GitHub's free plan includes 500 MB of backup storage in total for private
 repositories. The log line "Archive size" shows how big each photo backup is.
 If it grows past about 200 MB, move photo backups somewhere larger.
+
+## Restore test (every 3 months)
+
+The **Restore test** job (`.github/workflows/restore-test.yml`) runs on the 2nd of
+February, May, August and November, or any time from Actions → Restore test → Run workflow.
+It unlocks the newest nightly and photo backups and restores them into a temporary
+database inside the job. Your real Supabase project is never touched. The run's summary
+lists every table and how many rows came back, plus the photo count.
+A few notices about login links are expected, because the temporary database has no real users.

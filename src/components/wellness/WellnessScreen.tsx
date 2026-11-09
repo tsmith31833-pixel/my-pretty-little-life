@@ -5,14 +5,14 @@ import { Icon } from "../Icon";
 import { AppShell, useShell } from "../shell/AppShell";
 import { CardHeader } from "../home/CardHeader";
 import { HabitTracker } from "../home/HabitTracker";
-import { Glass, MOOD_ICONS, SLEEP_GOAL, STEP_GOAL } from "../home/WellnessTracker";
+import { Glass, MOOD_ICONS } from "../home/WellnessTracker";
 import { HabitHistory } from "./HabitHistory";
 import { HabitEditor } from "./HabitEditor";
 import { Routines } from "./Routines";
 import { CycleCard } from "./CycleCard";
 import { Trends } from "./Trends";
 import { usePlannerStore } from "@/lib/planner-store";
-import { useSettings } from "@/lib/settings";
+import { useProfile, useSettings } from "@/lib/settings";
 import { MOODS } from "@/lib/sample-data";
 import { MONTHS, WEEKDAYS } from "@/lib/dates";
 import { heartBurst } from "@/lib/hearts";
@@ -30,10 +30,11 @@ function WellnessBody({ now }: { now: Date }) {
   const saveError = () => toast("That change didn't save. Check your internet connection and try again.");
   const { status, day, week, todayIdx, updateDay, toggleHabit } = usePlannerStore(now, saveError);
   const { loaded, habits, routines, updateHabits, updateRoutines } = useSettings(saveError);
+  const profile = useProfile();
   const [editingHabits, setEditingHabits] = useState(false);
   const [savedTick, setSavedTick] = useState(0);
 
-  if (status !== "ready" || !loaded) {
+  if (status !== "ready" || !loaded || !profile) {
     return (
       <div className="loading inline" role="status">
         <p>{status === "error" ? "Your wellness page couldn't load. Check your internet connection, then refresh." : "Getting your wellness ready…"}</p>
@@ -41,6 +42,8 @@ function WellnessBody({ now }: { now: Date }) {
     );
   }
 
+  const SLEEP_GOAL = profile.sleepGoalHours * 60;
+  const STEP_GOAL = profile.stepGoal;
   const sleepH = day.sleep_minutes === null ? "" : String(Math.floor(day.sleep_minutes / 60));
   const sleepM = day.sleep_minutes === null ? "" : String(day.sleep_minutes % 60);
 
@@ -148,7 +151,7 @@ function WellnessBody({ now }: { now: Date }) {
           onCheck={(checks) => updateDay((d) => ({ ...d, routine_checks: checks }))}
           onChangeRoutines={updateRoutines} />
         <CycleCard now={now} />
-        <Trends now={now} todayWater={day.water} todayMood={day.mood} todaySleep={day.sleep_minutes} />
+        <Trends now={now} todayWater={day.water} todayMood={day.mood} todaySleep={day.sleep_minutes} sleepGoalHours={profile.sleepGoalHours} />
       </div>
     </>
   );

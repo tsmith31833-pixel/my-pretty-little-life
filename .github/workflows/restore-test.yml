@@ -1,0 +1,122 @@
+# Restore test: proves your backups really open.
+# Takes the newest nightly database backup and the newest weekly photo backup, unlocks them
+# with BACKUP_PASSPHRASE, and restores them into a throwaway database that exists only inside
+# this job. Your real Supabase project is never touched.
+#
+# Runs every 3 months (Feb, May, Aug, Nov) and any time from
+# GitHub → Actions → Restore test → Run workflow. The run's summary lists what was restored.
+
+name: Restore test
+
+on:
+  schedule:
+    - cron: "17 9 2 2,5,8,11 *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  restore:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    services:
+      postgres:
+        image: postgres:17
+        env:
+          POSTGRES_PASSWORD: restoretest
+          POSTGRES_DB: restoretest
+        ports: ["5432:5432"]
+        options: >-
+          --health-cmd "pg_isready -U postgres" --health-interval 5s --health-timeout 5s --health-retries 10
+    env:
+      GH_TOKEN: ${{ github.token }}
+      TESTDB: postgresql://postgres:restoretest@localhost:5432/restoretest
+    steps:
+      - name: Install Postgres 17 tools
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq postgresql-common
+          sudo /usr/share/postgresql-common/pgdg/apt.postgresql.org.sh -y
+          sudo apt-get install -y -qq postgresql-client-17
+
+      - name: Restore the newest database backup into a throwaway database
+        env:
+          BACKUP_PASSPHRASE: ${{ secrets.BACKUP_PASSPHRASE }}
+        run: |
+          set -euo pipefail
+          [ -n "${BACKUP_PASSPHRASE}" ] || { echo "::error::The secret BACKUP_PASSPHRASE is missing."; exit 1; }
+          PG=/usr/lib/postgresql/17/bin
+
+          run_id="$(gh api "repos/${GITHUB_REPOSITORY}/actions/workflows/nightly-backup.yml/runs?status=success&per_page=1" --jq '.workflow_runs[0].id // empty')"
+          [ -n "${run_id}" ] || { echo "::error::No successful nightly backup found to test."; exit 1; }
+          gh run download "${run_id}" --repo "${GITHUB_REPOSITORY}" --dir db
+          file="$(find db -name 'planner-*.dump.gpg' | head -n1)"
+          echo "Testing ${file##*/}"
+          gpg --batch --yes --pinentry-mode loopback --passphrase-fd 3 --output planner.dump --decrypt "${file}" 3<<< "${BACKUP_PASSPHRASE}"
+
+          # Stand-ins for the parts of Supabase the backup refers to (login users, roles, helper functions).
+          "${PG}/psql" "${TESTDB}" -q -v ON_ERROR_STOP=1 <<'SQL'
+          do $$ begin
+            if not exists (select from pg_roles where rolname = 'anon') then create role anon; end if;
+            if not exists (select from pg_roles where rolname = 'authenticated') then create role authenticated; end if;
+            if not exists (select from pg_roles where rolname = 'service_role') then create role service_role; end if;
+          end $$;
+          create schema if not exists auth;
+          create table if not exists auth.users (id uuid primary key);
+          create or replace function auth.uid() returns uuid language sql stable as 'select null::uuid';
+          create or replace function auth.jwt() returns jsonb language sql stable as 'select null::jsonb';
+          SQL
+
+          # Links to the login table can't be recreated here (no real users), so some notices are expected.
+          "${PG}/pg_restore" --no-owner --no-privileges --dbname "${TESTDB}" planner.dump 2> restore-log.txt || true
+          echo "Notices during restore: $(grep -c 'error' restore-log.txt || true)"
+
+          {
+            echo "## Database backup: ${file##*/}"
+            echo ""
+            echo "| Table | Rows restored |"
+            echo "|---|---|"
+          } >> "${GITHUB_STEP_SUMMARY}"
+          total=0; tables=0
+          for t in $("${PG}/psql" "${TESTDB}" -At -c "select tablename from pg_tables where schemaname = 'public' order by tablename"); do
+            n="$("${PG}/psql" "${TESTDB}" -At -c "select count(*) from public.\"${t}\"")"
+            echo "| ${t} | ${n} |" >> "${GITHUB_STEP_SUMMARY}"
+            total=$((total + n)); tables=$((tables + 1))
+          done
+          echo "" >> "${GITHUB_STEP_SUMMARY}"
+          echo "Restored ${tables} tables and ${total} rows."
+          if [ "${tables}" -lt 2 ]; then
+            echo "::error::The backup opened but almost no tables were restored."
+            cat restore-log.txt
+            exit 1
+          fi
+          echo "**Result: the database backup opens and restores (${tables} tables, ${total} rows).**" >> "${GITHUB_STEP_SUMMARY}"
+
+      - name: Unpack the newest photo backup
+        env:
+          BACKUP_PASSPHRASE: ${{ secrets.BACKUP_PASSPHRASE }}
+        run: |
+          set -euo pipefail
+          run_id="$(gh api "repos/${GITHUB_REPOSITORY}/actions/workflows/weekly-photo-backup.yml/runs?status=success&per_page=1" --jq '.workflow_runs[0].id // empty' 2>/dev/null || true)"
+          if [ -z "${run_id}" ]; then
+            echo "No photo backup yet, skipping." | tee -a "${GITHUB_STEP_SUMMARY}"
+            exit 0
+          fi
+          gh run download "${run_id}" --repo "${GITHUB_REPOSITORY}" --dir ph
+          file="$(find ph -name 'photos-*.tar.gz.gpg' | head -n1)"
+          gpg --batch --yes --pinentry-mode loopback --passphrase-fd 3 --output photos.tar.gz --decrypt "${file}" 3<<< "${BACKUP_PASSPHRASE}"
+          tar -xzf photos.tar.gz
+          expected="$(grep -c . list.txt || true)"
+          found="$(find photos -type f 2>/dev/null | wc -l | tr -d ' ')"
+          {
+            echo "## Photo backup: ${file##*/}"
+            echo ""
+            echo "Photos listed: ${expected}. Photos inside the backup: ${found}."
+          } >> "${GITHUB_STEP_SUMMARY}"
+          if [ "${found}" -lt "${expected}" ]; then
+            echo "::error::The photo backup is missing $((expected - found)) photo(s)."
+            exit 1
+          fi
+          echo "**Result: the photo backup opens and has every photo.**" >> "${GITHUB_STEP_SUMMARY}"

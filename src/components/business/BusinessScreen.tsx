@@ -45,7 +45,7 @@ function RevenueBars({ months, goal }: { months: { label: string; total: number 
       {goal > 0 && (
         <g>
           <line x1={l} x2={W - r} y1={y(goal)} y2={y(goal)} stroke="var(--gold)" strokeDasharray="3 4" strokeWidth="1.2" />
-          <text x={l - 6} y={y(goal) + 3} textAnchor="end" fontSize="9" fill="var(--gold)">Goal</text>
+          <text x={l - 6} y={y(goal) + 3} textAnchor="end" fontSize="9" fill="var(--gold-text)">Goal</text>
         </g>
       )}
       {months.map((m, i) => {

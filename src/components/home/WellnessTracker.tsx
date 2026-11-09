@@ -9,6 +9,8 @@ export const MOOD_ICONS: IconName[] = ["sparkle", "heart", "cherry", "moon", "dr
 const CIRC = 263.9;
 
 type Props = {
+  sleepGoal: number;
+  stepGoal: number;
   sleepMinutes: number | null;
   steps: number | null;
   water: number;
@@ -32,11 +34,7 @@ export function Glass({ filled }: { filled: boolean }) {
   );
 }
 
-export const SLEEP_GOAL = 8 * 60;
-export const STEP_GOAL = 8000;
-
-export function WellnessTracker({ sleepMinutes, steps, water, mood, onWater, onMood, toast }: Props) {
-  const stepGoal = STEP_GOAL;
+export function WellnessTracker({ sleepGoal, stepGoal, sleepMinutes, steps, water, mood, onWater, onMood, toast }: Props) {
   const stepPct = steps === null ? 0 : Math.min(100, Math.round((steps / stepGoal) * 100));
   const notLogged = <Link className="log-link" href="/wellness">Log it on the Wellness page</Link>;
   return (
@@ -87,11 +85,11 @@ export function WellnessTracker({ sleepMinutes, steps, water, mood, onWater, onM
           </div>
         </div>
         <div className="wbox">
-          <h3>Sleep <span>goal 8h</span></h3>
+          <h3>Sleep <span>goal {sleepGoal / 60}h</span></h3>
           {sleepMinutes === null ? notLogged : (
             <>
               <div className="big">{Math.floor(sleepMinutes / 60)}<small>h</small> {sleepMinutes % 60}<small>m</small></div>
-              <div className="bar"><i className="leaf" style={{ width: `${Math.min(100, Math.round((sleepMinutes / SLEEP_GOAL) * 100))}%` }} /></div>
+              <div className="bar"><i className="leaf" style={{ width: `${Math.min(100, Math.round((sleepMinutes / sleepGoal) * 100))}%` }} /></div>
             </>
           )}
         </div>

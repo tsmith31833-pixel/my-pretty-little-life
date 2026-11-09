@@ -4,9 +4,9 @@ import { BANNER_ART } from "@/lib/banner-art";
 import { MONTHS, WEEKDAYS } from "@/lib/dates";
 import { QUOTES } from "@/lib/sample-data";
 
-type Props = { now: Date; eventsAhead: number; prioritiesLeft: number; habitsLeft: number; water: number };
+type Props = { now: Date; name: string; eventsAhead: number; prioritiesLeft: number; habitsLeft: number; water: number };
 
-export function WelcomeBanner({ now, eventsAhead, prioritiesLeft, habitsLeft, water }: Props) {
+export function WelcomeBanner({ now, name, eventsAhead, prioritiesLeft, habitsLeft, water }: Props) {
   const dayOfYear = Math.floor((now.getTime() - new Date(now.getFullYear(), 0, 0).getTime()) / 864e5);
   return (
     <section className="banner" aria-label="Welcome">
@@ -14,7 +14,7 @@ export function WelcomeBanner({ now, eventsAhead, prioritiesLeft, habitsLeft, wa
         <span className="eyebrow">
           {WEEKDAYS[now.getDay()]} · {MONTHS[now.getMonth()]} {now.getDate()}, {now.getFullYear()}
         </span>
-        <h2 className="hello">Hello, Mrs. Presberry</h2>
+        <h2 className="hello">Hello, {name}</h2>
         <p className="quote">“{QUOTES[dayOfYear % QUOTES.length]}”</p>
         <div className="b-chips">
           <span><Icon name="sun" /><b>{eventsAhead}</b> events ahead</span>

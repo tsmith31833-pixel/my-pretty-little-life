@@ -30,3 +30,11 @@ Then open http://localhost:3000.
 - Database tables and privacy rules: `supabase/schema.sql` (run it in Supabase → SQL Editor).
 - Needed environment variables (set in Vercel): `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`.
   For local development, put them in a `.env.local` file (never committed).
+
+## Settings, export and backups
+
+- Settings (`/settings`): greeting name, sleep and step goals, theme, password change,
+  sign out everywhere, and **Download my data** (everything as JSON, spending as CSV).
+- Profile settings need `supabase/phase5.sql`.
+- Backups: nightly database, weekly photos, and a quarterly **Restore test** that restores
+  the newest backups into a throwaway database to prove they open. See `docs/BACKUPS.md`.

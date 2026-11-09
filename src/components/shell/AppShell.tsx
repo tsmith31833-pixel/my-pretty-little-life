@@ -11,24 +11,28 @@ import { supabase } from "@/lib/supabase/client";
 
 // The frame around every page: sidebar, top bar, phone tab bar, quick add and toasts.
 
+export type Theme = "light" | "dark" | "system";
+
 type Shell = {
   toast: (message: string) => void;
+  theme: Theme;
+  setTheme: (t: Theme) => void;
   /** Increases whenever something is added through quick add, so pages can reload. */
   version: number;
   bump: () => void;
 };
-const ShellContext = createContext<Shell>({ toast: () => {}, version: 0, bump: () => {} });
+const ShellContext = createContext<Shell>({ toast: () => {}, theme: "system", setTheme: () => {}, version: 0, bump: () => {} });
 export const useShell = () => useContext(ShellContext);
 
-type Theme = "light" | "dark";
 const THEME_KEY = "mpll-theme";
 function initialTheme(): Theme {
   try {
     const saved = localStorage.getItem(THEME_KEY);
-    if (saved === "light" || saved === "dark") return saved;
+    if (saved === "light" || saved === "dark" || saved === "system") return saved;
   } catch {}
-  return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+  return "system";
 }
+const prefersDark = () => window.matchMedia("(prefers-color-scheme: dark)").matches;
 
 type Props = { title: string; crumb?: string; examplesNote?: string; children: React.ReactNode };
 
@@ -43,7 +47,8 @@ export function AppShell({ title, crumb, examplesNote, children }: Props) {
   const toastTimer = useRef<ReturnType<typeof setTimeout>>(undefined);
 
   useEffect(() => {
-    document.documentElement.setAttribute("data-theme", theme);
+    if (theme === "system") document.documentElement.removeAttribute("data-theme");
+    else document.documentElement.setAttribute("data-theme", theme);
   }, [theme]);
 
   useEffect(() => {
@@ -68,20 +73,21 @@ export function AppShell({ title, crumb, examplesNote, children }: Props) {
     toast(`${label} is coming in a later phase.`);
   }
 
-  function switchTheme() {
-    const next: Theme = theme === "dark" ? "light" : "dark";
+  function chooseTheme(next: Theme) {
     setTheme(next);
     try {
       localStorage.setItem(THEME_KEY, next);
     } catch {}
   }
+  const isDark = theme === "dark" || (theme === "system" && prefersDark());
+  const switchTheme = () => chooseTheme(isDark ? "light" : "dark");
 
   async function signOut() {
     await supabase().auth.signOut();
     router.replace("/login");
   }
 
-  const shell: Shell = { toast, version, bump: () => setVersion((v) => v + 1) };
+  const shell: Shell = { toast, theme, setTheme: chooseTheme, version, bump: () => setVersion((v) => v + 1) };
   const tab = (href: string) => (pathname === href ? "on" : "");
 
   return (
@@ -111,8 +117,8 @@ export function AppShell({ title, crumb, examplesNote, children }: Props) {
               <span className="lbl">Quick add</span>
             </button>
             <button className="toggle" type="button" aria-label="Switch light or dark theme" onClick={switchTheme}>
-              <span className="knob"><Icon name={theme === "dark" ? "sun" : "moon"} /></span>
-              <span className="lbl">{theme === "dark" ? "Blush daylight" : "Midnight rose"}</span>
+              <span className="knob"><Icon name={isDark ? "sun" : "moon"} /></span>
+              <span className="lbl">{isDark ? "Blush daylight" : "Midnight rose"}</span>
             </button>
           </header>
 

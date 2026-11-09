@@ -90,9 +90,9 @@ function MoodDots({ points }: { points: { day: Date; mood: string | null }[] }) 
   );
 }
 
-type Props = { now: Date; todayWater: number; todayMood: string; todaySleep: number | null };
+type Props = { now: Date; todayWater: number; todayMood: string; todaySleep: number | null; sleepGoalHours?: number };
 
-export function Trends({ now, todayWater, todayMood, todaySleep }: Props) {
+export function Trends({ now, todayWater, todayMood, todaySleep, sleepGoalHours = 8 }: Props) {
   const days = Array.from({ length: DAYS }, (_, i) => addDays(now, i - (DAYS - 1)));
   const from = isoDate(days[0]);
   const to = isoDate(days[DAYS - 1]);
@@ -132,11 +132,11 @@ export function Trends({ now, todayWater, todayMood, todaySleep }: Props) {
         ))}
       </div>
       {failed && <p className="auth-err">Your trends couldn&apos;t load. Check your internet connection, then refresh.</p>}
-      {rows !== null && tab === "sleep" && <Bars points={sleep} max={10} ticks={[0, 4, 8]} goal={8} color="var(--leaf-deep)" format={hrs} label="Hours of sleep each night for the last 14 days, with an 8 hour goal line" />}
+      {rows !== null && tab === "sleep" && <Bars points={sleep} max={Math.max(10, sleepGoalHours + 2)} ticks={[0, 4, 8]} goal={sleepGoalHours} color="var(--leaf-deep)" format={hrs} label={`Hours of sleep each night for the last 14 days, with a ${sleepGoalHours} hour goal line`} />}
       {rows !== null && tab === "water" && <Bars points={water} max={8} ticks={[0, 4, 8]} color="var(--rose)" format={(v) => `${v} glasses`} label="Glasses of water each day for the last 14 days" />}
       {rows !== null && tab === "mood" && <MoodDots points={mood} />}
       <p className="hint-sm">
-        {tab === "sleep" ? "Dashed gold line: your 8-hour goal. Hover or press a day for details." : tab === "water" ? "8 glasses is a full day." : "One dot per day you logged a mood."}
+        {tab === "sleep" ? `Dashed gold line: your ${sleepGoalHours}-hour goal. Hover or press a day for details.` : tab === "water" ? "8 glasses is a full day." : "One dot per day you logged a mood."}
       </p>
     </section>
   );

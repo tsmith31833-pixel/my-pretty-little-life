@@ -49,7 +49,7 @@ export function parseMoney(v: FormDataEntryValue | string | null): number | null
 export function Progress({ value, max, tone }: { value: number; max: number; tone?: "gold" | "leaf" | "over" }) {
   const pct = max > 0 ? Math.min(100, Math.round((value / max) * 100)) : 0;
   return (
-    <div className="bar" role="progressbar" aria-valuemin={0} aria-valuemax={100} aria-valuenow={pct}>
+    <div className="bar" aria-hidden="true">
       <i className={tone ?? ""} style={{ width: `${pct}%` }} />
     </div>
   );
