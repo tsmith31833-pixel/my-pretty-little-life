@@ -531,3 +531,101 @@ textarea.p-text::placeholder{color:var(--muted);opacity:.8;font-style:italic}
   .hhead{grid-template-areas:"cells cells";margin-bottom:-6px}
   .hhead .hname,.hhead .streak{display:none!important}
 }
+
+/* ---------- Phase 3: wellness & journal ---------- */
+.stack{display:grid;gap:22px;align-content:start;min-width:0}
+.card-foot{display:flex;justify-content:flex-end;gap:8px}
+.saved{font-size:.78rem;color:var(--ok)}
+.saved.saving,.saved.idle{color:var(--muted)}
+.saved.error{color:var(--hot)}
+.hint-sm{font-size:.76rem;color:var(--muted)}
+.log-link{font-size:.84rem;color:var(--hot)}
+.btn.danger{background:var(--hot);color:var(--hot-ink);border-color:var(--hot)}
+.iconbtn:disabled{opacity:.3;cursor:default}
+.wgrid{display:grid;gap:22px;grid-template-columns:repeat(2,minmax(0,1fr));grid-template-areas:"check habits" "history habits" "routines cycle" "trends trends";align-items:start}
+.num-pair{display:flex;gap:10px;flex-wrap:wrap}
+.num-pair label{display:flex;align-items:center;gap:6px;font-size:.84rem;color:var(--muted)}
+.num-pair input{font:inherit;font-size:1.05rem;width:76px;padding:8px 10px;border-radius:12px;border:1px solid var(--line);background:var(--cream);color:var(--ink);font-variant-numeric:tabular-nums}
+.num-pair input#steps{width:120px}
+.num-pair input:focus{outline:2px solid var(--baby);border-color:var(--hot)}
+.edit-list{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+.edit-list li{display:flex;gap:4px;align-items:center}
+.edit-list input{flex:1;min-width:0;font:inherit;font-size:.92rem;padding:9px 12px;border-radius:12px;border:1px solid var(--line);background:var(--cream);color:var(--ink)}
+/* heatmap */
+.heat-scroll{overflow-x:auto}
+.heat{border-collapse:separate;border-spacing:4px;width:100%;font-size:.78rem}
+.heat th{font-weight:400;color:var(--muted);font-size:.68rem;white-space:nowrap;text-align:center}
+.heat tbody th{text-align:left;color:var(--ink);font-size:.82rem;white-space:normal;min-width:110px;max-width:170px}
+.heat td{padding:0}
+.heat-cell{display:grid;place-items:center;height:28px;min-width:28px;border-radius:8px;border:1px solid var(--line);font-variant-numeric:tabular-nums}
+.heat-cell b{font-size:.7rem;font-weight:500;color:var(--ink)}
+.heat-legend{display:flex;flex-wrap:wrap;gap:10px;align-items:center;font-size:.72rem;color:var(--muted)}
+.heat-legend .lg{display:inline-flex;align-items:center;gap:4px}
+.heat-legend i{width:12px;height:12px;border-radius:4px;border:1px solid var(--line)}
+/* routines */
+.routines{display:grid;gap:16px}
+.routine{display:grid;gap:8px;padding:14px;border-radius:18px;background:linear-gradient(150deg,var(--blush),var(--card));border:1px solid var(--line)}
+.routine-h{display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+.routine-h b{font-family:var(--f-display);font-weight:500;font-size:1.1rem}
+.routine-h span{font-size:.78rem;color:var(--muted)}
+.routine-h .all-done{color:var(--hot);font-weight:500}
+.pform textarea{font:inherit;font-size:.92rem;letter-spacing:normal;text-transform:none;color:var(--ink);padding:10px 12px;border-radius:12px;border:1px solid var(--line);background:var(--cream);width:100%;resize:vertical}
+.routine-edit{padding:14px;border-radius:18px;border:1px dashed var(--rose)}
+/* cycle */
+.cycle-hero{display:grid;gap:4px;padding:16px 18px;border-radius:20px;background:linear-gradient(140deg,var(--baby),var(--blush));}
+.cycle-hero b{font-family:var(--f-display);font-style:italic;font-weight:500;font-size:1.7rem;line-height:1.1}
+.cycle-hero span{font-size:.9rem}
+.cycle-hero small{font-size:.76rem;color:var(--muted)}
+.cycle-actions{display:grid;gap:10px;justify-items:start}
+.inline-date{display:flex;flex-wrap:wrap;align-items:center;gap:8px;font-size:.82rem;color:var(--muted)}
+.inline-date input{font:inherit;font-size:.9rem;padding:7px 10px;border-radius:10px;border:1px solid var(--line);background:var(--cream);color:var(--ink)}
+.period-list{list-style:none;margin:0;padding:0;display:grid;gap:4px}
+.period-list li{display:flex;align-items:center;gap:10px;font-size:.86rem;padding:6px 0;border-bottom:1px dashed var(--line)}
+.period-list li span:first-child{min-width:120px}
+.period-list .muted{flex:1;color:var(--muted);font-size:.78rem}
+/* trends */
+.trend-svg{width:100%;height:auto;display:block}
+.trend-svg text{font-family:var(--f-body)}
+/* journal */
+.prompt{font-family:var(--f-display);font-style:italic;font-size:1.15rem;color:var(--rose-deep);padding:12px 16px;border-radius:14px;background:var(--blush);border-left:3px solid var(--hot)}
+.journal-body{font:inherit;font-size:1rem;line-height:1.7;color:var(--ink);width:100%;min-height:280px;padding:16px 18px;border-radius:16px;border:1px solid var(--line);resize:vertical;
+  background:var(--cream) repeating-linear-gradient(transparent 0 calc(1.7em - 1px),var(--line) calc(1.7em - 1px) 1.7em);background-attachment:local;background-position:0 16px}
+.journal-body:focus{outline:2px solid var(--baby);border-color:var(--hot)}
+.grat{display:grid;gap:10px}
+.grat-line{display:flex;align-items:center;gap:12px}
+.grat-num{font-family:var(--f-display);font-style:italic;font-size:1.5rem;color:var(--gold);width:20px;text-align:center}
+.grat-line input{flex:1;min-width:0;font:inherit;font-size:.95rem;padding:10px 14px;border-radius:999px;border:1px solid var(--line);background:var(--cream);color:var(--ink)}
+.grat-line input:focus{outline:2px solid var(--baby);border-color:var(--hot)}
+.photo-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:10px}
+.photo{position:relative;aspect-ratio:1;max-width:100%;border-radius:16px;overflow:hidden;background:var(--blush);border:1px solid var(--line);margin:0;display:grid;place-items:center}
+.photo img{width:100%;height:100%;object-fit:cover;display:block}
+.photo-ph{font-size:.78rem;color:var(--muted)}
+.photo-del{position:absolute;top:6px;right:6px;background:var(--card);border-color:var(--line)}
+.add-photo{cursor:pointer;border:1.5px dashed var(--rose);color:var(--hot);gap:4px;align-content:center;font-size:.82rem}
+.add-photo .ic{width:22px;height:22px}
+.add-photo:focus-within{outline:2px solid var(--hot)}
+.past-list{list-style:none;margin:0;padding:0;display:grid;gap:6px}
+.past-list button{width:100%;display:flex;align-items:center;gap:12px;text-align:left;border:1px solid transparent;background:transparent;border-radius:16px;padding:8px;color:inherit}
+.past-list button:hover,.past-list button.on{background:var(--blush);border-color:var(--line)}
+.past-list .dtile{width:48px;flex:none}
+.past-txt{flex:1;min-width:0;display:grid;gap:2px}
+.past-txt b{font-weight:500;font-size:.88rem}
+.past-txt span{font-size:.8rem;color:var(--muted);overflow-wrap:anywhere}
+@media (max-width:1024px){
+  .wgrid{grid-template-columns:minmax(0,1fr);grid-template-areas:"check" "habits" "routines" "cycle" "trends" "history"}
+}
+.heat-scroll{min-width:0;max-width:100%}
+.wgrid{grid-template-areas:"check habits" "routines cycle" "trends history"}
+.trend-svg{max-height:240px}
+@media (max-width:1024px){
+  .wgrid{grid-template-areas:"check" "habits" "routines" "cycle" "trends" "history"}
+}
+@media (max-width:760px){
+  .heat tbody th{min-width:84px;font-size:.76rem}
+  .heat-cell{height:24px;min-width:24px;border-radius:7px}
+  .heat{border-spacing:3px}
+}
+.heat-scroll{width:100%;contain:inline-size}
+.heat thead th{line-height:1.15}
+.heat .wk-m,.heat .wk-d{display:block}
+.heat .wk-m{font-size:.6rem;letter-spacing:.06em;text-transform:uppercase}

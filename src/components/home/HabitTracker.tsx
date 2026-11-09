@@ -1,11 +1,18 @@
 import { Icon } from "../Icon";
 import { CardHeader } from "./CardHeader";
-import { HABITS } from "@/lib/sample-data";
+import type { HabitDef } from "@/lib/data";
 import { WEEKDAYS } from "@/lib/dates";
 import { heartBurst } from "@/lib/hearts";
 import type { WeekState } from "@/lib/planner-store";
 
-type Props = { week: WeekState; todayIdx: number; onToggle: (id: string, day: number) => boolean };
+type Props = {
+  habits: HabitDef[];
+  week: WeekState;
+  todayIdx: number;
+  onToggle: (id: string, day: number) => boolean;
+  gridArea?: string;
+  footer?: React.ReactNode;
+};
 
 function streak(row: boolean[], todayIdx: number) {
   let i = row[todayIdx] ? todayIdx : todayIdx - 1;
@@ -14,18 +21,18 @@ function streak(row: boolean[], todayIdx: number) {
   return n;
 }
 
-export function habitsLeftToday(week: WeekState, todayIdx: number) {
-  return HABITS.filter((h) => !week[h.id]?.[todayIdx]).length;
+export function habitsLeftToday(habits: HabitDef[], week: WeekState, todayIdx: number) {
+  return habits.filter((h) => !week[h.id]?.[todayIdx]).length;
 }
 
-export function HabitTracker({ week, todayIdx, onToggle }: Props) {
+export function HabitTracker({ habits, week, todayIdx, onToggle, gridArea = "habit", footer }: Props) {
   let total = 0;
   let done = 0;
-  for (const h of HABITS) for (let d = 0; d <= todayIdx; d++) { total++; if (week[h.id]?.[d]) done++; }
-  const pct = Math.round((done / total) * 100);
+  for (const h of habits) for (let d = 0; d <= todayIdx; d++) { total++; if (week[h.id]?.[d]) done++; }
+  const pct = total ? Math.round((done / total) * 100) : 0;
 
   return (
-    <section className="card" style={{ gridArea: "habit" }} aria-labelledby="h-hab">
+    <section className="card" style={{ gridArea }} aria-labelledby="h-hab">
       <CardHeader id="h-hab" icon="sparkle" eyebrow="Glow-up 2027" title="Habit tracker" meta={<><b>{pct}%</b>this week</>} />
       <div className="hgrid">
         <div className="hrow hhead" aria-hidden="true">
@@ -37,7 +44,7 @@ export function HabitTracker({ week, todayIdx, onToggle }: Props) {
           </div>
           <span className="dh streak">Streak</span>
         </div>
-        {HABITS.map((h) => {
+        {habits.map((h) => {
           const row = week[h.id] ?? Array(7).fill(false);
           const count = row.slice(0, todayIdx + 1).filter(Boolean).length;
           const days = streak(row, todayIdx);
@@ -79,6 +86,7 @@ export function HabitTracker({ week, todayIdx, onToggle }: Props) {
         <div className="bar"><i style={{ width: `${pct}%` }} /></div>
         <span>{done} of {total} check-ins so far this week</span>
       </div>
+      {footer}
     </section>
   );
 }

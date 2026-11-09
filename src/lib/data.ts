@@ -85,3 +85,92 @@ export async function updateMilestones(id: string, milestones: Milestone[]) {
 export async function deleteGoal(id: string) {
   check(await supabase().from("goals").delete().eq("id", id));
 }
+
+// ---------- phase 3: settings (habits & routines) ----------
+// Tables are created by supabase/phase3.sql.
+
+export type HabitDef = { id: string; name: string };
+export type Routine = { id: string; name: string; steps: string[] };
+export type Settings = { habits: HabitDef[] | null; routines: Routine[] | null };
+
+export async function getSettings() {
+  return check<Settings | null>(await supabase().from("settings").select("habits, routines").maybeSingle());
+}
+export async function saveSettings(patch: Partial<Settings>) {
+  check(await supabase().from("settings").upsert({ ...patch, updated_at: new Date().toISOString() }));
+}
+
+// ---------- phase 3: history for trends ----------
+export type DayRow = { day: string; water: number; mood: string | null; sleep_minutes: number | null; steps: number | null };
+export async function listDays(from: string, to: string) {
+  return check<DayRow[]>(
+    await supabase().from("day_entries").select("day, water, mood, sleep_minutes, steps").gte("day", from).lte("day", to).order("day"),
+  );
+}
+export type WeekRow = { week_start: string; checks: Record<string, boolean[]> };
+export async function listWeeks(from: string, to: string) {
+  return check<WeekRow[]>(
+    await supabase().from("habit_weeks").select("week_start, checks").gte("week_start", from).lte("week_start", to).order("week_start"),
+  );
+}
+
+// ---------- phase 3: cycle ----------
+export type Period = { id: string; start_day: string; end_day: string | null };
+export async function listPeriods() {
+  return check<Period[]>(await supabase().from("periods").select("id, start_day, end_day").order("start_day", { ascending: false }).limit(24));
+}
+export async function startPeriod(day: string) {
+  check(await supabase().from("periods").insert({ start_day: day }));
+}
+export async function endPeriod(id: string, day: string) {
+  check(await supabase().from("periods").update({ end_day: day }).eq("id", id));
+}
+export async function deletePeriod(id: string) {
+  check(await supabase().from("periods").delete().eq("id", id));
+}
+
+// ---------- phase 3: journal ----------
+export type JournalEntry = { day: string; body: string; gratitude: string[]; photos: string[] };
+export async function getJournal(day: string) {
+  return check<JournalEntry | null>(
+    await supabase().from("journal_entries").select("day, body, gratitude, photos").eq("day", day).maybeSingle(),
+  );
+}
+export async function saveJournal(e: JournalEntry) {
+  check(await supabase().from("journal_entries").upsert({ ...e, updated_at: new Date().toISOString() }));
+}
+export async function listJournal(limit = 30) {
+  return check<JournalEntry[]>(
+    await supabase().from("journal_entries").select("day, body, gratitude, photos").order("day", { ascending: false }).limit(limit),
+  );
+}
+
+const BUCKET = "journal-photos";
+
+/** Shrinks a photo to at most 1600px and saves it as JPEG in your private folder. */
+export async function uploadPhoto(file: File, day: string) {
+  const { data: claims } = await supabase().auth.getClaims();
+  const uid = claims?.claims?.sub;
+  if (!uid) throw new Error("Not signed in");
+  const bitmap = await createImageBitmap(file);
+  const scale = Math.min(1, 1600 / Math.max(bitmap.width, bitmap.height));
+  const canvas = document.createElement("canvas");
+  canvas.width = Math.round(bitmap.width * scale);
+  canvas.height = Math.round(bitmap.height * scale);
+  canvas.getContext("2d")!.drawImage(bitmap, 0, 0, canvas.width, canvas.height);
+  const blob = await new Promise<Blob>((res, rej) => canvas.toBlob((b) => (b ? res(b) : rej(new Error("encode"))), "image/jpeg", 0.85));
+  const path = `${uid}/${day}/${crypto.randomUUID()}.jpg`;
+  check(await supabase().storage.from(BUCKET).upload(path, blob, { contentType: "image/jpeg" }));
+  return path;
+}
+export async function photoUrls(paths: string[]) {
+  if (!paths.length) return {} as Record<string, string>;
+  const res = await supabase().storage.from(BUCKET).createSignedUrls(paths, 60 * 60);
+  if (res.error) throw new Error(res.error.message);
+  const out: Record<string, string> = {};
+  for (const d of res.data) if (d.path && d.signedUrl) out[d.path] = d.signedUrl;
+  return out;
+}
+export async function removePhoto(path: string) {
+  check(await supabase().storage.from(BUCKET).remove([path]));
+}

@@ -12,6 +12,7 @@ import { BusinessSnapshot } from "./BusinessSnapshot";
 import { WellnessTracker } from "./WellnessTracker";
 import { DailyWins } from "./DailyWins";
 import { usePlannerStore } from "@/lib/planner-store";
+import { useSettings } from "@/lib/settings";
 import { listEvents, type PlannerEvent } from "@/lib/data";
 import { MONTHS, addDays, isoDate } from "@/lib/dates";
 
@@ -20,7 +21,7 @@ export function HomeScreen({ now }: { now: Date }) {
     <AppShell
       title="Today"
       crumb={`${MONTHS[now.getMonth()]} ${now.getDate()}`}
-      examplesNote="Your priorities, agenda, events, habits, water, mood and wins are real and saved privately. The money and business cards show examples until those sections are built."
+      examplesNote="Your priorities, agenda, events, habits, water, mood and wins are real and saved privately. Sleep, steps and cycle are logged on the Wellness page. The money and business cards show examples until those sections are built."
     >
       <HomeBody now={now} />
     </AppShell>
@@ -29,9 +30,9 @@ export function HomeScreen({ now }: { now: Date }) {
 
 function HomeBody({ now }: { now: Date }) {
   const { toast, version } = useShell();
-  const { status, day, week, todayIdx, updateDay, toggleHabit } = usePlannerStore(now, () =>
-    toast("That change didn't save. Check your internet connection and try again."),
-  );
+  const saveError = () => toast("That change didn't save. Check your internet connection and try again.");
+  const { status, day, week, todayIdx, updateDay, toggleHabit } = usePlannerStore(now, saveError);
+  const { loaded, habits } = useSettings(saveError);
 
   // Events from the start of this month through the next 30 days (agenda, upcoming list, calendar dots).
   const today = isoDate(now);
@@ -53,7 +54,7 @@ function HomeBody({ now }: { now: Date }) {
     };
   }, [from, to, version]);
 
-  if (status !== "ready") {
+  if (status !== "ready" || !loaded) {
     return (
       <div className="loading inline" role="status">
         <p>{status === "loading" ? "Getting your day ready…" : "Your planner couldn't load. Check your internet connection, then refresh the page."}</p>
@@ -72,18 +73,20 @@ function HomeBody({ now }: { now: Date }) {
         now={now}
         eventsAhead={agendaLeft(todays, nowMinutes)}
         prioritiesLeft={prioritiesLeft}
-        habitsLeft={habitsLeftToday(week, todayIdx)}
+        habitsLeft={habitsLeftToday(habits, week, todayIdx)}
         water={day.water}
       />
 
       <div className="dash">
         <Priorities priorities={day.priorities} onChange={(p) => updateDay((d) => ({ ...d, priorities: p }))} toast={toast} />
         <Agenda events={todays} loading={events === null && !eventsFailed} failed={eventsFailed} nowMinutes={nowMinutes} />
-        <HabitTracker week={week} todayIdx={todayIdx} onToggle={toggleHabit} />
+        <HabitTracker habits={habits} week={week} todayIdx={todayIdx} onToggle={toggleHabit} />
         <UpcomingEvents now={now} monthEvents={events ?? []} upcoming={upcoming} />
         <FinancialSnapshot now={now} />
         <BusinessSnapshot now={now} />
         <WellnessTracker
+          sleepMinutes={day.sleep_minutes}
+          steps={day.steps}
           water={day.water}
           mood={day.mood}
           onWater={(n) => updateDay((d) => ({ ...d, water: n }))}

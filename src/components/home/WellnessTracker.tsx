@@ -1,13 +1,16 @@
+import Link from "next/link";
 import { Icon } from "../Icon";
 import { CardHeader } from "./CardHeader";
 import { MOODS } from "@/lib/sample-data";
 import { HEART_PATH, type IconName } from "@/lib/icons";
 import { heartBurst } from "@/lib/hearts";
 
-const MOOD_ICONS: IconName[] = ["sparkle", "heart", "cherry", "moon", "drop"];
+export const MOOD_ICONS: IconName[] = ["sparkle", "heart", "cherry", "moon", "drop"];
 const CIRC = 263.9;
 
 type Props = {
+  sleepMinutes: number | null;
+  steps: number | null;
   water: number;
   mood: string;
   onWater: (n: number) => void;
@@ -15,7 +18,7 @@ type Props = {
   toast: (m: string) => void;
 };
 
-function Glass({ filled }: { filled: boolean }) {
+export function Glass({ filled }: { filled: boolean }) {
   return (
     <svg viewBox="0 0 30 40">
       <path d="M4 4h22l-3 32a2 2 0 0 1-2 2H9a2 2 0 0 1-2-2z" fill={filled ? "var(--baby)" : "var(--card)"} stroke="var(--hot)" strokeWidth="1.6" />
@@ -29,10 +32,13 @@ function Glass({ filled }: { filled: boolean }) {
   );
 }
 
-export function WellnessTracker({ water, mood, onWater, onMood, toast }: Props) {
-  const steps = 6240;
-  const stepGoal = 8000;
-  const stepPct = Math.round((steps / stepGoal) * 100);
+export const SLEEP_GOAL = 8 * 60;
+export const STEP_GOAL = 8000;
+
+export function WellnessTracker({ sleepMinutes, steps, water, mood, onWater, onMood, toast }: Props) {
+  const stepGoal = STEP_GOAL;
+  const stepPct = steps === null ? 0 : Math.min(100, Math.round((steps / stepGoal) * 100));
+  const notLogged = <Link className="log-link" href="/wellness">Log it on the Wellness page</Link>;
   return (
     <section className="card" style={{ gridArea: "well" }} aria-labelledby="h-well">
       <CardHeader id="h-well" icon="drop" eyebrow="Body & soul" title="Wellness tracker" />
@@ -82,11 +88,16 @@ export function WellnessTracker({ water, mood, onWater, onMood, toast }: Props) 
         </div>
         <div className="wbox">
           <h3>Sleep <span>goal 8h</span></h3>
-          <div className="big">7<small>h</small> 20<small>m</small></div>
-          <div className="bar"><i className="leaf" style={{ width: "92%" }} /></div>
+          {sleepMinutes === null ? notLogged : (
+            <>
+              <div className="big">{Math.floor(sleepMinutes / 60)}<small>h</small> {sleepMinutes % 60}<small>m</small></div>
+              <div className="bar"><i className="leaf" style={{ width: `${Math.min(100, Math.round((sleepMinutes / SLEEP_GOAL) * 100))}%` }} /></div>
+            </>
+          )}
         </div>
         <div className="wbox">
           <h3>Movement <span>goal {stepGoal.toLocaleString("en-US")}</span></h3>
+          {steps === null ? notLogged : (
           <div className="steps">
             <div className="ring">
               <svg viewBox="0 0 100 100">
@@ -100,9 +111,10 @@ export function WellnessTracker({ water, mood, onWater, onMood, toast }: Props) 
             </div>
             <div>
               <div className="big">{steps.toLocaleString("en-US")}</div>
-              <small style={{ color: "var(--muted)", fontSize: ".8rem" }}>steps · Pilates at 9:30</small>
+              <small style={{ color: "var(--muted)", fontSize: ".8rem" }}>steps today</small>
             </div>
           </div>
+          )}
         </div>
       </div>
     </section>

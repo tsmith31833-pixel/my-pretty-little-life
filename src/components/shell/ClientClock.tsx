@@ -4,11 +4,13 @@ import { useSyncExternalStore } from "react";
 import { HomeScreen } from "../home/HomeScreen";
 import { PlannerScreen } from "../planner/PlannerScreen";
 import { CalendarScreen } from "../planner/CalendarScreen";
+import { WellnessScreen } from "../wellness/WellnessScreen";
+import { JournalScreen } from "../journal/JournalScreen";
 
 // Pages depend on your local date and time, so they render in the browser
 // (never on the server) and refresh once a minute.
 
-const SCREENS = { today: HomeScreen, planner: PlannerScreen, calendar: CalendarScreen };
+const SCREENS = { today: HomeScreen, planner: PlannerScreen, calendar: CalendarScreen, wellness: WellnessScreen, journal: JournalScreen };
 
 function subscribe(onChange: () => void) {
   const id = setInterval(onChange, 15_000);
