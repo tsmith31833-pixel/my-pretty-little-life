@@ -342,10 +342,6 @@ p{margin:0}
   .tabbar .add{width:48px;height:48px;border-radius:50%;background:var(--hot);color:var(--hot-ink);display:grid;place-items:center;margin-top:-22px;box-shadow:0 10px 18px -8px var(--hot)}
 }
 @media (max-width:420px){
-  .hgrid{grid-template-columns:minmax(0,1fr) repeat(7,26px);gap:5px 4px}
-  .hcell{width:26px;height:26px;border-radius:9px}
-  .hcell .ic{width:14px;height:14px}
-  .hgrid .sk{display:none}
   .stats{grid-template-columns:repeat(3,minmax(0,1fr))}
   .stat b{font-size:1rem}
 }
@@ -517,3 +513,21 @@ textarea.p-text::placeholder{color:var(--muted);opacity:.8;font-style:italic}
   .cal-ctrls .seg{margin-left:auto}
 }
 .seg button,.fchip,.btn,.iconbtn{font-family:var(--f-body)}
+
+/* Habit tracker rows (replaces the older single grid) */
+.hgrid{display:grid;gap:8px;grid-template-columns:none}
+.hrow{display:grid;grid-template-columns:minmax(0,1fr) auto 56px;gap:12px;align-items:center}
+.hcells{display:grid;grid-template-columns:repeat(7,34px);gap:6px}
+.hrow .hname{font-size:.9rem;min-width:0;overflow-wrap:anywhere}
+.hrow .streak{text-align:right}
+@media (max-width:760px){
+  .hgrid{gap:14px}
+  .hrow{grid-template-columns:minmax(0,1fr) auto;grid-template-areas:"name streak" "cells cells";gap:6px 10px}
+  .hrow .hname{grid-area:name}
+  .hrow .streak{grid-area:streak;display:block!important}
+  .hrow .hcells{grid-area:cells;grid-template-columns:repeat(7,minmax(0,1fr));gap:6px}
+  .hrow .hcell{width:100%;height:38px;border-radius:12px}
+  .hrow .hcell .ic{width:18px;height:18px}
+  .hhead{grid-template-areas:"cells cells";margin-bottom:-6px}
+  .hhead .hname,.hhead .streak{display:none!important}
+}

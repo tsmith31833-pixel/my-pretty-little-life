@@ -28,42 +28,49 @@ export function HabitTracker({ week, todayIdx, onToggle }: Props) {
     <section className="card" style={{ gridArea: "habit" }} aria-labelledby="h-hab">
       <CardHeader id="h-hab" icon="sparkle" eyebrow="Glow-up 2027" title="Habit tracker" meta={<><b>{pct}%</b>this week</>} />
       <div className="hgrid">
-        <span />
-        {"SMTWTFS".split("").map((c, d) => (
-          <span key={d} className={`dh${d === todayIdx ? " today" : ""}`}>{c}</span>
-        ))}
-        <span className="dh sk">Streak</span>
+        <div className="hrow hhead" aria-hidden="true">
+          <span className="hname" />
+          <div className="hcells">
+            {"SMTWTFS".split("").map((c, d) => (
+              <span key={d} className={`dh${d === todayIdx ? " today" : ""}`}>{c}</span>
+            ))}
+          </div>
+          <span className="dh streak">Streak</span>
+        </div>
         {HABITS.map((h) => {
           const row = week[h.id] ?? Array(7).fill(false);
           const count = row.slice(0, todayIdx + 1).filter(Boolean).length;
+          const days = streak(row, todayIdx);
           return (
-            <div key={h.id} style={{ display: "contents" }}>
+            <div key={h.id} className="hrow">
               <div className="hname">
                 <span>{h.name}</span>
                 <div className="bar"><i style={{ width: `${Math.round((count / (todayIdx + 1)) * 100)}%`, animation: "none" }} /></div>
               </div>
-              {row.map((on: boolean, d: number) => (
-                <button
-                  key={d}
-                  type="button"
-                  className={`hcell${on ? " on" : ""}${d === todayIdx ? " today" : ""}`}
-                  disabled={d > todayIdx}
-                  aria-pressed={on}
-                  aria-label={`${h.name}, ${WEEKDAYS[d]}`}
-                  onClick={(e) => {
-                    const el = e.currentTarget;
-                    if (onToggle(h.id, d)) {
-                      el.classList.remove("pop");
-                      void el.offsetWidth;
-                      el.classList.add("pop");
-                      heartBurst(el);
-                    }
-                  }}
-                >
-                  <Icon name="heart" filled={on} strokeWidth={1.8} />
-                </button>
-              ))}
-              <span className="streak sk"><b>{streak(row, todayIdx)}</b> {streak(row, todayIdx) === 1 ? "day" : "days"}</span>
+              <div className="hcells">
+                {row.map((on: boolean, d: number) => (
+                  <button
+                    key={d}
+                    type="button"
+                    className={`hcell${on ? " on" : ""}${d === todayIdx ? " today" : ""}`}
+                    disabled={d > todayIdx}
+                    aria-pressed={on}
+                    aria-label={`${h.name}, ${WEEKDAYS[d]}`}
+                    onClick={(e) => {
+                      const el = e.currentTarget;
+                      if (onToggle(h.id, d)) {
+                        el.classList.remove("pop");
+                        void el.offsetWidth;
+                        el.classList.add("pop");
+                        heartBurst(el);
+                      }
+                    }}
+                  >
+                    <Icon name="heart" filled={on} strokeWidth={1.8} />
+                  </button>
+                ))}
+              </div>
+              <span className="streak"><b>{days}</b> {days === 1 ? "day" : "days"}</span>
             </div>
           );
         })}
