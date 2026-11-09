@@ -11,10 +11,10 @@ const NAV: (string | NavItem)[] = [
   { label: "Wellness", icon: "heart", href: "/wellness" },
   { label: "Journal", icon: "journal", href: "/journal" },
   "Money",
-  { label: "Personal finance", icon: "coin" },
-  { label: "Money & Grace Co.", icon: "gem" },
+  { label: "Personal finance", icon: "coin", href: "/money" },
+  { label: "Money & Grace Co.", icon: "gem", href: "/business" },
   "Life",
-  { label: "Home", icon: "home" },
+  { label: "Home", icon: "home", href: "/home" },
   { label: "Settings", icon: "gear" },
 ];
 

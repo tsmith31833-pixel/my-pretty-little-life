@@ -21,7 +21,6 @@ export function HomeScreen({ now }: { now: Date }) {
     <AppShell
       title="Today"
       crumb={`${MONTHS[now.getMonth()]} ${now.getDate()}`}
-      examplesNote="Your priorities, agenda, events, habits, water, mood and wins are real and saved privately. Sleep, steps and cycle are logged on the Wellness page. The money and business cards show examples until those sections are built."
     >
       <HomeBody now={now} />
     </AppShell>

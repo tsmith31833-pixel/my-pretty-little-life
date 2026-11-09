@@ -330,7 +330,7 @@ p{margin:0}
   .prio{grid-template-columns:minmax(0,1fr)}
   .p-item{grid-template-columns:auto minmax(0,1fr) auto;align-items:center}
   .p-top{display:contents}
-  .p-num{order:0}.p-text{order:1;min-height:0}.chk{order:2}
+  .p-item .p-num{order:0}.p-item .p-text{order:1;min-height:0}.p-item .chk{order:2}
   .p-item .hint{display:none}
   .well{grid-template-columns:minmax(0,1fr)}
   .card{padding:18px 16px 20px;border-radius:22px}
@@ -629,3 +629,78 @@ textarea.p-text::placeholder{color:var(--muted);opacity:.8;font-style:italic}
 .heat thead th{line-height:1.15}
 .heat .wk-m,.heat .wk-d{display:block}
 .heat .wk-m{font-size:.6rem;letter-spacing:.06em;text-transform:uppercase}
+
+/* ---------- Phase 4: money, business, home ---------- */
+.month-label{font-family:var(--f-display);font-style:italic;font-size:1.1rem;min-width:140px;text-align:center}
+.month-label.sm{font-size:.92rem;min-width:0}
+.money-stats{grid-template-columns:repeat(4,minmax(0,1fr))}
+.stat.neg{background:linear-gradient(140deg,var(--rose-deep),var(--hot))}
+.lbl .over,.row .over{color:var(--hot);font-weight:500}
+.bar i.over{background:linear-gradient(90deg,var(--hot),var(--rose-deep))}
+.muted{color:var(--muted)}
+.mgrid{display:grid;gap:22px;grid-template-columns:repeat(2,minmax(0,1fr));grid-template-areas:"budget txns" "bills txns" "savings debts";align-items:start}
+.txn-list{list-style:none;margin:0;padding:0;display:grid;gap:6px}
+.txn-list li{display:flex;align-items:center;gap:10px;padding:8px 6px 8px 10px;border-radius:14px;border:1px solid var(--line);background:var(--cream)}
+.txn-list li.done .todo-title{text-decoration:line-through;text-decoration-color:var(--hot);color:var(--muted)}
+.txn-list .amt{font-variant-numeric:tabular-nums;font-weight:500;white-space:nowrap;font-size:.92rem}
+.txn-list .amt.income{color:var(--ok)}
+.txn-list .bar{height:5px;margin-top:4px}
+.cat-edit{display:grid;gap:8px}
+.cat-row{display:flex;gap:6px;align-items:center}
+.cat-row input{flex:1;min-width:0}
+.cat-row .money-in{flex:0 0 100px}
+.pform .check-line{display:flex;align-items:center;gap:8px;text-transform:none;letter-spacing:normal;font-size:.88rem;color:var(--ink)}
+.pform .check-line input{width:auto;accent-color:var(--hot)}
+.save-goal{display:grid;gap:6px;padding:12px;border-radius:16px;border:1px solid var(--line);background:linear-gradient(150deg,var(--blush),var(--card))}
+.save-goal .lbl{display:flex;justify-content:space-between;gap:8px;font-size:.88rem}
+.save-goal .lbl b{font-family:var(--f-display);font-weight:500;font-size:1.05rem}
+.inline-add{display:flex;gap:6px;align-items:center}
+.inline-add input{flex:1;min-width:0;max-width:150px;font:inherit;font-size:.86rem;padding:7px 10px;border-radius:10px;border:1px solid var(--line);background:var(--card);color:var(--ink)}
+.txn-list .inline-add{flex:0 0 auto}
+.tag-pill.focus{background:var(--hot);color:var(--hot-ink);border-color:var(--hot);margin-left:4px}
+.biz-title{color:var(--rose-deep)}
+.bgrid-top{display:grid;gap:22px;grid-template-columns:repeat(2,minmax(0,1fr));align-items:start}
+.pipeline{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+.stage{display:grid;gap:8px;align-content:start;padding:10px;border-radius:16px;background:var(--blush);min-width:0}
+.stage h3{font-size:.68rem;letter-spacing:.16em;text-transform:uppercase;color:var(--gold);font-weight:500;display:flex;justify-content:space-between}
+.stage h3 span{color:var(--muted)}
+.client{display:grid;gap:6px;padding:10px;border-radius:12px;background:var(--card);border:1px solid var(--line);font-size:.84rem;min-width:0}
+.client-top{display:flex;align-items:center;justify-content:space-between;gap:4px}
+.client-top b{font-weight:500;overflow-wrap:anywhere}
+.client .muted{font-size:.74rem}
+.client-ctrls{display:grid;gap:6px}
+.client-ctrls select,.debt-in input,.aisle-sel,.date-sm{font:inherit;font-size:.82rem;padding:6px 8px;border-radius:10px;border:1px solid var(--line);background:var(--cream);color:var(--ink);min-width:0;width:100%}
+.debt-in{display:grid;gap:3px}
+.debt-in span{font-size:.64rem;letter-spacing:.12em;text-transform:uppercase;color:var(--gold)}
+.ms-add .aisle-sel,.ms-add .date-sm{width:auto;flex:0 0 auto;max-width:150px}
+.meta-ctrls{margin-left:auto;flex-wrap:nowrap;width:auto!important}
+.meal-grid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:8px}
+.meal-day{display:grid;gap:6px;align-content:start;padding:10px;border-radius:16px;background:var(--cream);border:1px solid var(--line);min-width:0}
+.meal-day.today{border-color:var(--hot);box-shadow:0 0 0 2px var(--baby)}
+.meal-day h3{font-family:var(--f-display);font-weight:500;font-size:1rem}
+.meal-day h3 span{color:var(--muted);font-size:.85rem}
+.meal-day label{display:grid;gap:2px}
+.meal-day label span{font-size:.6rem;letter-spacing:.14em;text-transform:uppercase;color:var(--gold)}
+.meal-day input{font:inherit;font-size:.82rem;padding:6px 8px;border-radius:10px;border:1px solid transparent;background:var(--card);color:var(--ink);width:100%;min-width:0}
+.meal-day input:focus{outline:2px solid var(--baby);border-color:var(--hot)}
+.aisle{display:grid;gap:6px}
+.aisle h3{font-size:.66rem;letter-spacing:.16em;text-transform:uppercase;color:var(--gold);font-weight:500}
+.empty-start{display:grid;gap:10px;justify-items:start}
+@media (max-width:1280px){.pipeline{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:1024px){
+  .mgrid{grid-template-columns:minmax(0,1fr);grid-template-areas:"txns" "budget" "bills" "savings" "debts"}
+  .bgrid-top{grid-template-columns:minmax(0,1fr)}
+  .meal-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media (max-width:760px){
+  .money-stats{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .pipeline{grid-template-columns:minmax(0,1fr)}
+  .meal-grid{grid-template-columns:minmax(0,1fr)}
+  .meta-ctrls{margin-left:0}
+  .card-h:has(.meta-ctrls){flex-wrap:wrap}
+  .txn-list li:has(.inline-add){flex-wrap:wrap}
+  .txn-list li:has(.inline-add) .todo-main{flex:1 1 60%}
+  .txn-list .inline-add{flex:1 1 100%;padding-left:0}
+}
+/* "ring" is also a Tailwind utility name; keep only our progress-ring look. */
+.ring{box-shadow:none!important}
