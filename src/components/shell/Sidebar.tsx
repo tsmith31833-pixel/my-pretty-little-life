@@ -3,7 +3,7 @@ import { Icon } from "../Icon";
 import { Bow } from "../Ornaments";
 import type { IconName } from "@/lib/icons";
 
-type NavItem = { label: string; icon: IconName; href?: string };
+type NavItem = { label: string; icon: IconName; href?: string; sub?: boolean };
 const NAV: (string | NavItem)[] = [
   { label: "Today", icon: "sun", href: "/" },
   { label: "Planner", icon: "planner", href: "/planner" },
@@ -13,6 +13,7 @@ const NAV: (string | NavItem)[] = [
   "Money",
   { label: "Personal finance", icon: "coin", href: "/money" },
   { label: "Money & Grace Co.", icon: "gem", href: "/business" },
+  { label: "Content bank", icon: "sparkle", href: "/content", sub: true },
   "Life",
   { label: "Home", icon: "home", href: "/home" },
   { label: "Settings", icon: "gear", href: "/settings" },
@@ -44,7 +45,7 @@ export function Sidebar({ open, pathname, onNavigate, onSoon, onSignOut }: Props
           if (n.href) {
             const current = pathname === n.href;
             return (
-              <Link key={n.label} href={n.href} className={current ? "on" : ""} aria-current={current ? "page" : undefined} onClick={onNavigate}>
+              <Link key={n.label} href={n.href} className={`${current ? "on" : ""}${n.sub ? " sub" : ""}`} aria-current={current ? "page" : undefined} onClick={onNavigate}>
                 <Icon name={n.icon} />
                 <span>{n.label}</span>
               </Link>

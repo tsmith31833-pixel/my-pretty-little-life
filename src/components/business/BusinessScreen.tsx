@@ -1,13 +1,14 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import { Icon } from "../Icon";
 import { AppShell, useShell } from "../shell/AppShell";
 import { CardHeader } from "../home/CardHeader";
 import { DeleteButton, MonthNav, Progress, parseMoney } from "../ui";
 import {
   CLIENT_STATUSES, OFFERS, addBizIncome, addClient, addLaunch, deleteBizIncome, deleteClient, deleteLaunch, getBizGoals,
-  listBizIncome, listClients, listLaunches, monthKey, saveBizGoals, setLaunchDone, updateClient, usd, useRows,
+  listBizIncome, listClients, listContent, listLaunches, monthKey, saveBizGoals, setLaunchDone, updateClient, usd, useRows,
   type BizClient, type BizGoals, type ClientStatus,
 } from "@/lib/money";
 import { MONTHS, WEEKDAYS, isoDate } from "@/lib/dates";
@@ -78,6 +79,7 @@ function BusinessBody({ now }: { now: Date }) {
   const clients = useRows(listClients, []);
   const launches = useRows(listLaunches, []);
   const goals = useRows(getBizGoals, []);
+  const content = useRows(listContent, []);
   const [editGoals, setEditGoals] = useState(false);
   const [addingClient, setAddingClient] = useState(false);
   const mk = monthKey(month);
@@ -241,6 +243,7 @@ function BusinessBody({ now }: { now: Date }) {
         </section>
 
         <div className="stack">
+          <ContentTeaser items={content.data} failed={content.failed} today={isoDate(now)} />
           {/* Income log */}
           <section className="card" aria-labelledby="h-income">
             <CardHeader id="h-income" icon="coin" eyebrow={MONTHS[month.getMonth()]} title="Income" meta={<><b>{thisMonth.length}</b>{thisMonth.length === 1 ? "payment" : "payments"}</>} />
@@ -314,5 +317,29 @@ function BusinessBody({ now }: { now: Date }) {
         </div>
       </div>
     </>
+  );
+}
+
+function ContentTeaser({ items, failed, today }: { items: Awaited<ReturnType<typeof listContent>> | null; failed: boolean; today: string }) {
+  const list = items ?? [];
+  const next = list.filter((c) => c.status === "Scheduled" && c.post_day && c.post_day >= today).slice(0, 3);
+  const ideas = list.filter((c) => c.status === "Idea" || c.status === "Drafted").length;
+  return (
+    <section className="card" aria-labelledby="h-cteaser">
+      <CardHeader id="h-cteaser" icon="sparkle" eyebrow="Show up online" title="Content bank" meta={<><b>{ideas}</b>ideas waiting</>} />
+      {failed && <p className="empty">Set up the content bank by running <b>supabase/phase6.sql</b> in Supabase.</p>}
+      {!failed && next.length === 0 && <p className="empty">Nothing scheduled yet. Pick an idea and give it a date.</p>}
+      <ul className="txn-list">
+        {next.map((c) => (
+          <li key={c.id}>
+            <div className="todo-main">
+              <span className="todo-title">{c.title}</span>
+              <span className="todo-meta"><span className="tag-pill">{c.platform}</span><span>{shortDate(c.post_day!)}</span></span>
+            </div>
+          </li>
+        ))}
+      </ul>
+      <Link className="btn ghost sm link-btn" href="/content">Open content bank</Link>
+    </section>
   );
 }

@@ -10,12 +10,13 @@ import { MoneyScreen } from "../money/MoneyScreen";
 import { BusinessScreen } from "../business/BusinessScreen";
 import { HomeLifeScreen } from "../homelife/HomeLifeScreen";
 import { SettingsScreen } from "../settings/SettingsScreen";
+import { ContentScreen } from "../business/ContentScreen";
 
 // Pages depend on your local date and time, so they render in the browser
 // (never on the server) and refresh once a minute.
 
 const SCREENS = { today: HomeScreen, planner: PlannerScreen, calendar: CalendarScreen, wellness: WellnessScreen, journal: JournalScreen,
-  money: MoneyScreen, business: BusinessScreen, home: HomeLifeScreen, settings: SettingsScreen };
+  money: MoneyScreen, business: BusinessScreen, home: HomeLifeScreen, settings: SettingsScreen, content: ContentScreen };
 
 function subscribe(onChange: () => void) {
   const id = setInterval(onChange, 15_000);

@@ -7,7 +7,7 @@ import { supabase } from "./supabase/client";
 export const EXPORT_TABLES = [
   "day_entries", "habit_weeks", "events", "todos", "goals", "settings", "periods", "journal_entries",
   "budgets", "transactions", "bills", "savings_goals", "debts",
-  "biz_income", "biz_clients", "biz_launches", "meal_plans", "groceries", "chores",
+  "biz_income", "biz_clients", "biz_launches", "content_items", "meal_plans", "groceries", "chores",
 ] as const;
 
 const PAGE = 1000;

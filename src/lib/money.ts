@@ -219,3 +219,42 @@ export async function markChoreDone(id: string, day: string | null) {
 export async function deleteChore(id: string) {
   check(await db().from("chores").delete().eq("id", id));
 }
+
+// ---------- Money & Grace Co. content bank (supabase/phase6.sql) ----------
+export const CONTENT_STATUSES = ["Idea", "Drafted", "Scheduled", "Posted"] as const;
+export type ContentStatus = (typeof CONTENT_STATUSES)[number];
+export const PLATFORMS = ["Instagram", "TikTok", "YouTube", "Facebook", "Pinterest", "Threads", "LinkedIn", "Email", "Blog"];
+export const FORMATS = ["Reel", "Carousel", "Static post", "Story", "Short", "Long video", "Live", "Email", "Blog post"];
+export const PILLARS = ["Debt payoff tips", "Budgeting", "Money mindset", "Client wins", "Behind the scenes", "Offers & launches", "Lifestyle", "Other"];
+
+export type ContentItem = {
+  id: string;
+  title: string;
+  platform: string;
+  format: string;
+  pillar: string;
+  status: ContentStatus;
+  hook: string | null;
+  caption: string | null;
+  hashtags: string | null;
+  post_day: string | null;
+};
+export type NewContent = Omit<ContentItem, "id">;
+
+const CONTENT_COLS = "id, title, platform, format, pillar, status, hook, caption, hashtags, post_day";
+
+export async function listContent() {
+  return check<ContentItem[]>(
+    await db().from("content_items").select(CONTENT_COLS).order("post_day", { ascending: true, nullsFirst: false }).order("created_at", { ascending: false }),
+  );
+}
+export async function saveContent(c: NewContent, id?: string) {
+  const row = { ...c, updated_at: new Date().toISOString() };
+  check(await (id ? db().from("content_items").update(row).eq("id", id) : db().from("content_items").insert(row)));
+}
+export async function updateContent(id: string, patch: Partial<NewContent>) {
+  check(await db().from("content_items").update({ ...patch, updated_at: new Date().toISOString() }).eq("id", id));
+}
+export async function deleteContent(id: string) {
+  check(await db().from("content_items").delete().eq("id", id));
+}
