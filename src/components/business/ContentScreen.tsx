@@ -14,6 +14,7 @@ import { MONTHS, WEEKDAYS, addDays, isoDate } from "@/lib/dates";
 import { heartBurst } from "@/lib/hearts";
 import { newId } from "@/lib/settings";
 import { useTemplates, type ContentTemplate } from "@/lib/templates";
+import { mergeTags, parseTags, useHashtagSets, type HashtagSet } from "@/lib/hashtags";
 
 export function ContentScreen({ now }: { now: Date }) {
   return (
@@ -35,7 +36,10 @@ type Editing = { item?: ContentItem; day?: string; template?: ContentTemplate } 
 function ContentBody({ now }: { now: Date }) {
   const { toast } = useShell();
   const items = useRows(listContent, []);
-  const [view, setView] = useState<"bank" | "calendar" | "templates">("bank");
+  const [view, setView] = useState<"bank" | "calendar" | "templates" | "hashtags">("bank");
+  const { sets, update: updateSets } = useHashtagSets(() =>
+    toast("Hashtag sets didn't save. If this is your first time, run supabase/phase8.sql in Supabase."),
+  );
   const { templates, update: updateTemplates } = useTemplates(() =>
     toast("Templates didn't save. If this is your first time, run supabase/phase7.sql in Supabase."),
   );
@@ -106,6 +110,7 @@ function ContentBody({ now }: { now: Date }) {
             <button type="button" role="tab" aria-selected={view === "bank"} className={view === "bank" ? "on" : ""} onClick={() => setView("bank")}>Ideas</button>
             <button type="button" role="tab" aria-selected={view === "calendar"} className={view === "calendar" ? "on" : ""} onClick={() => setView("calendar")}>Calendar</button>
             <button type="button" role="tab" aria-selected={view === "templates"} className={view === "templates" ? "on" : ""} onClick={() => setView("templates")}>Templates</button>
+            <button type="button" role="tab" aria-selected={view === "hashtags"} className={view === "hashtags" ? "on" : ""} onClick={() => setView("hashtags")}>Hashtags</button>
           </div>
           <button type="button" className="btn" onClick={() => setEditing({})}><Icon name="plus" strokeWidth={2.2} /> New idea</button>
         </div>
@@ -120,7 +125,9 @@ function ContentBody({ now }: { now: Date }) {
         <div className="stat hl"><small>Posted in {MONTHS[now.getMonth()]}</small><b>{counts.posted}</b></div>
       </div>
 
-      {view === "templates" ? (
+      {view === "hashtags" ? (
+        <HashtagsPanel sets={sets} onChange={updateSets} toast={toast} />
+      ) : view === "templates" ? (
         <TemplatesPanel
           templates={templates}
           onUse={(template) => setEditing({ template })}
@@ -222,6 +229,7 @@ function ContentBody({ now }: { now: Date }) {
           item={editing.item}
           day={editing.day}
           templates={templates}
+          sets={sets}
           initialTemplate={editing.template}
           onSaveAsTemplate={(t) => {
             updateTemplates([...templates, t]);
@@ -239,19 +247,22 @@ function ContentBody({ now }: { now: Date }) {
   );
 }
 
-function ContentEditor({ item, day, templates, initialTemplate, onClose, onSave, onCopy, onSaveAsTemplate }: {
-  item?: ContentItem; day?: string; templates: ContentTemplate[]; initialTemplate?: ContentTemplate;
+function ContentEditor({ item, day, templates, sets, initialTemplate, onClose, onSave, onCopy, onSaveAsTemplate }: {
+  item?: ContentItem; day?: string; templates: ContentTemplate[]; sets: HashtagSet[]; initialTemplate?: ContentTemplate;
   onClose: () => void; onSave: (c: NewContent) => void; onCopy: (c: ContentItem) => void; onSaveAsTemplate: (t: ContentTemplate) => void;
 }) {
   const [tpl, setTpl] = useState<ContentTemplate | undefined>(initialTemplate);
   const seed = item ?? (tpl ? { title: tpl.title, platform: tpl.platform, format: tpl.format, pillar: tpl.pillar, hook: tpl.hook, caption: tpl.caption, hashtags: tpl.hashtags, status: undefined, post_day: undefined } : undefined);
   const [caption, setCaption] = useState(seed?.caption ?? "");
+  const [tags, setTags] = useState(seed?.hashtags ?? "");
+  const tagCount = parseTags(tags).length;
   const [naming, setNaming] = useState(false);
   const formRef = useRef<HTMLFormElement>(null);
 
   function pickTemplate(t: ContentTemplate | undefined) {
     setTpl(t);
     setCaption(t?.caption ?? "");
+    setTags(t?.hashtags ?? "");
   }
 
   function saveAsTemplate(name: string) {
@@ -315,7 +326,20 @@ function ContentEditor({ item, day, templates, initialTemplate, onClose, onSave,
             <textarea id="ce-caption" name="caption" rows={tpl && !item ? 14 : 7} value={caption} onChange={(e) => setCaption(e.currentTarget.value)} maxLength={5000}
               placeholder="Write the caption, script or email here…" />
           </label>
-          <label className="full">Hashtags <small>(optional)</small><input id="ce-tags" name="hashtags" defaultValue={seed?.hashtags ?? ""} placeholder="#debtfree #debtfreejourney #budgeting" maxLength={500} /></label>
+          <label className="full">Hashtags <small>{tagCount ? `${tagCount} ${tagCount === 1 ? "hashtag" : "hashtags"}${tagCount > 30 ? " · Instagram allows 30" : ""}` : "(optional)"}</small>
+            <textarea id="ce-tags" name="hashtags" rows={2} value={tags} onChange={(e) => setTags(e.currentTarget.value)} placeholder="#debtfree #debtfreejourney #budgeting" maxLength={1000} />
+          </label>
+          {sets.length > 0 && (
+            <div className="full set-pick">
+              <span className="eyebrow">Add a hashtag set</span>
+              <div className="chipset-row">
+                {sets.map((st) => (
+                  <button key={st.id} type="button" className="fchip soft" onClick={() => setTags(mergeTags(tags, st.tags))}>+ {st.name}</button>
+                ))}
+                {tags.trim() && <button type="button" className="fchip" onClick={() => setTags("")}>Clear</button>}
+              </div>
+            </div>
+          )}
           {naming && (
             <div className="full tpl-name">
               <label htmlFor="tpl-name-in" className="sr-only">Template name</label>
@@ -482,5 +506,70 @@ function TemplateEditor({ template, onClose, onSave }: { template?: ContentTempl
         </form>
       </div>
     </div>
+  );
+}
+
+function HashtagsPanel({ sets, onChange, toast }: { sets: HashtagSet[]; onChange: (s: HashtagSet[]) => void; toast: (m: string) => void }) {
+  const [editingId, setEditingId] = useState<string | "new" | null>(null);
+
+  async function copy(st: HashtagSet) {
+    try {
+      await navigator.clipboard.writeText(parseTags(st.tags).join(" "));
+      toast(`Copied ${st.name}.`);
+    } catch {
+      toast("Copying didn't work here. Select the hashtags and copy them instead.");
+    }
+  }
+
+  function save(e: React.FormEvent<HTMLFormElement>, id: string | "new") {
+    e.preventDefault();
+    const f = new FormData(e.currentTarget);
+    const name = String(f.get("name")).trim() || "My hashtags";
+    const tags = parseTags(String(f.get("tags"))).join(" ");
+    if (!tags) return toast("Add at least one hashtag.");
+    onChange(id === "new" ? [...sets, { id: newId("h"), name, tags }] : sets.map((x) => (x.id === id ? { ...x, name, tags } : x)));
+    setEditingId(null);
+    toast("Hashtag set saved.");
+  }
+
+  const form = (st?: HashtagSet) => (
+    <form className="pform set-form" onSubmit={(e) => save(e, st?.id ?? "new")}>
+      <label className="full">Set name<input id={`hs-name-${st?.id ?? "new"}`} name="name" defaultValue={st?.name} placeholder="Debt-free journey" maxLength={40} required autoFocus /></label>
+      <label className="full">Hashtags <small>(spaces or commas between them; the # is added for you)</small>
+        <textarea id={`hs-tags-${st?.id ?? "new"}`} name="tags" rows={3} defaultValue={st?.tags} placeholder="#debtfree #debtfreejourney #budgeting" maxLength={1500} />
+      </label>
+      <div className="form-actions full">
+        <button type="button" className="btn ghost sm" onClick={() => setEditingId(null)}>Cancel</button>
+        <button type="submit" className="btn sm">Save set</button>
+      </div>
+    </form>
+  );
+
+  return (
+    <section className="card" aria-labelledby="h-sets">
+      <CardHeader id="h-sets" icon="sparkle" eyebrow="One tap" title="Hashtag sets" meta={<><b>{sets.length}</b>{sets.length === 1 ? "set" : "sets"}</>} />
+      <p className="lede-sm">Save your favorite groups of hashtags. When you write an idea, tap a set to add it. Repeats are skipped automatically.</p>
+      <div className="set-grid">
+        {sets.map((st) => {
+          const list = parseTags(st.tags);
+          return editingId === st.id ? <div className="set-card" key={st.id}>{form(st)}</div> : (
+            <article className="set-card" key={st.id}>
+              <div className="cc-top">
+                <h3 className="tpl-title">{st.name}</h3>
+                <span className={list.length > 30 ? "overdue" : "muted"}>{list.length} {list.length === 1 ? "tag" : "tags"}</span>
+              </div>
+              <p className="tag-cloud">{list.map((t) => <span key={t}>{t}</span>)}</p>
+              <div className="cc-actions">
+                <button type="button" className="btn sm" onClick={() => copy(st)}>Copy</button>
+                <button type="button" className="btn ghost sm" onClick={() => setEditingId(st.id)}>Edit</button>
+                <DeleteButton label={`Delete hashtag set ${st.name}`} onConfirm={() => { onChange(sets.filter((x) => x.id !== st.id)); toast("Set deleted."); }} />
+              </div>
+            </article>
+          );
+        })}
+        {editingId === "new" && <div className="set-card">{form()}</div>}
+      </div>
+      {editingId !== "new" && <div className="card-foot"><button type="button" className="btn ghost sm" onClick={() => setEditingId("new")}>New hashtag set</button></div>}
+    </section>
   );
 }

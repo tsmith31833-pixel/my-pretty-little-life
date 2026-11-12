@@ -819,3 +819,12 @@ textarea.p-text::placeholder{color:var(--muted);opacity:.8;font-style:italic}
 .year-close p{color:var(--muted)}
 @media (max-width:1024px){.year-grid{grid-template-columns:minmax(0,1fr)}.year-tiles{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media (max-width:760px){.year-hero .bf{display:none}}
+/* Hashtag sets */
+.set-pick{display:grid;gap:6px}
+.set-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px}
+.set-card{display:grid;gap:10px;align-content:start;padding:14px;border-radius:20px;border:1px solid var(--line);background:linear-gradient(160deg,var(--blush),var(--card));min-width:0}
+.set-card .cc-top{align-items:baseline}
+.set-card .cc-top span{font-size:.76rem}
+.tag-cloud{display:flex;flex-wrap:wrap;gap:5px;margin:0}
+.tag-cloud span{font-size:.78rem;padding:3px 9px;border-radius:999px;background:var(--card);border:1px solid var(--line);color:var(--hot-text);overflow-wrap:anywhere}
+.set-form{grid-template-columns:minmax(0,1fr)}
