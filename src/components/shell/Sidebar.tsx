@@ -15,6 +15,7 @@ const NAV: (string | NavItem)[] = [
   { label: "Money & Grace Co.", icon: "gem", href: "/business" },
   { label: "Content bank", icon: "sparkle", href: "/content", sub: true },
   "Life",
+  { label: "Pretty Little Year", icon: "star", href: "/year" },
   { label: "Home", icon: "home", href: "/home" },
   { label: "Settings", icon: "gear", href: "/settings" },
 ];

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import Link from "next/link";
 import { Icon } from "../Icon";
 import { AppShell, useShell } from "../shell/AppShell";
@@ -12,6 +12,8 @@ import {
 } from "@/lib/money";
 import { MONTHS, WEEKDAYS, addDays, isoDate } from "@/lib/dates";
 import { heartBurst } from "@/lib/hearts";
+import { newId } from "@/lib/settings";
+import { useTemplates, type ContentTemplate } from "@/lib/templates";
 
 export function ContentScreen({ now }: { now: Date }) {
   return (
@@ -28,12 +30,16 @@ const shortDate = (s: string) => {
 };
 const fullText = (c: Pick<ContentItem, "hook" | "caption" | "hashtags">) => [c.hook, c.caption, c.hashtags].filter((x) => x && x.trim()).join("\n\n");
 
-type Editing = { item?: ContentItem; day?: string } | null;
+type Editing = { item?: ContentItem; day?: string; template?: ContentTemplate } | null;
 
 function ContentBody({ now }: { now: Date }) {
   const { toast } = useShell();
   const items = useRows(listContent, []);
-  const [view, setView] = useState<"bank" | "calendar">("bank");
+  const [view, setView] = useState<"bank" | "calendar" | "templates">("bank");
+  const { templates, update: updateTemplates } = useTemplates(() =>
+    toast("Templates didn't save. If this is your first time, run supabase/phase7.sql in Supabase."),
+  );
+  const [editingTemplate, setEditingTemplate] = useState<ContentTemplate | "new" | null>(null);
   const [editing, setEditing] = useState<Editing>(null);
   const [status, setStatus] = useState<ContentStatus | "All">("All");
   const [platform, setPlatform] = useState("All platforms");
@@ -99,6 +105,7 @@ function ContentBody({ now }: { now: Date }) {
           <div className="seg" role="tablist" aria-label="View">
             <button type="button" role="tab" aria-selected={view === "bank"} className={view === "bank" ? "on" : ""} onClick={() => setView("bank")}>Ideas</button>
             <button type="button" role="tab" aria-selected={view === "calendar"} className={view === "calendar" ? "on" : ""} onClick={() => setView("calendar")}>Calendar</button>
+            <button type="button" role="tab" aria-selected={view === "templates"} className={view === "templates" ? "on" : ""} onClick={() => setView("templates")}>Templates</button>
           </div>
           <button type="button" className="btn" onClick={() => setEditing({})}><Icon name="plus" strokeWidth={2.2} /> New idea</button>
         </div>
@@ -113,7 +120,15 @@ function ContentBody({ now }: { now: Date }) {
         <div className="stat hl"><small>Posted in {MONTHS[now.getMonth()]}</small><b>{counts.posted}</b></div>
       </div>
 
-      {view === "bank" ? (
+      {view === "templates" ? (
+        <TemplatesPanel
+          templates={templates}
+          onUse={(template) => setEditing({ template })}
+          onEdit={(t) => setEditingTemplate(t)}
+          onNew={() => setEditingTemplate("new")}
+          onDelete={(id) => { updateTemplates(templates.filter((t) => t.id !== id)); toast("Template deleted."); }}
+        />
+      ) : view === "bank" ? (
         <section className="card" aria-labelledby="h-bank">
           <CardHeader id="h-bank" icon="sparkle" eyebrow="Save every idea" title="Ideas & captions" meta={<><b>{shown.length}</b>shown</>} />
           <div className="content-filters">
@@ -188,11 +203,30 @@ function ContentBody({ now }: { now: Date }) {
           }} />
       )}
 
+      {editingTemplate && (
+        <TemplateEditor
+          template={editingTemplate === "new" ? undefined : editingTemplate}
+          onClose={() => setEditingTemplate(null)}
+          onSave={(t) => {
+            const exists = templates.some((x) => x.id === t.id);
+            updateTemplates(exists ? templates.map((x) => (x.id === t.id ? t : x)) : [...templates, t]);
+            setEditingTemplate(null);
+            toast("Template saved.");
+          }}
+        />
+      )}
+
       {editing && (
         <ContentEditor
-          key={editing.item?.id ?? `new-${editing.day ?? ""}`}
+          key={editing.item?.id ?? `new-${editing.day ?? ""}-${editing.template?.id ?? ""}`}
           item={editing.item}
           day={editing.day}
+          templates={templates}
+          initialTemplate={editing.template}
+          onSaveAsTemplate={(t) => {
+            updateTemplates([...templates, t]);
+            toast(`Saved as the template "${t.name}".`);
+          }}
           onClose={() => setEditing(null)}
           onCopy={copy}
           onSave={(c) => {
@@ -205,10 +239,32 @@ function ContentBody({ now }: { now: Date }) {
   );
 }
 
-function ContentEditor({ item, day, onClose, onSave, onCopy }: {
-  item?: ContentItem; day?: string; onClose: () => void; onSave: (c: NewContent) => void; onCopy: (c: ContentItem) => void;
+function ContentEditor({ item, day, templates, initialTemplate, onClose, onSave, onCopy, onSaveAsTemplate }: {
+  item?: ContentItem; day?: string; templates: ContentTemplate[]; initialTemplate?: ContentTemplate;
+  onClose: () => void; onSave: (c: NewContent) => void; onCopy: (c: ContentItem) => void; onSaveAsTemplate: (t: ContentTemplate) => void;
 }) {
-  const [caption, setCaption] = useState(item?.caption ?? "");
+  const [tpl, setTpl] = useState<ContentTemplate | undefined>(initialTemplate);
+  const seed = item ?? (tpl ? { title: tpl.title, platform: tpl.platform, format: tpl.format, pillar: tpl.pillar, hook: tpl.hook, caption: tpl.caption, hashtags: tpl.hashtags, status: undefined, post_day: undefined } : undefined);
+  const [caption, setCaption] = useState(seed?.caption ?? "");
+  const [naming, setNaming] = useState(false);
+  const formRef = useRef<HTMLFormElement>(null);
+
+  function pickTemplate(t: ContentTemplate | undefined) {
+    setTpl(t);
+    setCaption(t?.caption ?? "");
+  }
+
+  function saveAsTemplate(name: string) {
+    const form = formRef.current;
+    if (!form || !name.trim()) return;
+    const f = new FormData(form);
+    const val = (k: string) => String(f.get(k) ?? "").trim();
+    onSaveAsTemplate({
+      id: newId("t"), name: name.trim(), platform: val("platform"), format: val("format"), pillar: val("pillar"),
+      title: val("title"), hook: val("hook"), caption, hashtags: val("hashtags"),
+    });
+    setNaming(false);
+  }
   return (
     <div className="sheet-wrap" role="dialog" aria-modal="true" aria-labelledby="ce-title">
       <div className="scrim" onClick={onClose} />
@@ -217,7 +273,19 @@ function ContentEditor({ item, day, onClose, onSave, onCopy }: {
           <h2 id="ce-title">{item ? "Edit idea" : "New idea"}</h2>
           <button type="button" className="iconbtn" aria-label="Close" onClick={onClose}><Icon name="x" /></button>
         </div>
-        <form className="pform" onSubmit={(e) => {
+        {!item && templates.length > 0 && (
+          <div className="tpl-pick">
+            <span className="eyebrow">Start from a template</span>
+            <div className="chipset-row">
+              <button type="button" className={`fchip${!tpl ? " on" : ""}`} aria-pressed={!tpl} onClick={() => pickTemplate(undefined)}>Blank</button>
+              {templates.map((t) => (
+                <button key={t.id} type="button" className={`fchip${tpl?.id === t.id ? " on" : ""}`} aria-pressed={tpl?.id === t.id} onClick={() => pickTemplate(t)}>{t.name}</button>
+              ))}
+            </div>
+            {tpl && <p className="hint-sm">Replace the words in [square brackets] with your own.</p>}
+          </div>
+        )}
+        <form className="pform" ref={formRef} key={tpl?.id ?? "blank"} onSubmit={(e) => {
           e.preventDefault();
           const f = new FormData(e.currentTarget);
           const val = (k: string) => String(f.get(k) ?? "").trim() || null;
@@ -236,19 +304,28 @@ function ContentEditor({ item, day, onClose, onSave, onCopy }: {
             post_day,
           });
         }}>
-          <label className="full">Idea<input id="ce-title-in" name="title" defaultValue={item?.title} placeholder="3 signs you're ready to start your debt snowball" maxLength={200} required autoFocus /></label>
-          <label>Platform<select id="ce-platform" name="platform" defaultValue={item?.platform ?? "Instagram"}>{PLATFORMS.map((p) => <option key={p}>{p}</option>)}</select></label>
-          <label>Format<select id="ce-format" name="format" defaultValue={item?.format ?? "Reel"}>{FORMATS.map((p) => <option key={p}>{p}</option>)}</select></label>
-          <label>Topic<select id="ce-pillar" name="pillar" defaultValue={item?.pillar ?? "Debt payoff tips"}>{PILLARS.map((p) => <option key={p}>{p}</option>)}</select></label>
+          <label className="full">Idea<input id="ce-title-in" name="title" defaultValue={seed?.title} placeholder="3 signs you're ready to start your debt snowball" maxLength={200} required autoFocus /></label>
+          <label>Platform<select id="ce-platform" name="platform" defaultValue={seed?.platform ?? "Instagram"}>{PLATFORMS.map((p) => <option key={p}>{p}</option>)}</select></label>
+          <label>Format<select id="ce-format" name="format" defaultValue={seed?.format ?? "Reel"}>{FORMATS.map((p) => <option key={p}>{p}</option>)}</select></label>
+          <label>Topic<select id="ce-pillar" name="pillar" defaultValue={seed?.pillar ?? "Debt payoff tips"}>{PILLARS.map((p) => <option key={p}>{p}</option>)}</select></label>
           <label>Status<select id="ce-status" name="status" defaultValue={item?.status ?? (day ? "Scheduled" : "Idea")}>{CONTENT_STATUSES.map((p) => <option key={p}>{p}</option>)}</select></label>
           <label className="full">Post date <small>(optional)</small><input id="ce-day" name="post_day" type="date" defaultValue={item?.post_day ?? day ?? ""} /></label>
-          <label className="full">Hook <small>(the first line that stops the scroll)</small><input id="ce-hook" name="hook" defaultValue={item?.hook ?? ""} placeholder="I paid off $18,000 without a raise. Here's how." maxLength={300} /></label>
+          <label className="full">Hook <small>(the first line that stops the scroll)</small><input id="ce-hook" name="hook" defaultValue={seed?.hook ?? ""} placeholder="I paid off $18,000 without a raise. Here's how." maxLength={300} /></label>
           <label className="full">Caption <small>{caption.length ? `${caption.length.toLocaleString("en-US")} characters` : ""}</small>
-            <textarea id="ce-caption" name="caption" rows={7} value={caption} onChange={(e) => setCaption(e.currentTarget.value)} maxLength={5000}
+            <textarea id="ce-caption" name="caption" rows={tpl && !item ? 14 : 7} value={caption} onChange={(e) => setCaption(e.currentTarget.value)} maxLength={5000}
               placeholder="Write the caption, script or email here…" />
           </label>
-          <label className="full">Hashtags <small>(optional)</small><input id="ce-tags" name="hashtags" defaultValue={item?.hashtags ?? ""} placeholder="#debtfree #debtfreejourney #budgeting" maxLength={500} /></label>
-          <div className="form-actions full">
+          <label className="full">Hashtags <small>(optional)</small><input id="ce-tags" name="hashtags" defaultValue={seed?.hashtags ?? ""} placeholder="#debtfree #debtfreejourney #budgeting" maxLength={500} /></label>
+          {naming && (
+            <div className="full tpl-name">
+              <label htmlFor="tpl-name-in" className="sr-only">Template name</label>
+              <input id="tpl-name-in" placeholder="Template name, like Client win carousel" maxLength={60} autoFocus
+                onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); saveAsTemplate(e.currentTarget.value); } }} />
+              <button type="button" className="btn sm" onClick={(e) => saveAsTemplate((e.currentTarget.previousElementSibling as HTMLInputElement).value)}>Save template</button>
+            </div>
+          )}
+          <div className="form-actions full wrap">
+            {!naming && <button type="button" className="btn ghost" onClick={() => setNaming(true)}>Save as template</button>}
             {item && <button type="button" className="btn ghost" onClick={() => onCopy({ ...item, caption })}>Copy caption</button>}
             <button type="button" className="btn ghost" onClick={onClose}>Cancel</button>
             <button type="submit" className="btn">{item ? "Save" : "Add idea"}</button>
@@ -342,6 +419,67 @@ function ContentCalendar({ now, items, onOpen, onAdd, onSchedule }: {
             ))}
           </ul>
         </section>
+      </div>
+    </div>
+  );
+}
+
+function TemplatesPanel({ templates, onUse, onEdit, onNew, onDelete }: {
+  templates: ContentTemplate[]; onUse: (t: ContentTemplate) => void; onEdit: (t: ContentTemplate) => void; onNew: () => void; onDelete: (id: string) => void;
+}) {
+  return (
+    <section className="card" aria-labelledby="h-tpl">
+      <CardHeader id="h-tpl" icon="journal" eyebrow="Reuse what works" title="Post templates" meta={<><b>{templates.length}</b>{templates.length === 1 ? "template" : "templates"}</>} />
+      <p className="lede-sm">Start a new idea from a template and fill in the [blanks]. Edit any template to make it sound like you, or save one of your own posts as a template.</p>
+      <div className="content-grid">
+        {templates.map((t) => (
+          <article className="content-card tpl-card" key={t.id}>
+            <div className="cc-top"><span className="tag-pill">{t.platform} · {t.format}</span></div>
+            <h3 className="tpl-title">{t.name}</h3>
+            {t.hook && <p className="cc-hook">“{t.hook}”</p>}
+            <p className="cc-cap">{t.caption.split("\n").filter(Boolean).slice(0, 3).join(" · ").slice(0, 140)}…</p>
+            <div className="cc-actions">
+              <button type="button" className="btn sm" onClick={() => onUse(t)}>Use template</button>
+              <button type="button" className="btn ghost sm" onClick={() => onEdit(t)}>Edit</button>
+              <DeleteButton label={`Delete template ${t.name}`} onConfirm={() => onDelete(t.id)} />
+            </div>
+          </article>
+        ))}
+      </div>
+      <div className="card-foot"><button type="button" className="btn ghost sm" onClick={onNew}>New template</button></div>
+    </section>
+  );
+}
+
+function TemplateEditor({ template, onClose, onSave }: { template?: ContentTemplate; onClose: () => void; onSave: (t: ContentTemplate) => void }) {
+  return (
+    <div className="sheet-wrap" role="dialog" aria-modal="true" aria-labelledby="te-title">
+      <div className="scrim" onClick={onClose} />
+      <div className="sheet wide">
+        <div className="sheet-h">
+          <h2 id="te-title">{template ? "Edit template" : "New template"}</h2>
+          <button type="button" className="iconbtn" aria-label="Close" onClick={onClose}><Icon name="x" /></button>
+        </div>
+        <form className="pform" onSubmit={(e) => {
+          e.preventDefault();
+          const f = new FormData(e.currentTarget);
+          const val = (k: string) => String(f.get(k) ?? "").trim();
+          onSave({ id: template?.id ?? newId("t"), name: val("name") || "My template", platform: val("platform"), format: val("format"), pillar: val("pillar"),
+            title: val("title"), hook: val("hook"), caption: String(f.get("caption") ?? ""), hashtags: val("hashtags") });
+        }}>
+          <label className="full">Template name<input id="te-name" name="name" defaultValue={template?.name} placeholder="Client win carousel" maxLength={60} required autoFocus /></label>
+          <label>Platform<select id="te-platform" name="platform" defaultValue={template?.platform ?? "Instagram"}>{PLATFORMS.map((p) => <option key={p}>{p}</option>)}</select></label>
+          <label>Format<select id="te-format" name="format" defaultValue={template?.format ?? "Reel"}>{FORMATS.map((p) => <option key={p}>{p}</option>)}</select></label>
+          <label className="full">Topic<select id="te-pillar" name="pillar" defaultValue={template?.pillar ?? "Debt payoff tips"}>{PILLARS.map((p) => <option key={p}>{p}</option>)}</select></label>
+          <label className="full">Title formula<input id="te-title-in" name="title" defaultValue={template?.title} maxLength={200} /></label>
+          <label className="full">Hook formula<input id="te-hook" name="hook" defaultValue={template?.hook} maxLength={300} /></label>
+          <label className="full">Caption, script or outline<textarea id="te-caption" name="caption" rows={14} defaultValue={template?.caption} maxLength={5000} /></label>
+          <label className="full">Hashtags<input id="te-tags" name="hashtags" defaultValue={template?.hashtags} maxLength={500} /></label>
+          <div className="form-actions full">
+            <button type="button" className="btn ghost" onClick={onClose}>Cancel</button>
+            <button type="submit" className="btn">Save template</button>
+          </div>
+        </form>
       </div>
     </div>
   );

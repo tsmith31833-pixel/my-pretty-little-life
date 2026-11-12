@@ -224,7 +224,7 @@ export async function deleteChore(id: string) {
 export const CONTENT_STATUSES = ["Idea", "Drafted", "Scheduled", "Posted"] as const;
 export type ContentStatus = (typeof CONTENT_STATUSES)[number];
 export const PLATFORMS = ["Instagram", "TikTok", "YouTube", "Facebook", "Pinterest", "Threads", "LinkedIn", "Email", "Blog"];
-export const FORMATS = ["Reel", "Carousel", "Static post", "Story", "Short", "Long video", "Live", "Email", "Blog post"];
+export const FORMATS = ["Reel", "Carousel", "Static post", "Story", "Short", "Long video", "Live", "Pin", "Idea pin", "Email", "Blog post"];
 export const PILLARS = ["Debt payoff tips", "Budgeting", "Money mindset", "Client wins", "Behind the scenes", "Offers & launches", "Lifestyle", "Other"];
 
 export type ContentItem = {
