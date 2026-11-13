@@ -37,7 +37,18 @@ export function useRows<T>(load: () => Promise<T>, deps: unknown[]) {
 
 // ---------- personal finance ----------
 export type Category = { name: string; limit: number };
-export type Budget = { month: string; income: number; categories: Category[] };
+export type PaycheckItem = { id: string; name: string; amount: number; done: boolean; billId?: string | null };
+export type Paycheck = { id: string; name: string; day: number; amount: number; items: PaycheckItem[] };
+export type Budget = { month: string; income: number; categories: Category[]; paychecks?: Paycheck[] };
+
+/** Two paychecks to start: the 1st and the 15th, each half of planned income. */
+export function defaultPaychecks(income: number): Paycheck[] {
+  const half = Math.round((income / 2) * 100) / 100;
+  return [
+    { id: "p1", name: "1st paycheck", day: 1, amount: half, items: [] },
+    { id: "p2", name: "2nd paycheck", day: 15, amount: half, items: [] },
+  ];
+}
 export type Txn = { id: string; day: string; kind: "expense" | "income"; amount: number; category: string; note: string | null };
 export type Bill = { id: string; name: string; amount: number; due_day: number; autopay: boolean; paid_months: string[] };
 export type Saving = { id: string; name: string; target: number; saved: number };
@@ -55,13 +66,27 @@ export const DEFAULT_CATEGORIES: Category[] = [
 ];
 
 /** This month's budget. If it doesn't exist yet, it starts from last month's (or the defaults). */
+/** This month's budget. If it doesn't exist yet, it starts from last month's (or the defaults).
+ *  Paycheck plans carry over too, with every item unticked. */
 export async function getBudget(month: string): Promise<Budget> {
-  const row = check<Budget | null>(await db().from("budgets").select("month, income, categories").eq("month", month).maybeSingle());
-  if (row) return { ...row, income: num(row.income) };
+  // The paychecks column arrives with supabase/phase9.sql; read without it until then.
+  let cols = "month, income, categories, paychecks";
+  let first = await db().from("budgets").select(cols).eq("month", month).maybeSingle();
+  if (first.error) {
+    cols = "month, income, categories";
+    first = await db().from("budgets").select(cols).eq("month", month).maybeSingle();
+  }
+  const row = check<Budget | null>(first as { data: Budget | null; error: { message: string } | null });
+  if (row) return { ...row, income: num(row.income), paychecks: row.paychecks ?? undefined };
   const prev = check<Budget | null>(
-    await db().from("budgets").select("month, income, categories").lt("month", month).order("month", { ascending: false }).limit(1).maybeSingle(),
+    (await db().from("budgets").select(cols).lt("month", month).order("month", { ascending: false }).limit(1).maybeSingle()) as { data: Budget | null; error: { message: string } | null },
   );
-  return { month, income: prev ? num(prev.income) : 0, categories: prev?.categories ?? DEFAULT_CATEGORIES };
+  return {
+    month,
+    income: prev ? num(prev.income) : 0,
+    categories: prev?.categories ?? DEFAULT_CATEGORIES,
+    paychecks: prev?.paychecks?.map((p) => ({ ...p, items: p.items.map((i) => ({ ...i, done: false })) })) ?? undefined,
+  };
 }
 export async function saveBudget(b: Budget) {
   check(await db().from("budgets").upsert(b));

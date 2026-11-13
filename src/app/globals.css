@@ -828,3 +828,26 @@ textarea.p-text::placeholder{color:var(--muted);opacity:.8;font-style:italic}
 .tag-cloud{display:flex;flex-wrap:wrap;gap:5px;margin:0}
 .tag-cloud span{font-size:.78rem;padding:3px 9px;border-radius:999px;background:var(--card);border:1px solid var(--line);color:var(--hot-text);overflow-wrap:anywhere}
 .set-form{grid-template-columns:minmax(0,1fr)}
+
+/* ---------- Paycheck budgets ---------- */
+.mgrid{grid-template-areas:"paychecks paychecks" "budget txns" "bills txns" "savings debts"}
+.pay-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.paycheck{display:grid;gap:12px;align-content:start;padding:16px;border-radius:22px;border:1px solid var(--line);background:linear-gradient(160deg,var(--blush),var(--card));min-width:0}
+.pay-head{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;flex-wrap:wrap}
+.pay-head h3{font-family:var(--f-display);font-weight:500;font-size:1.3rem}
+.pay-head .muted{font-size:.8rem}
+.pay-amt{display:grid;justify-items:end;gap:6px}
+.pay-amt b{font-family:var(--f-display);font-weight:500;font-size:1.6rem;font-variant-numeric:tabular-nums}
+.pay-sum{display:grid;gap:6px}
+.pay-sum .lbl{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;font-size:.84rem;color:var(--muted)}
+.pay-sum .lbl b{color:var(--ink);font-weight:600}
+.pay-sum .lbl b.over{color:var(--hot-text)}
+.pay-sum .lbl b.ok{color:var(--ok)}
+.pay-add .pay-amt-in{flex:0 0 96px}
+.pay-note{flex:1 1 auto}
+@media (max-width:1024px){
+  .mgrid{grid-template-areas:"paychecks" "txns" "budget" "bills" "savings" "debts"}
+}
+@media (max-width:760px){.pay-grid{grid-template-columns:minmax(0,1fr)}}
+.paycheck{grid-template-columns:minmax(0,1fr)}
+.pay-add input{min-width:0}

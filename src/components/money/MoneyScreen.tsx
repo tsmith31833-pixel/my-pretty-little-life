@@ -4,6 +4,7 @@ import { useState } from "react";
 import { Icon } from "../Icon";
 import { AppShell, useShell } from "../shell/AppShell";
 import { CardHeader } from "../home/CardHeader";
+import { PaychecksCard } from "./PaychecksCard";
 import { DeleteButton, MonthNav, Progress, parseMoney } from "../ui";
 import {
   addBill, addDebt, addSaving, addTxn, deleteBill, deleteDebt, deleteSaving, deleteTxn, getBudget, listBills, listDebts,
@@ -64,7 +65,18 @@ function MoneyBody({ now }: { now: Date }) {
 
   function updateBudget(next: Budget) {
     budget.setData(next);
-    saveBudget(next).catch(oops);
+    saveBudget(next).catch(() =>
+      toast(next.paychecks ? "That didn't save. If this is your first time using paycheck budgets, run supabase/phase9.sql in Supabase." : "That didn't save. Check your internet connection and try again."),
+    );
+  }
+
+  function markBillPaid(billId: string, paid: boolean) {
+    const all = bills.data ?? [];
+    const bill = all.find((x) => x.id === billId);
+    if (!bill) return;
+    const next = paid ? [...new Set([...bill.paid_months, mk])] : bill.paid_months.filter((m) => m !== mk);
+    bills.setData(all.map((x) => (x.id === billId ? { ...x, paid_months: next } : x)));
+    setBillPaid(billId, next).catch(oops);
   }
 
   return (
@@ -92,6 +104,10 @@ function MoneyBody({ now }: { now: Date }) {
       )}
 
       <div className="mgrid">
+        {b && (
+          <PaychecksCard budget={b} bills={bills.data ?? []} monthKey={mk} monthName={MONTHS[month.getMonth()]}
+            onChange={updateBudget} onBillPaid={markBillPaid} toast={toast} />
+        )}
         {/* Budget categories */}
         <section className="card" style={{ gridArea: "budget" }} aria-labelledby="h-budget">
           <CardHeader id="h-budget" icon="coin" eyebrow={`${MONTHS[month.getMonth()]} plan`} title="Budget" />
