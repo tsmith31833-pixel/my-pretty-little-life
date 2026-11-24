@@ -88,15 +88,15 @@ em.gold{font-style:italic;color:var(--gold-text)}
 .logo b i{font-family:var(--f-script);font-style:normal;font-weight:400;color:var(--gold-text);font-size:1.5em;margin:0 .04em;line-height:0;position:relative;top:.08em}
 .logo small{font-size:.62rem;font-weight:700;letter-spacing:.28em;text-transform:uppercase;color:var(--muted);margin-top:4px}
 .nav{display:none}
-.nav a{text-decoration:none;font-size:.84rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;padding:8px 2px;position:relative}
+.nav a{text-decoration:none;font-size:.8rem;font-weight:700;letter-spacing:.08em;white-space:nowrap;text-transform:uppercase;padding:8px 2px;position:relative}
 .nav a::after{content:"";position:absolute;left:0;right:0;bottom:2px;height:1px;background:var(--gold);transform:scaleX(0);transition:transform .35s var(--ease)}
 .nav a:hover::after,.nav a[aria-current="page"]::after{transform:scaleX(1)}
 .bar-actions{display:flex;gap:10px;align-items:center}
 .bar-actions .btn{display:none}
 .menu-btn{width:48px;height:48px;border-radius:50%;border:1px solid var(--line);background:var(--paper);display:grid;place-items:center;cursor:pointer;color:var(--ink)}
 .menu-btn span{display:block;width:18px;height:1px;background:currentColor;box-shadow:0 -6px 0 currentColor,0 6px 0 currentColor}
-@media (min-width:980px){
-  .nav{display:flex;gap:28px}
+@media (min-width:1240px){
+  .nav{display:flex;gap:22px}
   .menu-btn{display:none}
   .bar-actions .btn{display:inline-flex}
 }
@@ -106,7 +106,7 @@ em.gold{font-style:italic;color:var(--gold-text)}
 .drawer-top{display:flex;justify-content:space-between;align-items:center;min-height:54px}
 .close-btn{width:48px;height:48px;border-radius:50%;border:1px solid var(--line);background:var(--paper);font-size:1.4rem;cursor:pointer;color:var(--ink)}
 .drawer nav{display:flex;flex-direction:column}
-.drawer nav a{font-family:var(--f-display);font-weight:500;font-size:2rem;text-decoration:none;padding:10px 0;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:baseline}
+.drawer nav a{font-family:var(--f-display);font-weight:500;font-size:1.75rem;text-decoration:none;padding:10px 0;min-height:56px;align-items:center!important;gap:12px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:baseline}
 .drawer nav a small{font-family:var(--f-body);font-size:.74rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--gold-text)}
 
 /* sections */
@@ -142,9 +142,8 @@ em.gold{font-style:italic;color:var(--gold-text)}
 }
 
 /* photo placeholder */
-.photo{position:relative;border-radius:var(--r-lg);overflow:hidden;background:var(--blush);aspect-ratio:5/4;max-width:100%;isolation:isolate}
+.photo{position:relative;border-radius:var(--r-lg);overflow:hidden;background-color:var(--tone,var(--blush));background-image:repeating-linear-gradient(0deg,rgba(0,0,0,.035) 0 1px,transparent 1px 6px),repeating-linear-gradient(90deg,rgba(0,0,0,.035) 0 1px,transparent 1px 6px);aspect-ratio:5/4;max-width:100%;isolation:isolate}
 .photo svg{display:block;width:100%;height:100%}
-.photo .ph-note{position:absolute;right:12px;top:12px;font-size:.66rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;background:color-mix(in srgb,var(--paper) 82%,transparent);color:var(--muted);padding:5px 9px;border-radius:var(--r-pill)}
 .sv-d{font-family:var(--f-display)}
 .sv-b{font-family:var(--f-body)}
 .sv-s{font-family:var(--f-script)}
@@ -157,7 +156,7 @@ em.gold{font-style:italic;color:var(--gold-text)}
 
 /* welcome */
 .welcome{display:grid;gap:40px}
-.welcome .photo{aspect-ratio:1/1}
+.welcome .photo{aspect-ratio:5/4}
 .welcome-copy{display:flex;flex-direction:column;gap:22px;min-width:0}
 .pillars{display:grid;gap:0;border-top:1px solid var(--line);margin-top:10px}
 .pillar{display:grid;grid-template-columns:auto 1fr;gap:16px;padding:18px 0;border-bottom:1px solid var(--line);align-items:start}
@@ -178,13 +177,17 @@ em.gold{font-style:italic;color:var(--gold-text)}
 .p-body{display:flex;flex-direction:column;gap:8px;padding:0 10px;flex:1}
 .p-meta{display:flex;justify-content:space-between;flex-wrap:wrap;gap:4px 10px;font-size:.74rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--gold-text)}
 .p-body h3{font-size:1.35rem;font-weight:600;line-height:1.2}
+.p-body h3 a{text-decoration:none}
+.p-body h3 a:hover{color:var(--blush-ink)}
+.p-meta .soon{color:var(--blush-ink)}
+.p-img{display:block;border-radius:calc(var(--r-lg) - 8px)}
 .p-body p{color:var(--muted);font-size:1rem;line-height:1.65}
 .p-actions{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:6px 10px 0;flex-wrap:wrap}
 .price-note{font-size:.78rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
 
 /* chips */
 .chips{display:flex;gap:8px;flex-wrap:wrap}
-.chip{border:1px solid var(--line);background:var(--paper);color:var(--ink);border-radius:var(--r-pill);padding:10px 18px;font:700 .8rem var(--f-body);letter-spacing:.1em;text-transform:uppercase;cursor:pointer;min-height:42px;transition:background .3s,color .3s,border-color .3s}
+.chip{border:1px solid var(--line);background:var(--paper);color:var(--ink);border-radius:var(--r-pill);padding:10px 18px;font:700 .8rem var(--f-body);letter-spacing:.1em;text-transform:uppercase;cursor:pointer;min-height:44px;transition:background .3s,color .3s,border-color .3s}
 .chip[aria-pressed="true"]{background:var(--ink);color:var(--cream);border-color:var(--ink)}
 
 /* article cards */
@@ -225,7 +228,7 @@ em.gold{font-style:italic;color:var(--gold-text)}
 .signup-row{display:flex;flex-direction:column;gap:10px}
 @media (min-width:560px){.signup-row{flex-direction:row}.signup-row input{flex:1;min-width:0}}
 .field{display:flex;flex-direction:column;gap:6px;min-width:0}
-.field label{font-size:.8rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.field > label,.field legend{font-size:.8rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
 input,select,textarea{font:inherit;font-size:1rem;color:var(--ink);background:var(--paper);border:1px solid var(--line);border-radius:var(--r-pill);padding:14px 20px;min-height:52px;width:100%}
 textarea{border-radius:var(--r-md);min-height:150px;resize:vertical}
 select{appearance:none;background-image:linear-gradient(45deg,transparent 50%,var(--muted) 50%),linear-gradient(135deg,var(--muted) 50%,transparent 50%);background-position:calc(100% - 24px) 50%,calc(100% - 18px) 50%;background-size:6px 6px;background-repeat:no-repeat;padding-right:44px}
@@ -302,7 +305,7 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--gold);bo
 
 /* about */
 .about-grid{display:grid;gap:40px;align-items:center}
-.about-grid .photo{aspect-ratio:4/5}
+.about-grid .photo{aspect-ratio:5/4}
 @media (min-width:900px){.about-grid{grid-template-columns:1fr 1fr;gap:80px}}
 .values{display:grid;gap:22px;grid-template-columns:1fr}
 @media (min-width:700px){.values{grid-template-columns:repeat(2,1fr)}}
@@ -325,19 +328,89 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--gold);bo
 .copy-row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
 .copy-row code{font-family:var(--f-body);font-size:1rem;user-select:all;overflow-wrap:anywhere}
 
-/* modal */
-.modal{position:fixed;inset:0;z-index:90;display:flex;align-items:flex-end;justify-content:center;background:color-mix(in srgb,#16110F 55%,transparent);opacity:0;visibility:hidden;transition:opacity .35s}
-.modal.open{opacity:1;visibility:visible}
-.sheet{background:var(--cream);width:100%;max-width:980px;max-height:92vh;overflow-y:auto;border-radius:var(--r-lg) var(--r-lg) 0 0;padding:16px max(16px,env(safe-area-inset-right,0px)) calc(28px + env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px));transform:translateY(40px);transition:transform .5s var(--ease)}
-.modal.open .sheet{transform:none}
-.sheet-grid{display:grid;gap:26px}
-.sheet-close{display:flex;justify-content:flex-end}
-.sheet-copy{display:flex;flex-direction:column;gap:16px;min-width:0;padding:0 4px}
-@media (min-width:800px){.modal{align-items:center;padding:24px}.sheet{border-radius:var(--r-lg);padding:20px}.sheet-grid{grid-template-columns:1fr 1fr;gap:36px;align-items:start}}
-
 /* toast */
 .toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translate(-50%,30px);background:var(--ink);color:var(--cream);padding:14px 22px;border-radius:var(--r-pill);font-size:1rem;font-weight:700;z-index:95;opacity:0;transition:opacity .3s,transform .4s var(--ease);pointer-events:none;max-width:calc(100% - 32px);text-align:center}
 .toast.show{opacity:1;transform:translate(-50%,0)}
+
+
+/* scroll targets clear the sticky header */
+[id],[data-grace]{scroll-margin-top:90px}
+.stack{display:flex;flex-direction:column;gap:16px;min-width:0}
+.tags{display:flex;flex-wrap:wrap;gap:8px}
+.tags span{font:700 .78rem var(--f-body);letter-spacing:.08em;text-transform:uppercase;padding:8px 14px;border-radius:var(--r-pill);border:1px solid var(--gold);color:var(--gold-text)}
+
+/* ritual checklists (Sunday Reset, Monthly Money Reset) */
+.ritual{display:grid;gap:40px;align-items:start}
+@media (min-width:900px){.ritual{grid-template-columns:.9fr 1.1fr;gap:80px}}
+.steps{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:10px}
+.step label{display:grid;grid-template-columns:auto 1fr auto;gap:14px;align-items:center;padding:16px 18px;border-radius:var(--r-md);background:var(--paper);border:1px solid var(--line);cursor:pointer;min-height:60px;transition:border-color .3s}
+.step label:hover{border-color:var(--gold)}
+.step input{appearance:none;-webkit-appearance:none;width:26px;height:26px;min-height:0;padding:0;margin:0;border-radius:50%;border:1.5px solid var(--gold);background:var(--paper);cursor:pointer;flex:none}
+.step input:checked{background:var(--gold) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cpath d='M5.5 10.5l3 3 6-7' fill='none' stroke='%231A130C' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center/100% no-repeat}
+.step input:checked + span b{text-decoration:line-through;text-decoration-color:var(--gold)}
+.step b{display:block;font-weight:700}
+.step small{display:block;color:var(--muted);font-size:1rem;line-height:1.5}
+.step .mins{font:700 .76rem var(--f-body);letter-spacing:.08em;text-transform:uppercase;color:var(--gold-text);white-space:nowrap}
+.progress{display:flex;align-items:center;gap:12px;font:700 .8rem var(--f-body);letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.progress-bar{flex:1;height:6px;border-radius:3px;background:var(--line);overflow:hidden}
+.progress-bar i{display:block;height:100%;width:0;background:var(--gold);transition:width .5s var(--ease)}
+.steps-foot{display:flex;justify-content:flex-end}
+.steps-foot .link-arrow{min-height:44px}
+
+/* reset room */
+.rr-hero{display:grid;gap:36px;align-items:center}
+@media (min-width:900px){.rr-hero{grid-template-columns:1fr 1fr;gap:72px}}
+.rr-grid{display:grid;gap:22px;grid-template-columns:1fr}
+@media (min-width:700px){.rr-grid{grid-template-columns:repeat(2,1fr)}}
+.rr-card{background:var(--paper);border-radius:var(--r-lg);padding:clamp(24px,4vw,34px);display:flex;flex-direction:column;gap:12px;border:1px solid var(--line);min-width:0}
+.rr-card .script{font-size:2.4rem;line-height:.9}
+.rr-card p{color:var(--muted)}
+.inbox{display:flex;flex-direction:column;gap:4px;padding:14px 18px;border-radius:var(--r-md);background:var(--sand);font-size:1rem;color:var(--ink)!important}
+.inbox b{font:700 .74rem var(--f-body);letter-spacing:.12em;text-transform:uppercase;color:var(--gold-text)}
+.rr-card .link-arrow{margin-top:auto;align-self:flex-start}
+.challenge{display:flex;flex-direction:column;gap:36px}
+.weeks{display:grid;gap:12px;grid-template-columns:1fr}
+@media (min-width:700px){.weeks{grid-template-columns:repeat(2,1fr)}}
+.week{border:1px solid color-mix(in srgb,var(--on-noir) 22%,transparent);border-radius:var(--r-md);padding:22px;display:flex;flex-direction:column;gap:6px}
+.week span{font:700 .76rem var(--f-body);letter-spacing:.14em;text-transform:uppercase;color:var(--gold)}
+.week b{font-family:var(--f-display);font-weight:600;font-size:1.25rem}
+.week p{color:color-mix(in srgb,var(--on-noir) 78%,transparent)}
+.how{display:grid;gap:28px}
+@media (min-width:800px){.how{grid-template-columns:repeat(3,1fr)}}
+.how-step{display:flex;flex-direction:column;gap:8px;padding-top:18px;border-top:1px solid var(--gold)}
+.how-step .n{font-family:var(--f-display);font-size:2.4rem;color:var(--gold-text);line-height:1}
+.how-step b{font-family:var(--f-display);font-weight:600;font-size:1.25rem}
+.how-step p{color:var(--muted)}
+.join-card{background:var(--paper);border-radius:var(--r-lg);padding:clamp(22px,5vw,44px);box-shadow:var(--shadow);display:flex;flex-direction:column;gap:16px;max-width:760px;margin:0 auto}
+.interests{display:flex;flex-wrap:wrap;gap:8px;margin-top:4px}
+.pick{position:relative;display:inline-flex}
+.pick input{position:absolute;opacity:0;width:1px;height:1px;min-height:0;padding:0}
+.pick span{display:inline-flex;align-items:center;min-height:44px;padding:10px 16px;border-radius:var(--r-pill);border:1px solid var(--line);background:var(--cream);font:700 .8rem var(--f-body);letter-spacing:.06em;text-transform:uppercase;cursor:pointer;transition:background .3s,color .3s}
+.pick input:checked + span{background:var(--ink);color:var(--cream);border-color:var(--ink)}
+.pick input:checked + span::before{content:"✓";margin-right:8px}
+.pick input:focus-visible + span{outline:2px solid var(--gold);outline-offset:3px}
+
+/* product detail page */
+.pdp{display:grid;gap:32px;padding-bottom:clamp(56px,9vw,110px)}
+.gallery{display:flex;flex-direction:column;gap:12px;min-width:0}
+.thumbs{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.thumb{padding:0;border:2px solid transparent;border-radius:var(--r-md);background:none;cursor:pointer;min-height:44px;transition:border-color .3s}
+.thumb .photo{border-radius:calc(var(--r-md) - 4px)}
+.thumb[aria-pressed="true"]{border-color:var(--gold)}
+.pdp-info{display:flex;flex-direction:column;gap:18px;min-width:0}
+.status{display:inline-flex;align-items:center;gap:8px;font:700 .78rem var(--f-body);letter-spacing:.1em;text-transform:uppercase;padding:8px 14px;border-radius:var(--r-pill);width:fit-content}
+.status::before{content:"";width:8px;height:8px;border-radius:50%;background:currentColor}
+.status.available{background:color-mix(in srgb,var(--gold) 20%,transparent);color:var(--gold-text)}
+.status.soon{background:var(--blush);color:var(--blush-ink)}
+.buy-box{display:flex;flex-direction:column;gap:12px;padding:22px;border-radius:var(--r-lg);background:var(--paper);box-shadow:var(--shadow-sm)}
+.buy-box .btn{width:100%}
+.detail-block{border-top:1px solid var(--line);padding-top:20px;display:flex;flex-direction:column;gap:12px}
+.detail-block h2{font-size:1.35rem;font-weight:600}
+.detail-block p{color:var(--muted)}
+.specs{display:grid;grid-template-columns:auto 1fr;gap:10px 18px;margin:0}
+.specs dt{font:700 .8rem/1.9 var(--f-body);letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.specs dd{margin:0}
+@media (min-width:900px){.pdp{grid-template-columns:1.05fr .95fr;gap:64px;align-items:start}.gallery{position:sticky;top:96px}}
 
 @media (prefers-reduced-motion:reduce){
   *,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}
@@ -361,8 +434,9 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--gold);bo
   <div class="wrap bar">
     <a class="logo" href="#home" aria-label="Money and Grace Co. home"><b>Money<i>&amp;</i>Grace Co.</b><small>Build wealth with grace</small></a>
     <nav class="nav" aria-label="Main">
-      <a href="#shop">Shop</a>
       <a href="#money-edit">The Money Edit</a>
+      <a href="#shop">The Shop</a>
+      <a href="#reset-room">The Reset Room</a>
       <a href="#free-resources">Free Resources</a>
       <a href="#about">About</a>
       <a href="#contact">Contact</a>
@@ -381,10 +455,11 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--gold);bo
   </div>
   <nav aria-label="Mobile">
     <a href="#home">Home <small>Start here</small></a>
-    <a href="#shop">Shop <small>Planners</small></a>
     <a href="#money-edit">The Money Edit <small>Blog</small></a>
+    <a href="#shop">The Shop <small>Planners</small></a>
+    <a href="#reset-room">The Reset Room <small>Community</small></a>
     <a href="#free-resources">Free Resources <small>Freebies</small></a>
-    <a href="#about">About Us <small>Our story</small></a>
+    <a href="#about">About <small>Our story</small></a>
     <a href="#contact">Contact <small>Say hello</small></a>
   </nav>
   <a class="btn btn-primary" href="#free-resources">Get the free budget kit</a>
@@ -463,9 +538,34 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--gold);bo
     </div>
   </section>
 
-  <section class="section band-sand">
+  <section class="section band-sand" id="sunday-reset">
+    <div class="wrap ritual">
+      <div class="welcome-copy">
+        <span class="eyebrow">The Sunday Reset</span>
+        <h2 class="h-1">Fifteen minutes. <em class="gold">One calm week.</em></h2>
+        <p class="lede">Pour something warm and walk through these five steps. Tick each one as you go. Your progress is saved on this device.</p>
+        <div class="btn-row"><a class="btn btn-primary" href="#reset-room" data-scroll="#join">Get Sunday Reset emails</a></div>
+      </div>
+      <div class="stack" data-steps-mount="sunday"></div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap rr-hero">
+      <div class="photo" data-art="reset" data-tone="blush" data-label="A candle, a latte, and a Sunday Reset checklist"></div>
+      <div class="welcome-copy">
+        <span class="eyebrow">Introducing The Reset Room</span>
+        <h2 class="h-1">Your financial bestie’s <em class="gold">living room.</em></h2>
+        <p class="lede">A free email community for women who want company on the money journey. Monthly resets, weekly money dates, savings challenges, and gentle accountability.</p>
+        <div class="tags"><span>Monthly Money Reset</span><span>Weekly Money Date</span><span>Savings Challenges</span><span>Debt Payoff</span><span>Goal Setting</span></div>
+        <div class="btn-row"><a class="btn btn-primary" href="#reset-room">Step inside</a><a class="btn btn-ghost" href="#reset-room" data-scroll="#join">Join free</a></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section band-blush">
     <div class="wrap res">
-      <div class="photo" data-art="kit" data-tone="blush" data-label="The free Budget Starter Kit worksheets fanned out"></div>
+      <div class="photo" data-art="kit" data-tone="sand" data-label="The free Budget Starter Kit worksheets fanned out"></div>
       <div class="res-copy">
         <span class="eyebrow">Free resources</span>
         <h2 class="h-1">Start with the free <em class="gold">Budget Starter Kit.</em></h2>
@@ -475,7 +575,8 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--gold);bo
           <li>30-day spending tracker</li>
           <li>Monthly money date checklist</li>
         </ul>
-        <div class="btn-row"><a class="btn btn-primary" href="#free-resources">Get the free kit</a></div>
+        <div data-signup="home-kit" data-cta="Send me the free kit" data-resource="The Budget Starter Kit"></div>
+        <div><a class="link-arrow" href="#free-resources">See all free resources <span>→</span></a></div>
       </div>
     </div>
   </section>
@@ -498,7 +599,7 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--gold);bo
     </div>
   </section>
 
-  <section class="section band-blush">
+  <section class="section band-sand" id="newsletter">
     <div class="wrap cta-band">
       <span class="script">Hey, bestie</span>
       <h2 class="h-1">Let’s get your money together, bestie.</h2>
@@ -519,7 +620,7 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--gold);bo
   <div class="wrap" style="padding-bottom:clamp(64px,10vw,120px)">
     <div class="chips" role="group" aria-label="Filter products" data-shop-filters style="margin-bottom:28px"></div>
     <div class="grid-products" data-products="shop"></div>
-    <p class="fine" style="margin-top:28px">Prices and launch dates will be announced soon. Tap “Notify me” on any product to hear first.</p>
+    <p class="fine" style="margin-top:28px">Products marked Coming soon are still in the works. Open one and tap Notify me to hear the moment it launches.</p>
   </div>
   <section class="section band-noir">
     <div class="wrap cta-band">
@@ -567,6 +668,114 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--gold);bo
   </section>
 </div>
 
+<!-- ============ PRODUCT DETAIL ============ -->
+<div class="page" data-page="product" hidden>
+  <div class="wrap" data-pdp></div>
+  <section class="section band-blush">
+    <div class="wrap">
+      <div class="sec-head-row"><div><span class="eyebrow">You may also like</span><h2 class="h-2">More from the shop</h2></div><a class="link-arrow" href="#shop">Shop all <span>→</span></a></div>
+      <div class="grid-products" data-products="related"></div>
+    </div>
+  </section>
+</div>
+
+<!-- ============ RESET ROOM ============ -->
+<div class="page" data-page="reset-room" hidden>
+  <section class="wrap rr-hero" style="padding-block:clamp(44px,8vw,96px) clamp(56px,9vw,110px)">
+    <div class="welcome-copy">
+      <a class="crumb" href="#home">Home / The Reset Room</a>
+      <span class="eyebrow">Free email community</span>
+      <h1 class="h-1">Welcome to <em class="gold">The Reset Room.</em></h1>
+      <p class="lede">Kick off your shoes, bestie. This is the cozy corner of Money &amp; Grace Co., where we reset our budgets, cheer each other on, and keep money talk honest and kind.</p>
+      <p class="muted">The Reset Room lives in your inbox. There are no logins or forums, just thoughtful emails, printable tools, and a monthly challenge we do together.</p>
+      <div class="btn-row"><a class="btn btn-primary" href="#reset-room" data-scroll="#join">Join the free community</a><a class="btn btn-ghost" href="#reset-room" data-scroll="#challenge">This month’s challenge</a></div>
+    </div>
+    <div class="photo" data-art="reset" data-tone="blush" data-label="A candle, a latte, and a Sunday Reset checklist"></div>
+  </section>
+
+  <section class="section band-blush" id="monthly-reset">
+    <div class="wrap ritual">
+      <div class="welcome-copy">
+        <span class="eyebrow">Monthly Money Reset</span>
+        <h2 class="h-1">Start every month with a <em class="gold">clean slate.</em></h2>
+        <p class="lede">On the first of each month, members get this reset in their inbox. Try it here now. Your ticks are saved on this device.</p>
+        <div><a class="link-arrow" href="#product-monthly-money-planner">Pair it with the Monthly Money Planner <span>→</span></a></div>
+      </div>
+      <div class="stack" data-steps-mount="monthly"></div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <div class="sec-head"><span class="eyebrow">Inside The Reset Room</span><h2 class="h-1">How we show up <em class="gold">for you.</em></h2></div>
+      <div class="rr-grid">
+        <article class="rr-card"><span class="script">Sundays</span><h3 class="h-3">Weekly Money Date</h3><p>A standing date with your money. Fifteen minutes to check balances, look at the week ahead, and set one intention.</p><p class="inbox"><b>In your inbox</b>A short prompt every Sunday morning with the Sunday Reset checklist.</p><a class="link-arrow" href="#home" data-scroll="#sunday-reset">Try the Sunday Reset <span>→</span></a></article>
+        <article class="rr-card"><span class="script">Save</span><h3 class="h-3">Savings Challenges</h3><p>Playful challenges that turn saving into a habit, from no-spend weekends to the 52-week challenge.</p><p class="inbox"><b>In your inbox</b>A new challenge idea each month, with tips to make it fit your budget.</p><a class="link-arrow" href="#product-savings-challenges">See Savings Challenges <span>→</span></a></article>
+        <article class="rr-card"><span class="script">Pay it down</span><h3 class="h-3">Debt Payoff Accountability</h3><p>Paying off debt is easier with someone in your corner. Track every balance you shrink and celebrate each win.</p><p class="inbox"><b>In your inbox</b>A monthly check-in email with a progress prompt. Reply any time to share a win.</p><a class="link-arrow" href="#product-debt-repayment-tracker">See the Debt Repayment Tracker <span>→</span></a></article>
+        <article class="rr-card"><span class="script">Dream</span><h3 class="h-3">Financial Goal Setting</h3><p>Turn big dreams into clear money goals, with a number, a date, and a plan you can follow.</p><p class="inbox"><b>In your inbox</b>A goal-setting worksheet each season and gentle reminders to check in.</p><a class="link-arrow" href="#free-resources">Browse free worksheets <span>→</span></a></article>
+      </div>
+    </div>
+  </section>
+
+  <section class="section band-noir" id="challenge">
+    <div class="wrap challenge">
+      <div class="sec-head" style="margin:0">
+        <span class="eyebrow">This month’s community challenge</span>
+        <h2 class="h-1">The Holiday <span class="script" style="color:var(--gold);font-size:1.3em;line-height:.8">Calm Fund</span></h2>
+        <p class="lede" style="max-width:48ch">Build a small cushion for holiday spending so January starts calm. One step each week, with an email to guide you.</p>
+      </div>
+      <div class="weeks">
+        <div class="week"><span>Week 1</span><b>Make your list</b><p>Write down every gift, event, and trip you expect this season.</p></div>
+        <div class="week"><span>Week 2</span><b>Set your number</b><p>Add it up and choose a realistic amount to set aside.</p></div>
+        <div class="week"><span>Week 3</span><b>Find the money</b><p>Pause one subscription or skip two takeout meals, and move the difference.</p></div>
+        <div class="week"><span>Week 4</span><b>Spend with a plan</b><p>Shop from your list and track every purchase. No January regret.</p></div>
+      </div>
+      <div class="btn-row"><a class="btn btn-light" href="#reset-room" data-scroll="#join" data-pick="r-i-5">Join this month’s challenge</a></div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <div class="sec-head"><span class="eyebrow">How it works</span><h2 class="h-1">Three steps to <em class="gold">settle in.</em></h2></div>
+      <div class="how">
+        <div class="how-step"><span class="n">1</span><b>Join with your email</b><p>Tell us what you would like help with. It is free, and you can unsubscribe any time.</p></div>
+        <div class="how-step"><span class="n">2</span><b>Get your welcome kit</b><p>Your first email brings the Monthly Money Reset checklist and the Budget Starter Kit.</p></div>
+        <div class="how-step"><span class="n">3</span><b>Show up for yourself</b><p>Sunday money dates, the monthly challenge, and accountability check-ins arrive in your inbox.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section band-sand" id="join">
+    <div class="wrap">
+      <div class="join-card">
+        <span class="eyebrow">Join the free community</span>
+        <h2 class="h-1">Pull up a chair, <em class="gold">bestie.</em></h2>
+        <p class="muted">Choose what you would like help with and we will send the emails that fit.</p>
+        <form class="contact-form" id="reset-form" novalidate>
+          <div class="two">
+            <div class="field"><label for="r-name">First name (optional)</label><input id="r-name" name="first_name" autocomplete="given-name" placeholder="Your first name"></div>
+            <div class="field"><label for="r-email">Email</label><input id="r-email" name="email" type="email" autocomplete="email" required placeholder="you@email.com"></div>
+          </div>
+          <fieldset class="field" style="border:0;padding:0;margin:0;min-width:0">
+            <legend>I would love help with</legend>
+            <div class="interests">
+              <label class="pick" for="r-i-0"><input type="checkbox" id="r-i-0" value="Monthly Money Reset" checked><span>Monthly Money Reset</span></label>
+              <label class="pick" for="r-i-1"><input type="checkbox" id="r-i-1" value="Weekly Money Date" checked><span>Weekly Money Date</span></label>
+              <label class="pick" for="r-i-2"><input type="checkbox" id="r-i-2" value="Savings Challenges"><span>Savings Challenges</span></label>
+              <label class="pick" for="r-i-3"><input type="checkbox" id="r-i-3" value="Debt Payoff Accountability"><span>Debt Payoff Accountability</span></label>
+              <label class="pick" for="r-i-4"><input type="checkbox" id="r-i-4" value="Financial Goal Setting"><span>Financial Goal Setting</span></label>
+              <label class="pick" for="r-i-5"><input type="checkbox" id="r-i-5" value="This month’s challenge"><span>This month’s challenge</span></label>
+            </div>
+          </fieldset>
+          <div><button class="btn btn-primary" type="submit">Join The Reset Room</button></div>
+          <p class="form-msg" id="reset-msg" aria-live="polite"></p>
+          <p class="fine">Free. By joining you agree to receive emails from Money &amp; Grace Co. Unsubscribe anytime.</p>
+        </form>
+      </div>
+    </div>
+  </section>
+</div>
+
 <!-- ============ FREE RESOURCES ============ -->
 <div class="page" data-page="free-resources" hidden>
   <div class="wrap page-head">
@@ -608,7 +817,7 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--gold);bo
   </div>
   <section class="section-tight">
     <div class="wrap about-grid">
-      <div class="photo" data-art="desk" data-tone="blush" data-label="Lifestyle photo placeholder of the founder's workspace"></div>
+      <div class="photo" data-art="desk" data-tone="blush" data-label="A calm workspace with an open budget planner and a latte"></div>
       <div class="welcome-copy">
         <span class="eyebrow">Our mission</span>
         <h2 class="h-2">Financial confidence should feel good.</h2>
@@ -642,7 +851,7 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--gold);bo
         <span class="eyebrow">Meet Grace</span>
         <h2 class="h-2">Our animated money bestie.</h2>
         <p class="muted">Grace is the voice of the brand: the friend who compliments your outfit, then asks how your emergency fund is doing. She shows up in our planners, tips, and social posts.</p>
-        <div><a class="link-arrow" href="#home" data-scroll="grace">Meet Grace <span>→</span></a></div>
+        <div><a class="link-arrow" href="#home" data-scroll="[data-grace]">Meet Grace <span>→</span></a></div>
       </div>
     </div>
   </section>
@@ -696,7 +905,7 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--gold);bo
       </div>
       <div class="foot-cols">
         <div class="foot-col"><h4>Explore</h4>
-          <a href="#home">Home</a><a href="#shop">Shop</a><a href="#money-edit">The Money Edit</a><a href="#free-resources">Free Resources</a><a href="#about">About Us</a><a href="#contact">Contact</a>
+          <a href="#home">Home</a><a href="#money-edit">The Money Edit</a><a href="#shop">The Shop</a><a href="#reset-room">The Reset Room</a><a href="#free-resources">Free Resources</a><a href="#about">About</a><a href="#contact">Contact</a>
         </div>
         <div class="foot-col"><h4>Contact</h4>
           <button class="copy" type="button" data-copy="hello@moneyandgraceco.com">hello@moneyandgraceco.com</button>
@@ -717,29 +926,37 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--gold);bo
   </div>
 </footer>
 
-<div class="modal" id="modal" aria-hidden="true">
-  <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="m-title">
-    <div class="sheet-close"><button class="close-btn" type="button" data-close-modal aria-label="Close">×</button></div>
-    <div class="sheet-grid" data-modal-body></div>
-  </div>
-</div>
 <div class="toast" id="toast" role="status"></div>
 
 <script>
 /* ---------- content ---------- */
+const CHECKOUT_PLACEHOLDER='https://payhip.com/b/REPLACE-WITH-PAYHIP-ID';
+/* status: 'available' shows Buy Now; 'coming-soon' shows Notify me. Flip a product to 'available' and paste its Payhip link into checkout when it is ready. */
 const PRODUCTS=[
-  {id:'monthly-money-planner',name:'Monthly Money Planner',cat:'Planners',art:'monthly',tone:'blush',
+  {id:'monthly-money-planner',name:'Monthly Money Planner',cat:'Planners',art:'monthly',tone:'blush',status:'available',checkout:CHECKOUT_PLACEHOLDER,
    short:'One calm spread a month for income, bills, goals, and a money-date reflection.',
-   inside:['Monthly budget overview','Bill and due-date calendar','Savings and goals check-in','End-of-month reflection page']},
-  {id:'budget-planner',name:'Budget Planner',cat:'Planners',art:'budget',tone:'sand',
+   description:['The Monthly Money Planner gives your money one calm place to live each month. Map out your income and bills, check in on your goals, and close the month with a short reflection.','It is made for busy women who want a clear picture of their finances without spending hours in spreadsheets.'],
+   features:['Monthly budget overview on a single spread','Bill calendar to spot due dates at a glance','Goal check-ins for savings and debt','Reflection prompts written in the Money & Grace voice'],
+   included:['Monthly budget overview','Bill and due-date calendar','Savings and goals check-in','End-of-month reflection page','Quick-start guide'],
+   previews:[['monthly','blush','Cover'],['calendar','sand','Bill calendar page'],['desk','gold','On the desk']]},
+  {id:'budget-planner',name:'Budget Planner',cat:'Planners',art:'budget',tone:'sand',status:'coming-soon',checkout:CHECKOUT_PLACEHOLDER,
    short:'A complete budgeting system for paycheck planning, categories, and sinking funds.',
-   inside:['Paycheck-by-paycheck budget','Spending category tracker','Sinking funds pages','Annual money overview']},
-  {id:'debt-repayment-tracker',name:'Debt Repayment Tracker',cat:'Trackers',art:'debt',tone:'gold',
+   description:['The Budget Planner is a complete system for women who want to plan every paycheck with intention.','Track spending by category, set aside money for the expenses you know are coming, and see your whole year at a glance.'],
+   features:['Paycheck-by-paycheck planning','Spending tracker by category','Sinking funds for planned expenses','Year-at-a-glance money overview'],
+   included:['Paycheck budget pages','Spending category tracker','Sinking funds tracker','Annual money overview','Quick-start guide'],
+   previews:[['budget','sand','Budget spread'],['calendar','blush','Planning page'],['desk','blush','On the desk']]},
+  {id:'debt-repayment-tracker',name:'Debt Repayment Tracker',cat:'Trackers',art:'debt',tone:'gold',status:'coming-soon',checkout:CHECKOUT_PLACEHOLDER,
    short:'See every balance in one place and color in your progress as you pay it down.',
-   inside:['Debt list and payoff order','Snowball and avalanche planners','Payment log','Progress coloring pages']},
-  {id:'savings-challenges',name:'Savings Challenges',cat:'Challenges',art:'savings',tone:'blush',
+   description:['The Debt Repayment Tracker puts every balance in one place so you can stop guessing and start planning.','Choose a payoff method, log each payment, and color in your progress as balances shrink.'],
+   features:['Debt list with balances, rates, and minimums','Snowball and avalanche payoff planners','Payment log for every extra payment','Coloring progress pages to celebrate wins'],
+   included:['Debt overview sheet','Payoff method planner','Payment log','Progress coloring pages','Quick-start guide'],
+   previews:[['debt','gold','Tracker'],['debt-close','blush','Progress page'],['desk','sand','On the desk']]},
+  {id:'savings-challenges',name:'Savings Challenges',cat:'Challenges',art:'savings',tone:'blush',status:'coming-soon',checkout:CHECKOUT_PLACEHOLDER,
    short:'Fun, flexible challenges that make saving feel like a game you want to win.',
-   inside:['52-week savings challenge','Emergency fund tracker','No-spend month calendar','Sinking fund jars']}
+   description:['Savings Challenges turn saving into a game you actually want to play.','Pick a challenge that fits your month, color in your progress, and watch small amounts become real savings.'],
+   features:['Classic and flexible 52-week challenge','Emergency fund tracker','No-spend month calendar','Sinking fund jar trackers'],
+   included:['52-week savings challenge','Emergency fund tracker','No-spend month calendar','Sinking fund jars','Quick-start guide'],
+   previews:[['savings','blush','Challenge'],['savings-close','sand','Tracker page'],['reset','gold','On the desk']]}
 ];
 const ARTICLES=[
   {id:'zero-based-budget',cat:'Budgeting',title:'The zero-based budget, explained over coffee',dek:'Give every dollar a job before the month begins, and watch the stress quiet down.',read:'6 min read',art:'budget',tone:'blush',
@@ -845,21 +1062,33 @@ function kitStack(x,y,s=1){return `<g transform="translate(${x} ${y}) scale(${s}
   <text x="95" y="34" text-anchor="middle" class="sv-s" font-size="24" fill="#E2C893">Budget</text><text x="95" y="54" text-anchor="middle" class="sv-b" font-size="8" letter-spacing="2.6" fill="#F3E6CF">STARTER KIT</text>
   ${lines(20,92,150,6,16)}<rect x="20" y="196" width="70" height="22" rx="11" fill="#F4DADB"/><text x="55" y="211" text-anchor="middle" class="sv-b" font-size="7" letter-spacing="1.6" fill="#9C4D5C">FREE</text></g></g>`}
 
-function scene(kind,tone){
-  const bg=TONES[tone]||TONES.blush;let inner='';
+function candle(x,y,s=1){return `<g transform="translate(${x} ${y}) scale(${s})" filter="url(#sh)"><circle r="38" fill="#FFFDFA"/><circle r="31" fill="#F4E4D2"/><circle r="31" fill="none" stroke="#E7B8BD" stroke-width="3"/><path d="M0 -20c7 8 7 15 0 19-7-4-7-11 0-19z" fill="url(#goldg)"/><rect x="-1.2" y="-3" width="2.4" height="6" rx="1" fill="#16110F"/></g>`}
+function sheetReset(x,y,s=1){const rows=['Check your balances','Review last week','Look at the week ahead','Pay yourself first','Set one intention'];return `<g transform="translate(${x} ${y}) scale(${s}) rotate(-3)" filter="url(#sh)"><rect width="190" height="250" rx="6" fill="#FFFDFA"/>
+  <text x="20" y="44" class="sv-d" font-size="19" fill="#16110F">Sunday</text><text x="98" y="46" class="sv-s" font-size="22" fill="#B08A4E">reset</text>
+  <text x="20" y="62" class="sv-b" font-size="6.5" letter-spacing="2" fill="#87672F">15 MINUTES · ONE CALM WEEK</text>
+  ${rows.map((r,i)=>`<rect x="20" y="${86+i*30}" width="12" height="12" rx="3" fill="${i<3?'#C9A66B':'none'}" stroke="#C9A66B" stroke-width="1.3"/><text x="42" y="${96+i*30}" class="sv-b" font-size="9" fill="#3A2E2C">${r}</text>`).join('')}</g>`}
+function sheetCalendar(x,y,s=1){const hot=[3,11,17,24,30];let c='';for(let r=0;r<5;r++)for(let k=0;k<7;k++){const i=r*7+k,h=hot.includes(i);c+=`<rect x="${16+k*23}" y="${84+r*30}" width="20" height="26" rx="3" fill="${h?'#F4DADB':'#FBF6F0'}" stroke="#EADCD0"/>`+(h?`<circle cx="${26+k*23}" cy="${101+r*30}" r="3" fill="#C9A66B"/>`:'')}
+  return `<g transform="translate(${x} ${y}) scale(${s}) rotate(2)" filter="url(#sh)"><rect width="190" height="250" rx="6" fill="#FFFDFA"/><text x="16" y="42" class="sv-d" font-size="17" fill="#16110F">Bills &amp; due dates</text><text x="16" y="60" class="sv-b" font-size="6.5" letter-spacing="2" fill="#87672F">MONTHLY MONEY PLANNER</text>${['S','M','T','W','T','F','S'].map((d,k)=>`<text x="${26+k*23}" y="78" text-anchor="middle" class="sv-b" font-size="7" fill="#87672F">${d}</text>`).join('')}${c}</g>`}
+
+function scene(kind){
+  let inner='';
   switch(kind){
-    case 'hero': return `<svg viewBox="0 0 400 500" preserveAspectRatio="xMidYMid slice"><rect width="400" height="500" fill="${bg}"/><rect width="400" height="500" fill="url(#linen)"/>
+    case 'hero': return `<svg viewBox="0 0 400 500" preserveAspectRatio="xMidYMid meet">
       ${spreadBudget(40,300,.95)}${bookMonthly(120,60,1.15)}${cup(70,120,.95)}${pen(345,250,18)}${clip(330,90,25)}${petals(70,440)}</svg>`;
     case 'monthly': inner=`${bookMonthly(140,40,1)}${cup(76,232,.8)}${pen(340,150,12)}${petals(330,270)}`;break;
     case 'budget': inner=`${spreadBudget(55,60,1)}${pen(60,250,-62)}${clip(350,40,20)}`;break;
     case 'debt': inner=`${sheetDebt(110,40,1)}${cup(330,240,.75)}${pen(70,170,-10)}`;break;
     case 'savings': inner=`${sheetSavings(104,36,1)}${cup(330,90,.7)}${clip(70,260,-30)}${petals(330,270)}`;break;
     case 'kit': inner=`${kitStack(95,30,1)}${pen(350,180,15)}${petals(60,60)}`;break;
+    case 'reset': inner=`${sheetReset(150,34,1)}${candle(84,96,1)}${cup(352,268,.6)}${petals(70,250)}`;break;
+    case 'calendar': inner=`${sheetCalendar(105,30,1)}${pen(345,170,14)}${clip(62,80,-20)}`;break;
+    case 'debt-close': inner=`${sheetDebt(100,22,1.08)}${pen(350,170,10)}`;break;
+    case 'savings-close': inner=`${sheetSavings(100,16,1.08)}${petals(345,262)}`;break;
     case 'desk': inner=`${spreadBudget(30,130,.9)}${cup(320,80,.95)}${pen(330,250,40)}${clip(70,70,-15)}${petals(260,40)}`;break;
   }
-  return `<svg viewBox="0 0 400 320" preserveAspectRatio="xMidYMid slice"><rect width="400" height="320" fill="${bg}"/><rect width="400" height="320" fill="url(#linen)"/>${inner}</svg>`;
+  return `<svg viewBox="0 0 400 320" preserveAspectRatio="xMidYMid meet">${inner}</svg>`;
 }
-function photo(kind,tone,label,note=true){return `<div class="photo" role="img" aria-label="${label}">${scene(kind,tone)}${note?'<span class="ph-note">Photo placeholder</span>':''}</div>`}
+function photo(kind,tone,label){return `<div class="photo" style="--tone:${TONES[tone]||TONES.blush}" ${label?`role="img" aria-label="${label}"`:'aria-hidden="true"'}>${scene(kind)}</div>`}
 
 /* ---------- Grace mascot ---------- */
 const GRACE=`<svg viewBox="0 0 240 280" role="img" aria-label="Grace, the Money and Grace Co. mascot, a stylish woman with a black bob, gold hoops, and a blush blazer">
@@ -883,10 +1112,36 @@ const GRACE=`<svg viewBox="0 0 240 280" role="img" aria-label="Grace, the Money 
 
 /* ---------- reusable components ---------- */
 const $=(s,r=document)=>r.querySelector(s), $$=(s,r=document)=>[...r.querySelectorAll(s)];
-function productCard(p){return `<article class="p-card">
-  ${photo(p.art,p.tone,`Product photo placeholder: ${p.name}`)}
-  <div class="p-body"><div class="p-meta"><span>${p.cat}</span><span>Digital download</span></div><h3>${p.name}</h3><p>${p.short}</p></div>
-  <div class="p-actions"><span class="price-note">Price coming soon</span><button class="btn btn-ghost btn-sm" type="button" data-product="${p.id}">View details</button></div></article>`}
+const isAvail=p=>p.status==='available';
+function productCard(p){const href=`#product-${p.id}`;return `<article class="p-card">
+  <a class="p-img" href="${href}" tabindex="-1" aria-hidden="true">${photo(p.art,p.tone,'')}</a>
+  <div class="p-body"><div class="p-meta"><span>${p.cat}</span><span class="${isAvail(p)?'':'soon'}">${isAvail(p)?'Available now':'Coming soon'}</span></div><h3><a href="${href}">${p.name}</a></h3><p>${p.short}</p></div>
+  <div class="p-actions"><span class="price-note">${isAvail(p)?'Digital download':'Price coming soon'}</span><a class="btn btn-ghost btn-sm" href="${href}">View details</a></div></article>`}
+function renderProduct(id){const p=PRODUCTS.find(x=>x.id===id);if(!p)return false;const av=isAvail(p);
+  $('[data-pdp]').innerHTML=`<div class="page-head" style="padding-bottom:28px"><a class="crumb" href="#shop">← The Shop</a></div>
+  <div class="pdp">
+    <div class="gallery">
+      <div data-gallery-main>${photo(p.previews[0][0],p.previews[0][1],`${p.name}: ${p.previews[0][2]}`)}</div>
+      <div class="thumbs" role="group" aria-label="Product previews">${p.previews.map((v,i)=>`<button class="thumb" type="button" aria-pressed="${i===0}" data-preview="${i}" aria-label="Show ${v[2]}">${photo(v[0],v[1],'')}</button>`).join('')}</div>
+      <p class="fine" data-preview-cap>Preview: ${p.previews[0][2]}</p>
+    </div>
+    <div class="pdp-info">
+      <div class="p-meta"><span>${p.cat}</span><span>Digital download</span></div>
+      <h1 class="h-1">${p.name}</h1>
+      <span class="status ${av?'available':'soon'}">${av?'Available now':'Coming soon'}</span>
+      <p class="lede">${p.short}</p>
+      <div class="buy-box">${av
+        ?`<a class="btn btn-primary" href="${p.checkout}" target="_blank" rel="noopener" data-checkout>Buy Now</a><p class="fine">Secure checkout and instant download through Payhip.</p>`
+        :`<p><b>Coming soon.</b> Be the first to know when the ${p.name} launches.</p><div data-signup="pdp" data-cta="Notify me" data-resource="${p.name} launch"></div>`}</div>
+      <div class="detail-block"><h2>Description</h2>${p.description.map(d=>`<p>${d}</p>`).join('')}</div>
+      <div class="detail-block"><h2>Features</h2><ul class="checklist">${p.features.map(i=>`<li>${i}</li>`).join('')}</ul></div>
+      <div class="detail-block"><h2>What’s included in the download</h2><ul class="checklist">${p.included.map(i=>`<li>${i}</li>`).join('')}</ul></div>
+      <div class="detail-block"><h2>Details</h2><dl class="specs"><dt>Format</dt><dd>Digital download</dd><dt>Delivery</dt><dd>${av?'Download link right after checkout':'Available at launch'}</dd><dt>Price</dt><dd>${av?'Shown at checkout':'Announced at launch'}</dd></dl></div>
+    </div>
+  </div>`;
+  const pdpSignup=$('[data-pdp] [data-signup]');if(pdpSignup)signupForm(pdpSignup);
+  const i=PRODUCTS.indexOf(p);$('[data-products="related"]').innerHTML=[1,2].map(k=>productCard(PRODUCTS[(i+k)%PRODUCTS.length])).join('');
+  return true}
 function articleCard(a){return `<a class="a-card" href="#edit-${a.id}">${photo(a.art,a.tone,`Article image: ${a.title}`,false)}
   <div class="a-meta"><span>${a.cat}</span><span>${a.read}</span></div><h3>${a.title}</h3><p>${a.dek}</p></a>`}
 function resourceCard(r){return `<article class="r-card">${photo(r.art,r.tone,`Preview of ${r.name}`)}
@@ -924,25 +1179,42 @@ function renderStatic(){
   $('[data-products="featured"]').innerHTML=PRODUCTS.map(productCard).join('');
   $('[data-articles="home"]').innerHTML=ARTICLES.slice(0,3).map(articleCard).join('');
   $('[data-resources]').innerHTML=RESOURCES.map(resourceCard).join('');
-  $$('[data-art]').forEach(el=>{el.setAttribute('role','img');el.setAttribute('aria-label',el.dataset.label||'');el.innerHTML=scene(el.dataset.art,el.dataset.tone)+'<span class="ph-note">Photo placeholder</span>'});
+  $$('[data-art]').forEach(el=>{el.setAttribute('role','img');el.setAttribute('aria-label',el.dataset.label||'');el.style.setProperty('--tone',TONES[el.dataset.tone]||TONES.blush);el.innerHTML=scene(el.dataset.art)});
   $$('[data-grace-art]').forEach(el=>el.innerHTML=GRACE);
   $$('[data-signup]').forEach(signupForm);
   $$('[data-socials]').forEach(el=>el.innerHTML=SOCIALS.map(s=>`<a href="${s.url}" target="_blank" rel="noopener" aria-label="${s.name}"><svg viewBox="0 0 24 24" aria-hidden="true">${s.svg}</svg></a>`).join(''));
   $('[data-year]').textContent=new Date().getFullYear();
+  $$('[data-steps-mount]').forEach(mountSteps);
   renderShop();renderEdit();
 }
 
+/* ---------- ritual checklists (saved per device) ---------- */
+const STEPS={
+  sunday:[['Check your balances','Peek at checking, savings, and card balances.','2 min'],['Review last week','Skim your spending. Any surprises?','4 min'],['Look at the week ahead','Bills due, plans, and anything that costs money.','3 min'],['Pay yourself first','Move something to savings, even if it is small.','3 min'],['Set one money intention','One sentence for the week. Keep it kind.','3 min']],
+  monthly:[['Close out last month','Compare what you planned with what you spent.','10 min'],['Celebrate one win','Write down a money win, no matter how small.','2 min'],['Plan this month’s budget','Give every dollar a job before the month starts.','15 min'],['Update your goals','Check savings and debt progress. Color in your trackers.','5 min'],['Book your money dates','Put four Sunday check-ins on your calendar.','3 min']]
+};
+const store={get(k){try{return JSON.parse(localStorage.getItem('mg-'+k))||[]}catch(e){return[]}},set(k,v){try{localStorage.setItem('mg-'+k,JSON.stringify(v))}catch(e){}}};
+function mountSteps(el){const k=el.dataset.stepsMount,items=STEPS[k],saved=store.get(k);
+  el.innerHTML=`<div class="progress"><span data-prog-label>0 of ${items.length} done</span><span class="progress-bar"><i></i></span></div>
+  <ol class="steps">${items.map((it,i)=>`<li class="step"><label for="${k}-${i}"><input type="checkbox" id="${k}-${i}" data-step ${saved[i]?'checked':''}><span><b>${it[0]}</b><small>${it[1]}</small></span><span class="mins">${it[2]}</span></label></li>`).join('')}</ol>
+  <div class="steps-foot"><button class="link-arrow" type="button" data-reset-steps>Start over <span>↺</span></button></div>`;
+  updSteps(el)}
+function updSteps(el){const cs=$$('input',el),n=cs.filter(c=>c.checked).length;$('[data-prog-label]',el).textContent=`${n} of ${cs.length} done`;$('.progress-bar i',el).style.width=(n/cs.length*100)+'%';return n===cs.length}
+document.addEventListener('change',e=>{const c=e.target;if(!c.hasAttribute('data-step'))return;const el=c.closest('[data-steps-mount]'),k=el.dataset.stepsMount;
+  store.set(k,$$('input',el).map(x=>x.checked));if(updSteps(el)&&c.checked)toast(k==='sunday'?'Sunday Reset done. Have a lovely week.':'Monthly reset done. Grace is proud of you.')});
+
 /* ---------- router ---------- */
-const PAGES=['home','shop','money-edit','free-resources','about','contact'];
+const PAGES=['home','money-edit','shop','reset-room','free-resources','about','contact'];
 let pendingScroll=null;
 function route(){
   let h=decodeURIComponent(location.hash.slice(1))||'home',page=h;
   if(h.startsWith('edit-')){page=renderArticle(h.slice(5))?'article':'money-edit'}
+  else if(h.startsWith('product-')){page=renderProduct(h.slice(8))?'product':'shop'}
   else if(!PAGES.includes(h)){page='home'}
   $$('[data-page]').forEach(p=>{const on=p.dataset.page===page;p.hidden=!on;if(on){p.style.animation='none';void p.offsetWidth;p.style.animation=''}});
-  $$('.nav a,.drawer nav a').forEach(a=>a.toggleAttribute('aria-current',a.getAttribute('href')==='#'+(page==='article'?'money-edit':page)));
+  $$('.nav a,.drawer nav a').forEach(a=>a.toggleAttribute('aria-current',a.getAttribute('href')==='#'+({article:'money-edit',product:'shop'}[page]||page)));
   $$('.nav a,.drawer nav a').forEach(a=>{if(a.hasAttribute('aria-current'))a.setAttribute('aria-current','page')});
-  closeMenu();closeModal();
+  closeMenu();
   if(pendingScroll){const t=$(pendingScroll);pendingScroll=null;if(t){setTimeout(()=>t.scrollIntoView({behavior:'smooth'}),60);return}}
   window.scrollTo({top:0,behavior:'instant'in window?'instant':'auto'});
 }
@@ -954,20 +1226,7 @@ function openMenu(){drawer.classList.add('open');menuBtn.setAttribute('aria-expa
 function closeMenu(){if(!drawer.classList.contains('open'))return;drawer.classList.remove('open');menuBtn.setAttribute('aria-expanded','false');document.body.style.overflow=''}
 menuBtn.addEventListener('click',openMenu);$('#menu-close').addEventListener('click',closeMenu);
 
-/* ---------- modal ---------- */
-const modal=$('#modal');let lastFocus=null;
-function openProduct(id){const p=PRODUCTS.find(x=>x.id===id);if(!p)return;lastFocus=document.activeElement;
-  $('[data-modal-body]').innerHTML=`${photo(p.art,p.tone,`Product photo placeholder: ${p.name}`)}
-  <div class="sheet-copy"><span class="eyebrow">${p.cat} · Digital download</span><h2 class="h-2" id="m-title">${p.name}</h2><p class="muted">${p.short}</p>
-  <div><span class="eyebrow" style="color:var(--muted)">What’s inside</span><ul class="checklist" style="margin-top:12px">${p.inside.map(i=>`<li>${i}</li>`).join('')}</ul></div>
-  <p class="fine">Contents shown are placeholders until the final product listing is ready.</p>
-  <div class="success" style="background:var(--paper)"><span class="eyebrow">Price coming soon</span><p class="muted" style="font-size:1rem">Be the first to know when the ${p.name} is available.</p></div>
-  <div data-signup="modal" data-cta="Notify me" data-resource="${p.name} launch"></div></div>`;
-  signupForm($('[data-modal-body] [data-signup]'));
-  modal.classList.add('open');modal.setAttribute('aria-hidden','false');document.body.style.overflow='hidden';setTimeout(()=>$('[data-close-modal]').focus(),50)}
-function closeModal(){if(!modal.classList.contains('open'))return;modal.classList.remove('open');modal.setAttribute('aria-hidden','true');document.body.style.overflow='';lastFocus&&lastFocus.focus&&lastFocus.focus()}
-modal.addEventListener('click',e=>{if(e.target===modal)closeModal()});
-document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeModal();closeMenu()}});
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeMenu()});
 
 /* ---------- toast ---------- */
 let tt;function toast(m){const t=$('#toast');t.textContent=m;t.classList.add('show');clearTimeout(tt);tt=setTimeout(()=>t.classList.remove('show'),2600)}
@@ -978,14 +1237,18 @@ let tip=0;function showTip(){const el=$('[data-tip]');el.parentElement.style.opa
 /* ---------- events ---------- */
 document.addEventListener('click',e=>{
   const t=e.target.closest('button,a');if(!t)return;
+  if(t.closest('#drawer')&&t.tagName==='A')closeMenu();
   if(t.dataset.filter){shopFilter=t.dataset.filter;renderShop()}
   if(t.matches('.nav a[href="#shop"],.drawer a[href="#shop"],.foot-col a[href="#shop"]')){shopFilter='All';renderShop()}
   if(t.dataset.shopcat){shopFilter=t.dataset.shopcat;renderShop()}
   if(t.dataset.editcat){editFilter=t.dataset.editcat;renderEdit()}
-  if(t.dataset.product)openProduct(t.dataset.product);
-  if(t.hasAttribute('data-close-modal'))closeModal();
+  if(t.dataset.preview){const g=t.closest('.gallery'),p=PRODUCTS.find(x=>location.hash==='#product-'+x.id),v=p.previews[+t.dataset.preview];
+    $('[data-gallery-main]',g).innerHTML=photo(v[0],v[1],`${p.name}: ${v[2]}`);$$('.thumb',g).forEach(b=>b.setAttribute('aria-pressed',b===t));$('[data-preview-cap]',g).textContent='Preview: '+v[2]}
+  if(t.hasAttribute('data-checkout')&&t.getAttribute('href').includes('REPLACE-WITH')){e.preventDefault();toast('Checkout is not connected yet. Add this product’s Payhip link to turn on Buy Now.')}
+  if(t.hasAttribute('data-reset-steps')){const el=t.closest('[data-steps-mount]');$$('input',el).forEach(c=>c.checked=false);store.set(el.dataset.stepsMount,[]);updSteps(el)}
+  if(t.dataset.pick){const c=document.getElementById(t.dataset.pick);if(c)c.checked=true}
   if(t.hasAttribute('data-next-tip')){tip=(tip+1)%TIPS.length;showTip()}
-  if(t.dataset.scroll==='grace'){pendingScroll='[data-grace]';if(location.hash==='#home'){e.preventDefault();route()}}
+  if(t.dataset.scroll){const here=(location.hash||'#home')===t.getAttribute('href');if(here){e.preventDefault();const el=$(t.dataset.scroll);el&&el.scrollIntoView({behavior:'smooth'})}else pendingScroll=t.dataset.scroll}
   if(t.dataset.getResource){const f=$('#kit form');f.dataset.res=t.dataset.getResource;$('#kit').scrollIntoView({behavior:'smooth'});setTimeout(()=>f.querySelector('input').focus({preventScroll:true}),500);toast(`Enter your email to get the ${t.dataset.getResource}`)}
   if(t.dataset.copy){const v=t.dataset.copy;(navigator.clipboard?navigator.clipboard.writeText(v):Promise.reject()).then(()=>toast('Email address copied')).catch(()=>{const r=document.createRange();const c=t.closest('.copy-row')?.querySelector('code')||t;r.selectNodeContents(c);const s=getSelection();s.removeAllRanges();s.addRange(r);toast('Address selected. Copy it from here.')})}
 });
@@ -996,6 +1259,12 @@ document.addEventListener('submit',e=>{
     if(!validEmail(inp.value)){msg.className='form-msg err';msg.textContent='Please enter a valid email address, like you@email.com.';inp.focus();return}
     const what=f.dataset.res;
     f.outerHTML=`<div class="success" role="status"><b>You’re in, bestie.</b><span>${what?`We’ll send ${what.endsWith('launch')?'news about the '+what:'the '+what} to ${inp.value.trim()}.`:`Welcome to the list. Check ${inp.value.trim()} for a hello from Grace.`}</span><span class="fine">Prototype preview: no email was sent yet. Connect your email platform to make this live.</span></div>`;
+    return}
+  if(f.id==='reset-form'){
+    const msg=$('#reset-msg'),em=$('#r-email'),nm=$('#r-name').value.trim();
+    if(!validEmail(em.value)){msg.className='form-msg err';msg.textContent='Please enter a valid email address, like you@email.com.';em.focus();return}
+    const picks=$$('.pick input:checked',f).map(c=>c.value);
+    f.innerHTML=`<div class="success" role="status"><b>Welcome to The Reset Room${nm?', '+nm:''}.</b><span>${picks.length?`You picked: ${picks.join(', ')}.`:'You will get our general Reset Room emails.'} Your welcome kit will go to ${em.value.trim()}.</span><span class="fine">Prototype preview: no email was sent yet. Connect your email platform to make this live.</span></div>`;
     return}
   if(f.id==='contact-form'){
     const msg=$('#contact-msg'),n=$('#c-name'),em=$('#c-email'),m=$('#c-msg');
