@@ -1,0 +1,5 @@
+# Money & Grace Co. is a static site: no build step, no dependencies.
+# Netlify serves the files in this folder exactly as they are.
+[build]
+  publish = "."
+  command = ""

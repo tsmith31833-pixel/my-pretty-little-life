@@ -12,6 +12,9 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // Standalone Money & Grace Co. website (static, not part of this app):
+    "website-prototype/**",
+    "website-deploy/**",
   ]),
 ]);
 

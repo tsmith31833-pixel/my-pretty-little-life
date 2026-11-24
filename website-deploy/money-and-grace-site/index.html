@@ -1,0 +1,643 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Money &amp; Grace Co. | Build wealth with grace</title>
+<meta name="description" content="Simple money tools and financial education to help you budget better, save more, and build a life you love.">
+<meta name="theme-color" content="#FBF6F0">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Money &amp; Grace Co.">
+<meta property="og:title" content="Money &amp; Grace Co. | Build wealth with grace">
+<meta property="og:description" content="Simple money tools and financial education to help you budget better, save more, and build a life you love.">
+<meta property="og:image" content="og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preload" href="fonts/playfair-display-normal-400-800-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="fonts/lato-normal-400-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="css/fonts.css">
+<link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+<!-- shared SVG defs (kept rendered so filters work everywhere) -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <defs>
+    <filter id="sh" x="-30%" y="-30%" width="160%" height="160%"><feDropShadow dx="0" dy="10" stdDeviation="10" flood-color="#4A1F27" flood-opacity=".28"/></filter>
+    <filter id="sh2" x="-30%" y="-30%" width="160%" height="160%"><feDropShadow dx="0" dy="4" stdDeviation="4" flood-color="#4A1F27" flood-opacity=".25"/></filter>
+    <pattern id="linen" width="6" height="6" patternUnits="userSpaceOnUse"><path d="M0 3h6M3 0v6" stroke="#000" stroke-opacity=".035" stroke-width="1"/></pattern>
+    <linearGradient id="goldg" x1="0" x2="1" y1="0" y2="1"><stop offset="0" stop-color="#E9D3A6"/><stop offset=".5" stop-color="#C9A66B"/><stop offset="1" stop-color="#A9844A"/></linearGradient>
+    <radialGradient id="light" cx=".2" cy=".1" r="1"><stop offset="0" stop-color="#fff" stop-opacity=".45"/><stop offset=".6" stop-color="#fff" stop-opacity="0"/></radialGradient>
+  </defs>
+</svg>
+
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="site-header">
+  <div class="wrap bar">
+    <a class="logo" href="#home" aria-label="Money and Grace Co. home"><b>Money<i>&amp;</i>Grace Co.</b><small>Build wealth with grace</small></a>
+    <nav class="nav" aria-label="Main">
+      <a href="#money-edit">The Money Edit</a>
+      <a href="#shop">The Shop</a>
+      <a href="#reset-room">The Reset Room</a>
+      <a href="#free-resources">Free Resources</a>
+      <a href="#about">About</a>
+      <a href="#contact">Contact</a>
+    </nav>
+    <div class="bar-actions">
+      <a class="btn btn-primary btn-sm" href="#free-resources">Free budget kit</a>
+      <button class="menu-btn" id="menu-open" aria-label="Open menu" aria-expanded="false" aria-controls="drawer"><span></span></button>
+    </div>
+  </div>
+</header>
+
+<div class="drawer" id="drawer" role="dialog" aria-modal="true" aria-label="Menu">
+  <div class="drawer-top">
+    <a class="logo" href="#home"><b>Money<i>&amp;</i>Grace Co.</b><small>Build wealth with grace</small></a>
+    <button class="close-btn" id="menu-close" aria-label="Close menu">×</button>
+  </div>
+  <nav aria-label="Mobile">
+    <a href="#home">Home <small>Start here</small></a>
+    <a href="#money-edit">The Money Edit <small>Blog</small></a>
+    <a href="#shop">The Shop <small>Planners</small></a>
+    <a href="#reset-room">The Reset Room <small>Community</small></a>
+    <a href="#free-resources">Free Resources <small>Freebies</small></a>
+    <a href="#about">About <small>Our story</small></a>
+    <a href="#contact">Contact <small>Say hello</small></a>
+  </nav>
+  <a class="btn btn-primary" href="#free-resources">Get the free budget kit</a>
+</div>
+
+<main id="main">
+
+<!-- ============ HOME ============ -->
+<div class="page" data-page="home">
+  <section class="hero">
+    <div class="wrap hero-grid">
+      <div class="hero-copy">
+        <span class="eyebrow">Money &amp; Grace Co. · Est. for the women doing it all</span>
+        <h1 class="h-hero">Your money deserves a little more <em>grace.</em></h1>
+        <p class="lede">Simple money tools and financial education to help you budget better, save more, and build a life you love.</p>
+        <div class="btn-row">
+          <a class="btn btn-primary" href="#shop" data-filter="Planners">Shop Planners</a>
+          <a class="btn btn-ghost" href="#free-resources">Explore Free Resources</a>
+        </div>
+        <div class="hero-meta"><span>Budgeting</span><span>Saving</span><span>Debt freedom</span></div>
+      </div>
+      <div class="hero-art">
+        <div class="photo" data-art="hero" data-tone="blush" data-label="Flat lay of the Monthly Money Planner beside a latte and a gold pen"></div>
+        <div class="hero-tag"><small>New in the shop</small><b>The Monthly Money Planner</b></div>
+      </div>
+    </div>
+  </section>
+
+  <div class="marquee" aria-hidden="true"><div class="marquee-track">
+    <span>Budget better</span><span>Save more</span><span>Pay it down</span><span>Plan with grace</span><span>Build wealth</span><span>Budget better</span><span>Save more</span><span>Pay it down</span><span>Plan with grace</span><span>Build wealth</span>
+  </div></div>
+
+  <section class="section">
+    <div class="wrap welcome">
+      <div class="photo" data-art="desk" data-tone="sand" data-label="A calm desk with an open budget planner and a coffee"></div>
+      <div class="welcome-copy">
+        <span class="eyebrow">Welcome to Money &amp; Grace Co.</span>
+        <h2 class="h-1">Money management, minus the <em class="gold">shame spiral.</em></h2>
+        <div class="prose muted">
+          <p>You run meetings, run households, and run on iced coffee. Your finances deserve the same confidence. Money &amp; Grace Co. makes budgeting feel less like a punishment and more like a ritual you look forward to.</p>
+          <p>Our mission is simple: give women the tools, education, and encouragement to take control of their money, one pretty, practical step at a time.</p>
+        </div>
+        <div class="pillars">
+          <div class="pillar"><i>✦</i><div><b>Plan</b><p>Beautiful planners that make your budget easy to follow and hard to ignore.</p></div></div>
+          <div class="pillar"><i>✦</i><div><b>Learn</b><p>Plain-English money lessons in The Money Edit. No jargon, no judgment.</p></div></div>
+          <div class="pillar"><i>✦</i><div><b>Grow</b><p>Savings challenges and debt trackers that turn small wins into real momentum.</p></div></div>
+        </div>
+        <div><a class="link-arrow" href="#about">Read our story <span>→</span></a></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section band-blush">
+    <div class="wrap">
+      <div class="sec-head-row">
+        <div>
+          <span class="eyebrow">Featured products</span>
+          <h2 class="h-1">Tools for a <em class="gold">well-kept</em> budget.</h2>
+        </div>
+        <a class="link-arrow" href="#shop">Shop all <span>→</span></a>
+      </div>
+      <div class="grid-products four" data-products="featured"></div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <div class="sec-head-row">
+        <div>
+          <span class="eyebrow">The Money Edit</span>
+          <h2 class="h-1">Read it with your <em class="gold">morning latte.</em></h2>
+        </div>
+        <a class="link-arrow" href="#money-edit">All articles <span>→</span></a>
+      </div>
+      <div class="grid-articles three" data-articles="home"></div>
+    </div>
+  </section>
+
+  <section class="section band-sand" id="sunday-reset">
+    <div class="wrap ritual">
+      <div class="welcome-copy">
+        <span class="eyebrow">The Sunday Reset</span>
+        <h2 class="h-1">Fifteen minutes. <em class="gold">One calm week.</em></h2>
+        <p class="lede">Pour something warm and walk through these five steps. Tick each one as you go. Your progress is saved on this device.</p>
+        <div class="btn-row"><a class="btn btn-primary" href="#reset-room" data-scroll="#join">Get Sunday Reset emails</a></div>
+      </div>
+      <div class="stack" data-steps-mount="sunday"></div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap rr-hero">
+      <div class="photo" data-art="reset" data-tone="blush" data-label="A candle, a latte, and a Sunday Reset checklist"></div>
+      <div class="welcome-copy">
+        <span class="eyebrow">Introducing The Reset Room</span>
+        <h2 class="h-1">Your financial bestie’s <em class="gold">living room.</em></h2>
+        <p class="lede">A free email community for women who want company on the money journey. Monthly resets, weekly money dates, savings challenges, and gentle accountability.</p>
+        <div class="tags"><span>Monthly Money Reset</span><span>Weekly Money Date</span><span>Savings Challenges</span><span>Debt Payoff</span><span>Goal Setting</span></div>
+        <div class="btn-row"><a class="btn btn-primary" href="#reset-room">Step inside</a><a class="btn btn-ghost" href="#reset-room" data-scroll="#join">Join free</a></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section band-blush">
+    <div class="wrap res">
+      <div class="photo" data-art="kit" data-tone="sand" data-label="The free Budget Starter Kit worksheets fanned out"></div>
+      <div class="res-copy">
+        <span class="eyebrow">Free resources</span>
+        <h2 class="h-1">Start with the free <em class="gold">Budget Starter Kit.</em></h2>
+        <p class="lede">Three printable pages to help you see where your money goes and decide where it should go next.</p>
+        <ul class="checklist">
+          <li>One-page monthly budget</li>
+          <li>30-day spending tracker</li>
+          <li>Monthly money date checklist</li>
+        </ul>
+        <div data-signup="home-kit" data-cta="Send me the free kit" data-resource="The Budget Starter Kit"></div>
+        <div><a class="link-arrow" href="#free-resources">See all free resources <span>→</span></a></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section band-noir" data-grace>
+    <div class="wrap grace">
+      <div class="grace-stage">
+        <div class="grace-disk" data-grace-art></div>
+      </div>
+      <div class="grace-copy">
+        <span class="eyebrow">Meet your financial bestie</span>
+        <h2 class="h-1">Say hi to <span class="script" style="font-size:1.35em;color:var(--gold)">Grace.</span></h2>
+        <p class="lede">Grace is our resident money bestie. She's stylish, a little sassy, and always honest about your spending. You'll find her popping up in planners, tips, and The Money Edit.</p>
+        <div class="bubble" aria-live="polite"><small>Grace says</small><span data-tip></span></div>
+        <div class="btn-row">
+          <button class="btn btn-light" type="button" data-next-tip>Another tip, Grace</button>
+          <a class="btn btn-ghost" style="color:var(--on-noir);border-color:var(--on-noir)" href="#money-edit">Read The Money Edit</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section band-sand" id="newsletter">
+    <div class="wrap cta-band">
+      <span class="script">Hey, bestie</span>
+      <h2 class="h-1">Let’s get your money together, bestie.</h2>
+      <p class="lede" style="max-width:44ch">Weekly money notes, new planner launches, and Grace’s best tips, delivered to your inbox.</p>
+      <div data-signup="home-band" data-cta="Join the list"></div>
+    </div>
+  </section>
+</div>
+
+<!-- ============ SHOP ============ -->
+<div class="page" data-page="shop" hidden>
+  <div class="wrap page-head">
+    <a class="crumb" href="#home">Home / Shop</a>
+    <span class="eyebrow">The shop</span>
+    <h1 class="h-1">Planners &amp; trackers for a <em class="gold">graceful</em> budget.</h1>
+    <p class="lede">Digital tools designed to make your money plan clear, pretty, and easy to keep up with.</p>
+  </div>
+  <div class="wrap" style="padding-bottom:clamp(64px,10vw,120px)">
+    <div class="chips" role="group" aria-label="Filter products" data-shop-filters style="margin-bottom:28px"></div>
+    <div class="grid-products" data-products="shop"></div>
+    <p class="fine" style="margin-top:28px">Products marked Coming soon are still in the works. Open one and tap Notify me to hear the moment it launches.</p>
+  </div>
+  <section class="section band-noir">
+    <div class="wrap cta-band">
+      <span class="eyebrow">Not ready to shop?</span>
+      <h2 class="h-2">Try the free Budget Starter Kit first.</h2>
+      <a class="btn btn-light" href="#free-resources">Get the free kit</a>
+    </div>
+  </section>
+</div>
+
+<!-- ============ MONEY EDIT ============ -->
+<div class="page" data-page="money-edit" hidden>
+  <div class="wrap page-head">
+    <a class="crumb" href="#home">Home / The Money Edit</a>
+    <span class="eyebrow">The blog</span>
+    <h1 class="h-1">The Money <em class="gold">Edit.</em></h1>
+    <p class="lede">Budgeting, saving, debt, and planning, explained like your smartest friend would over brunch.</p>
+  </div>
+  <div class="wrap" style="padding-bottom:clamp(64px,10vw,120px)">
+    <div data-article-feature></div>
+    <div class="chips" role="group" aria-label="Filter articles" data-edit-filters style="margin-bottom:32px"></div>
+    <div class="grid-articles three" data-articles="all"></div>
+  </div>
+  <section class="section band-blush">
+    <div class="wrap cta-band">
+      <span class="eyebrow">Get The Money Edit by email</span>
+      <h2 class="h-2">New articles, straight to your inbox.</h2>
+      <div data-signup="edit" data-cta="Subscribe"></div>
+    </div>
+  </section>
+</div>
+
+<!-- ============ ARTICLE ============ -->
+<div class="page" data-page="article" hidden>
+  <div class="wrap">
+    <div class="article-head" data-article-head></div>
+    <div class="article-hero" data-article-hero></div>
+    <article class="article-body" data-article-body></article>
+  </div>
+  <section class="section">
+    <div class="wrap">
+      <div class="sec-head-row"><div><span class="eyebrow">Keep reading</span><h2 class="h-2">More from The Money Edit</h2></div><a class="link-arrow" href="#money-edit">All articles <span>→</span></a></div>
+      <div class="grid-articles three" data-articles="related"></div>
+    </div>
+  </section>
+</div>
+
+<!-- ============ PRODUCT DETAIL ============ -->
+<div class="page" data-page="product" hidden>
+  <div class="wrap" data-pdp></div>
+  <section class="section band-blush">
+    <div class="wrap">
+      <div class="sec-head-row"><div><span class="eyebrow">You may also like</span><h2 class="h-2">More from the shop</h2></div><a class="link-arrow" href="#shop">Shop all <span>→</span></a></div>
+      <div class="grid-products" data-products="related"></div>
+    </div>
+  </section>
+</div>
+
+<!-- ============ RESET ROOM ============ -->
+<div class="page" data-page="reset-room" hidden>
+  <section class="wrap rr-hero" style="padding-block:clamp(44px,8vw,96px) clamp(56px,9vw,110px)">
+    <div class="welcome-copy">
+      <a class="crumb" href="#home">Home / The Reset Room</a>
+      <span class="eyebrow">Free email community</span>
+      <h1 class="h-1">Welcome to <em class="gold">The Reset Room.</em></h1>
+      <p class="lede">Kick off your shoes, bestie. This is the cozy corner of Money &amp; Grace Co., where we reset our budgets, cheer each other on, and keep money talk honest and kind.</p>
+      <p class="muted">The Reset Room lives in your inbox. There are no logins or forums, just thoughtful emails, printable tools, and a monthly challenge we do together.</p>
+      <div class="btn-row"><a class="btn btn-primary" href="#reset-room" data-scroll="#join">Join the free community</a><a class="btn btn-ghost" href="#reset-room" data-scroll="#challenge">This month’s challenge</a></div>
+    </div>
+    <div class="photo" data-art="reset" data-tone="blush" data-label="A candle, a latte, and a Sunday Reset checklist"></div>
+  </section>
+
+  <nav class="jump" aria-label="On this page"><div class="wrap"><div class="jump-row">
+    <a class="chip" href="#reset-room" data-scroll="#monthly-reset">Monthly Reset</a>
+    <a class="chip" href="#reset-room" data-scroll="#challenge">Challenge of the Month</a>
+    <a class="chip" href="#reset-room" data-scroll="#money-dates">Money Date prompts</a>
+    <a class="chip" href="#reset-room" data-scroll="#savings">Savings</a>
+    <a class="chip" href="#reset-room" data-scroll="#debt">Debt payoff</a>
+    <a class="chip" href="#reset-room" data-scroll="#wins">Community wins</a>
+    <a class="chip" href="#reset-room" data-scroll="#join">Join free</a>
+  </div></div></nav>
+
+  <section class="section band-blush" id="monthly-reset">
+    <div class="wrap ritual">
+      <div class="welcome-copy">
+        <span class="eyebrow">Monthly Money Reset</span>
+        <h2 class="h-1">Start every month with a <em class="gold">clean slate.</em></h2>
+        <p class="lede">On the first of each month, members get this reset in their inbox. Try it here now. Your ticks are saved on this device.</p>
+        <div><a class="link-arrow" href="#product-monthly-money-planner">Pair it with the Monthly Money Planner <span>→</span></a></div>
+      </div>
+      <div class="stack" data-steps-mount="monthly"></div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <div class="sec-head"><span class="eyebrow">Inside The Reset Room</span><h2 class="h-1">How we show up <em class="gold">for you.</em></h2></div>
+      <div class="rr-grid">
+        <article class="rr-card"><span class="script">Sundays</span><h3 class="h-3">Weekly Money Date</h3><p>A standing date with your money. Fifteen minutes to check balances, look at the week ahead, and set one intention.</p><p class="inbox"><b>In your inbox</b>A short prompt every Sunday morning with the Sunday Reset checklist.</p><a class="link-arrow" href="#reset-room" data-scroll="#money-dates">See the Money Date prompts <span>→</span></a></article>
+        <article class="rr-card"><span class="script">Save</span><h3 class="h-3">Savings Challenges</h3><p>Playful challenges that turn saving into a habit, from no-spend weekends to the 52-week challenge.</p><p class="inbox"><b>In your inbox</b>A new challenge idea each month, with tips to make it fit your budget.</p><a class="link-arrow" href="#reset-room" data-scroll="#savings">Explore savings challenges <span>→</span></a></article>
+        <article class="rr-card"><span class="script">Pay it down</span><h3 class="h-3">Debt Payoff Accountability</h3><p>Paying off debt is easier with someone in your corner. Track every balance you shrink and celebrate each win.</p><p class="inbox"><b>In your inbox</b>A monthly check-in email with a progress prompt. Reply any time to share a win.</p><a class="link-arrow" href="#reset-room" data-scroll="#debt">Start your debt check-in <span>→</span></a></article>
+        <article class="rr-card"><span class="script">Dream</span><h3 class="h-3">Financial Goal Setting</h3><p>Turn big dreams into clear money goals, with a number, a date, and a plan you can follow.</p><p class="inbox"><b>In your inbox</b>A goal-setting worksheet each season and gentle reminders to check in.</p><a class="link-arrow" href="#free-resources">Browse free worksheets <span>→</span></a></article>
+      </div>
+    </div>
+  </section>
+
+  <section class="section band-noir" id="challenge">
+    <div class="wrap challenge">
+      <div class="sec-head" style="margin:0">
+        <span class="eyebrow">Challenge of the Month</span>
+        <h2 class="h-1">The Holiday <span class="script" style="color:var(--gold);font-size:1.3em;line-height:.8">Calm Fund</span></h2>
+        <p class="lede" style="max-width:48ch">Build a small cushion for holiday spending so January starts calm. One step each week, with an email to guide you.</p>
+      </div>
+      <div class="stack" data-steps-mount="challenge" data-static>
+        <div class="progress"><span data-prog-label>0 of 4 weeks done</span><span class="progress-bar"><i></i></span></div>
+        <div class="weeks">
+          <div class="week"><span>Week 1</span><b>Make your list</b><p>Write down every gift, event, and trip you expect this season.</p><label class="week-done" for="challenge-0"><input type="checkbox" id="challenge-0" data-step>Mark week done</label></div>
+          <div class="week"><span>Week 2</span><b>Set your number</b><p>Add it up and choose a realistic amount to set aside.</p><label class="week-done" for="challenge-1"><input type="checkbox" id="challenge-1" data-step>Mark week done</label></div>
+          <div class="week"><span>Week 3</span><b>Find the money</b><p>Pause one subscription or skip two takeout meals, and move the difference.</p><label class="week-done" for="challenge-2"><input type="checkbox" id="challenge-2" data-step>Mark week done</label></div>
+          <div class="week"><span>Week 4</span><b>Spend with a plan</b><p>Shop from your list and track every purchase. No January regret.</p><label class="week-done" for="challenge-3"><input type="checkbox" id="challenge-3" data-step>Mark week done</label></div>
+        </div>
+        <div class="steps-foot"><button class="link-arrow" type="button" data-reset-steps>Start over <span>↺</span></button></div>
+      </div>
+      <div class="btn-row"><a class="btn btn-light" href="#reset-room" data-scroll="#join" data-pick="r-i-5">Join this month’s challenge</a></div>
+    </div>
+  </section>
+
+  <section class="section band-sand" id="money-dates">
+    <div class="wrap ritual">
+      <div class="welcome-copy">
+        <span class="eyebrow">Weekly Money Date</span>
+        <h2 class="h-1">Prompts for your <em class="gold">Sunday money date.</em></h2>
+        <p class="lede">Pick one prompt each week or draw one at random. Members get a fresh prompt by email every Sunday.</p>
+        <div class="prompt-card">
+          <span class="eyebrow">This week’s prompt</span>
+          <q data-prompt aria-live="polite">What is one money win from this week, big or small?</q>
+          <div class="btn-row"><button class="btn btn-primary btn-sm" type="button" data-draw-prompt>Draw another prompt</button><a class="btn btn-ghost btn-sm" href="#home" data-scroll="#sunday-reset">Sunday Reset checklist</a></div>
+        </div>
+      </div>
+      <div class="prompt-sets">
+        <div class="prompt-set"><span class="script">Check in</span><ul><li>What did I spend this week that I feel good about?</li><li>Which purchase surprised me?</li><li>Which bill is coming up next?</li></ul></div>
+        <div class="prompt-set"><span class="script">Reflect</span><ul><li>How did money make me feel this week, in one word?</li><li>Where did I spend on autopilot?</li><li>What would I do differently next week?</li></ul></div>
+        <div class="prompt-set"><span class="script">Plan</span><ul><li>What expense can I plan for now?</li><li>How much will I move to savings this week?</li><li>Which day this week will be a no-spend day?</li></ul></div>
+        <div class="prompt-set"><span class="script">Celebrate</span><ul><li>What is one money win, big or small?</li><li>Which habit am I proud of keeping?</li><li>How will I treat myself within my budget?</li></ul></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="savings">
+    <div class="wrap">
+      <div class="sec-head"><span class="eyebrow">Savings challenges</span><h2 class="h-1">Make saving feel like <em class="gold">a game.</em></h2><p class="lede">Choose a challenge that fits your month. Every Reset Room email includes a new idea to try.</p></div>
+      <div class="rr-grid">
+        <article class="mini-card"><span class="level">Easy start</span><h3>No-Spend Weekend</h3><p>Two days with zero spending on extras. Plan free fun before Saturday arrives.</p></article>
+        <article class="mini-card"><span class="level">Easy start</span><h3>Round-Up Challenge</h3><p>Round each purchase up to the next dollar and move the difference to savings.</p></article>
+        <article class="mini-card"><span class="level">Steady habit</span><h3>52-Week Challenge</h3><p>Save a little more each week, or color in whichever amount fits that week.</p></article>
+        <article class="mini-card"><span class="level">Steady habit</span><h3>Emergency Fund Starter</h3><p>Pick a first milestone and automate a small transfer every payday.</p></article>
+      </div>
+      <div class="ritual" style="margin-top:clamp(40px,6vw,64px)">
+        <div class="welcome-copy">
+          <span class="eyebrow">Try it now</span>
+          <h3 class="h-2">Your No-Spend Weekend tracker</h3>
+          <p class="muted">Tick off each weekend you complete this month. Your progress is saved on this device.</p>
+          <div><a class="link-arrow" href="#product-savings-challenges">See the Savings Challenges download <span>→</span></a></div>
+        </div>
+        <div class="stack" data-steps-mount="savings"></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section band-blush" id="debt">
+    <div class="wrap ritual">
+      <div class="welcome-copy">
+        <span class="eyebrow">Debt payoff accountability</span>
+        <h2 class="h-1">Pay it down, <em class="gold">together.</em></h2>
+        <p class="lede">Debt feels lighter when someone is cheering you on. Once a month, members get a check-in email with three simple questions.</p>
+        <ul class="checklist">
+          <li>Which balance did I shrink this month?</li>
+          <li>Did I make every minimum payment?</li>
+          <li>Which debt is my focus next month?</li>
+        </ul>
+        <div style="display:flex;flex-direction:column;gap:14px;align-items:flex-start">
+          <a class="link-arrow" href="#edit-snowball-avalanche">Snowball or avalanche? Read the guide <span>→</span></a>
+          <a class="link-arrow" href="#product-debt-repayment-tracker">See the Debt Repayment Tracker <span>→</span></a>
+        </div>
+      </div>
+      <div class="stack">
+        <span class="eyebrow">This month’s debt check-in</span>
+        <div class="stack" data-steps-mount="debt"></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="wins">
+    <div class="wrap">
+      <div class="sec-head"><span class="eyebrow">Community wins</span><h2 class="h-1">Small wins, <em class="gold">big energy.</em></h2></div>
+      <div class="sample-note"><b>Sample content.</b><span>These wins are examples written by Money &amp; Grace Co. to show how this space will look. Real member wins will appear here only after members share them and give permission.</span></div>
+      <div class="rr-grid">
+        <article class="win"><span class="sample-tag">Sample win</span><blockquote>Paid off my smallest credit card and rolled that payment into the next one.</blockquote><div class="win-meta"><span>Debt payoff</span><span>Sample member</span></div></article>
+        <article class="win"><span class="sample-tag">Sample win</span><blockquote>Finished my first no-spend weekend and moved the savings into my travel fund.</blockquote><div class="win-meta"><span>Savings</span><span>Sample member</span></div></article>
+        <article class="win"><span class="sample-tag">Sample win</span><blockquote>Planned my whole month’s budget on the first, before a single bill arrived.</blockquote><div class="win-meta"><span>Budgeting</span><span>Sample member</span></div></article>
+        <article class="win"><span class="sample-tag">Sample win</span><blockquote>Opened a separate emergency fund account and set up an automatic transfer.</blockquote><div class="win-meta"><span>Goals</span><span>Sample member</span></div></article>
+      </div>
+      <div class="join-card" style="margin-top:clamp(40px,6vw,64px)">
+        <span class="eyebrow">Share your win</span>
+        <h3 class="h-2">Tell us what you are proud of.</h3>
+        <form class="contact-form" id="win-form" novalidate>
+          <div class="two">
+            <div class="field"><label for="w-name">First name (optional)</label><input id="w-name" name="first_name" autocomplete="given-name" placeholder="Your first name"></div>
+            <div class="field"><label for="w-email">Email</label><input id="w-email" name="email" type="email" autocomplete="email" required placeholder="you@email.com"></div>
+          </div>
+          <div class="field"><label for="w-text">Your win</label><textarea id="w-text" name="win" required placeholder="Big or small, it counts."></textarea></div>
+          <label class="consent" for="w-ok"><input type="checkbox" id="w-ok" name="permission"><span>Money &amp; Grace Co. may share my win and first name on the website.</span></label>
+          <div><button class="btn btn-primary" type="submit">Share my win</button></div>
+          <p class="form-msg" id="win-msg" aria-live="polite"></p>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <section class="section band-sand">
+    <div class="wrap">
+      <div class="sec-head"><span class="eyebrow">How it works</span><h2 class="h-1">Three steps to <em class="gold">settle in.</em></h2></div>
+      <div class="how">
+        <div class="how-step"><span class="n">1</span><b>Join with your email</b><p>Tell us what you would like help with. It is free, and you can unsubscribe any time.</p></div>
+        <div class="how-step"><span class="n">2</span><b>Get your welcome kit</b><p>Your first email brings the Monthly Money Reset checklist and the Budget Starter Kit.</p></div>
+        <div class="how-step"><span class="n">3</span><b>Show up for yourself</b><p>Sunday money dates, the monthly challenge, and accountability check-ins arrive in your inbox.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section band-blush" id="join">
+    <div class="wrap">
+      <div class="join-card">
+        <span class="eyebrow">Join the free Money &amp; Grace community</span>
+        <h2 class="h-1">Pull up a chair, <em class="gold">bestie.</em></h2>
+        <p class="muted">Choose what you would like help with and we will send the emails that fit.</p>
+        <form class="contact-form" id="reset-form" novalidate>
+          <div class="two">
+            <div class="field"><label for="r-name">First name (optional)</label><input id="r-name" name="first_name" autocomplete="given-name" placeholder="Your first name"></div>
+            <div class="field"><label for="r-email">Email</label><input id="r-email" name="email" type="email" autocomplete="email" required placeholder="you@email.com"></div>
+          </div>
+          <fieldset class="field" style="border:0;padding:0;margin:0;min-width:0">
+            <legend>I would love help with</legend>
+            <div class="interests">
+              <label class="pick" for="r-i-0"><input type="checkbox" id="r-i-0" value="Monthly Money Reset" checked><span>Monthly Money Reset</span></label>
+              <label class="pick" for="r-i-1"><input type="checkbox" id="r-i-1" value="Weekly Money Date" checked><span>Weekly Money Date</span></label>
+              <label class="pick" for="r-i-2"><input type="checkbox" id="r-i-2" value="Savings Challenges"><span>Savings Challenges</span></label>
+              <label class="pick" for="r-i-3"><input type="checkbox" id="r-i-3" value="Debt Payoff Accountability"><span>Debt Payoff Accountability</span></label>
+              <label class="pick" for="r-i-4"><input type="checkbox" id="r-i-4" value="Financial Goal Setting"><span>Financial Goal Setting</span></label>
+              <label class="pick" for="r-i-5"><input type="checkbox" id="r-i-5" value="This month’s challenge"><span>This month’s challenge</span></label>
+            </div>
+          </fieldset>
+          <div><button class="btn btn-primary" type="submit">Join the community</button></div>
+          <p class="form-msg" id="reset-msg" aria-live="polite"></p>
+          <p class="fine">Free. By joining you agree to receive emails from Money &amp; Grace Co. Unsubscribe anytime.</p>
+        </form>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- ============ FREE RESOURCES ============ -->
+<div class="page" data-page="free-resources" hidden>
+  <div class="wrap page-head">
+    <a class="crumb" href="#home">Home / Free Resources</a>
+    <span class="eyebrow">Free resources</span>
+    <h1 class="h-1">Free tools to get you <em class="gold">started.</em></h1>
+    <p class="lede">No credit card, no catch. Just practical worksheets to help you take the first step.</p>
+  </div>
+  <section class="section-tight band-sand" id="kit">
+    <div class="wrap res">
+      <div class="photo" data-art="kit" data-tone="blush" data-label="The free Budget Starter Kit worksheets"></div>
+      <div class="res-copy">
+        <span class="eyebrow">Most popular freebie</span>
+        <h2 class="h-2">The Budget Starter Kit</h2>
+        <p class="muted">Everything you need for your first calm money month.</p>
+        <ul class="checklist">
+          <li>One-page monthly budget</li>
+          <li>30-day spending tracker</li>
+          <li>Monthly money date checklist</li>
+        </ul>
+        <div data-signup="kit" data-cta="Send me the kit" data-resource="The Budget Starter Kit"></div>
+      </div>
+    </div>
+  </section>
+  <section class="section">
+    <div class="wrap">
+      <div class="sec-head"><span class="eyebrow">More freebies</span><h2 class="h-2">Pick your next worksheet.</h2></div>
+      <div class="grid-res" data-resources></div>
+    </div>
+  </section>
+</div>
+
+<!-- ============ ABOUT ============ -->
+<div class="page" data-page="about" hidden>
+  <div class="wrap page-head">
+    <a class="crumb" href="#home">Home / About Us</a>
+    <span class="eyebrow">About us</span>
+    <h1 class="h-1">Build wealth <em class="gold">with grace.</em></h1>
+  </div>
+  <section class="section-tight">
+    <div class="wrap about-grid">
+      <div class="photo" data-art="desk" data-tone="blush" data-label="A calm workspace with an open budget planner and a latte"></div>
+      <div class="welcome-copy">
+        <span class="eyebrow">Our mission</span>
+        <h2 class="h-2">Financial confidence should feel good.</h2>
+        <div class="prose muted">
+          <p>Money &amp; Grace Co. exists for women who are balancing careers, families, responsibilities, and big personal goals, and who are tired of money advice that feels cold, complicated, or judgmental.</p>
+          <p>We create simple tools and approachable education that help you budget better, save more, and pay down debt, without giving up the things that make life feel lovely.</p>
+          <p>Luxury lifestyle, meet practical money management.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+  <section class="section band-blush">
+    <div class="wrap">
+      <div class="sec-head"><span class="eyebrow">What we believe</span><h2 class="h-2">Our values</h2></div>
+      <div class="values">
+        <div class="value"><span class="script">Grace</span><h3 class="h-3">Over guilt</h3><p>Every money mistake is information, not a character flaw. We start where you are.</p></div>
+        <div class="value"><span class="script">Simple</span><h3 class="h-3">Over complicated</h3><p>A plan you can follow beats a perfect plan you abandon by the 12th.</p></div>
+        <div class="value"><span class="script">Pretty</span><h3 class="h-3">And practical</h3><p>When your tools are beautiful, you actually want to use them. That is the whole point.</p></div>
+        <div class="value"><span class="script">Honest</span><h3 class="h-3">Always</h3><p>Clear education, no hype, no get-rich-quick promises. Just habits that add up.</p></div>
+      </div>
+    </div>
+  </section>
+  <section class="section">
+    <div class="wrap about-grid">
+      <div class="placeholder-box">
+        <span class="eyebrow">Founder story · placeholder</span>
+        <b>Add your story here</b>
+        <p class="muted">Share why you started Money &amp; Grace Co., your own money turning point, and who you built it for. Pair it with a portrait photo. This block is intentionally left for your real words.</p>
+      </div>
+      <div class="welcome-copy">
+        <span class="eyebrow">Meet Grace</span>
+        <h2 class="h-2">Our animated money bestie.</h2>
+        <p class="muted">Grace is the voice of the brand: the friend who compliments your outfit, then asks how your emergency fund is doing. She shows up in our planners, tips, and social posts.</p>
+        <div><a class="link-arrow" href="#home" data-scroll="[data-grace]">Meet Grace <span>→</span></a></div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- ============ CONTACT ============ -->
+<div class="page" data-page="contact" hidden>
+  <div class="wrap page-head">
+    <a class="crumb" href="#home">Home / Contact</a>
+    <span class="eyebrow">Contact</span>
+    <h1 class="h-1">Let’s <em class="gold">talk.</em></h1>
+    <p class="lede">Questions about a planner, collaboration ideas, or press requests. Send a note and we will get back to you.</p>
+  </div>
+  <section class="wrap contact-grid" style="padding-bottom:clamp(64px,10vw,120px)">
+    <form class="contact-form" id="contact-form" novalidate>
+      <div class="two">
+        <div class="field"><label for="c-name">Name</label><input id="c-name" name="name" autocomplete="name" required placeholder="Your name"></div>
+        <div class="field"><label for="c-email">Email</label><input id="c-email" name="email" type="email" autocomplete="email" required placeholder="you@email.com"></div>
+      </div>
+      <div class="field"><label for="c-topic">Topic</label>
+        <select id="c-topic" name="topic">
+          <option>Product question</option>
+          <option>Order or download help</option>
+          <option>Collaboration or partnership</option>
+          <option>Press</option>
+          <option>Something else</option>
+        </select>
+      </div>
+      <div class="field"><label for="c-msg">Message</label><textarea id="c-msg" name="message" required placeholder="How can we help?"></textarea></div>
+      <div><button class="btn btn-primary" type="submit">Send message</button></div>
+      <p class="form-msg" id="contact-msg" aria-live="polite"></p>
+    </form>
+    <aside class="info-list">
+      <div class="info-item"><b>Email</b><div class="copy-row"><code data-email>hello@moneyandgraceco.com</code><button class="chip" type="button" data-copy="hello@moneyandgraceco.com">Copy</button></div><p class="fine" data-email-note>Placeholder address. Replace with your real inbox.</p></div>
+      <div class="info-item"><b>Product help</b><p>Trouble with a download? Choose “Order or download help” and include the email you used at checkout.</p></div>
+      <div class="info-item"><b>Collaborations</b><p>Brands, podcasts, and creators: tell us about your audience and idea.</p></div>
+      <div class="info-item"><b>Follow along</b><div class="socials" data-socials></div></div>
+    </aside>
+  </section>
+</div>
+
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="foot-grid">
+      <div class="foot-brand">
+        <a class="logo" href="#home"><b>Money<i>&amp;</i>Grace Co.</b><small>Build wealth with grace</small></a>
+        <p style="color:color-mix(in srgb,var(--on-noir) 78%,transparent);max-width:34ch">Simple money tools and financial education for women building a life they love.</p>
+        <div class="socials" data-socials></div>
+      </div>
+      <div class="foot-cols">
+        <div class="foot-col"><h4>Explore</h4>
+          <a href="#home">Home</a><a href="#money-edit">The Money Edit</a><a href="#shop">The Shop</a><a href="#reset-room">The Reset Room</a><a href="#free-resources">Free Resources</a><a href="#about">About</a><a href="#contact">Contact</a>
+        </div>
+        <div class="foot-col"><h4>Contact</h4>
+          <button class="copy" type="button" data-copy="hello@moneyandgraceco.com" data-email>hello@moneyandgraceco.com</button>
+          <a href="#contact">Send a message</a>
+          <a href="#contact">Collaborations</a>
+        </div>
+      </div>
+      <div class="foot-col band-noir" style="background:none">
+        <h4>The newsletter</h4>
+        <p style="color:color-mix(in srgb,var(--on-noir) 78%,transparent);font-size:1rem">Money notes and launch news. Unsubscribe anytime.</p>
+        <div data-signup="footer" data-cta="Sign up" data-compact></div>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <span>© <span data-year></span> Money &amp; Grace Co. All rights reserved.</span>
+      <span>Educational content only, not personalized financial advice.</span>
+    </div>
+  </div>
+</footer>
+
+<div class="toast" id="toast" role="status"></div>
+
+<script src="js/config.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>
