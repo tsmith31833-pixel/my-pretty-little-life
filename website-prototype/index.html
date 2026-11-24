@@ -42,7 +42,7 @@
 
 *{box-sizing:border-box}
 html{scroll-behavior:smooth}
-body{background:var(--cream);color:var(--ink);font-family:var(--f-body);font-size:1.0625rem;line-height:1.7;font-weight:400;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+body{background:var(--cream);color:var(--ink);font-family:var(--f-body);font-size:1.0625rem;line-height:1.7;font-weight:400;-webkit-font-smoothing:antialiased;overflow-x:hidden;overflow-x:clip}
 body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:60;background:var(--cream)}
 a{color:inherit}
 img,svg{max-width:100%}
@@ -56,7 +56,7 @@ p{margin:0}
 /* type */
 .eyebrow{font-family:var(--f-body);font-size:.8rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--gold-text)}
 .script{font-family:var(--f-script);font-weight:400;color:var(--gold-text);letter-spacing:0}
-.h-hero{font-size:clamp(2.6rem,10.5vw,5.4rem);line-height:1.04}
+.h-hero{font-size:clamp(2.15rem,9vw,5.4rem);line-height:1.06}
 .h-1{font-size:clamp(2.2rem,7.5vw,4rem)}
 .h-2{font-size:clamp(1.8rem,5.5vw,2.9rem)}
 .h-3{font-size:1.4rem;line-height:1.25;font-weight:600}
@@ -77,6 +77,8 @@ em.gold{font-style:italic;color:var(--gold-text)}
 .btn-light{background:var(--on-noir);color:#16110F}
 .btn-sm{min-height:44px;padding:.7em 1.2em;font-size:.8rem}
 .link-arrow{display:inline-flex;gap:.5em;align-items:center;font:700 .84rem var(--f-body);letter-spacing:.12em;text-transform:uppercase;text-decoration:none;border-bottom:1px solid var(--gold);padding-bottom:4px;background:none;border-top:0;border-left:0;border-right:0;color:inherit;cursor:pointer}
+.link-arrow{position:relative}
+.link-arrow::after{content:"";position:absolute;inset:-12px -6px}
 .link-arrow span{transition:transform .3s var(--ease)}
 .link-arrow:hover span{transform:translateX(4px)}
 
@@ -126,7 +128,8 @@ em.gold{font-style:italic;color:var(--gold-text)}
 /* hero */
 .hero{padding-block:clamp(36px,7vw,90px) clamp(56px,9vw,110px)}
 .hero-grid{display:grid;gap:40px;align-items:center}
-.hero-copy{display:flex;flex-direction:column;gap:22px;min-width:0}
+.hero-copy{display:flex;flex-direction:column;gap:18px;min-width:0}
+@media (min-width:900px){.hero-copy{gap:22px}}
 .hero h1 em{font-style:italic;color:var(--gold-text);font-weight:500}
 .btn-row{display:flex;flex-wrap:wrap;gap:12px}
 .hero-meta{display:flex;flex-wrap:wrap;gap:8px 20px;font-size:.82rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);padding-top:8px}
@@ -274,7 +277,10 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--gold);bo
 .foot-brand .logo small{color:color-mix(in srgb,var(--on-noir) 60%,transparent)}
 .foot-brand .logo b i{color:var(--gold)}
 .foot-cols{display:grid;grid-template-columns:repeat(2,1fr);gap:32px}
-.foot-col{display:flex;flex-direction:column;gap:10px;min-width:0}
+.foot-col{display:flex;flex-direction:column;gap:0;min-width:0}
+.foot-col h4{margin-bottom:8px!important}
+.foot-col a,.foot-col button.copy{padding-block:10px}
+.foot-col > p{margin-bottom:10px}
 .foot-col h4{font-family:var(--f-body);font-size:.78rem;letter-spacing:.16em;text-transform:uppercase;color:var(--gold);font-weight:700;margin-bottom:4px}
 .foot-col a,.foot-col button.copy{color:color-mix(in srgb,var(--on-noir) 80%,transparent);text-decoration:none;font-size:1rem;line-height:1.5;background:none;border:0;padding:0;text-align:left;cursor:pointer;font-family:inherit;overflow-wrap:anywhere}
 .foot-col a:hover,.foot-col button.copy:hover{color:var(--on-noir)}
@@ -289,6 +295,7 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--gold);bo
 .page-head{padding-block:clamp(44px,8vw,96px) clamp(28px,5vw,56px);display:flex;flex-direction:column;gap:18px}
 .page-head .lede{max-width:46ch}
 .crumb{font-size:.8rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);text-decoration:none}
+.crumb{display:inline-flex;align-items:center;min-height:44px;width:fit-content}
 .crumb:hover{color:var(--ink)}
 
 /* article page */
@@ -334,7 +341,7 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--gold);bo
 
 
 /* scroll targets clear the sticky header */
-[id],[data-grace]{scroll-margin-top:90px}
+[id],[data-grace]{scroll-margin-top:calc(env(safe-area-inset-top,0px) + 84px)}
 .stack{display:flex;flex-direction:column;gap:16px;min-width:0}
 .tags{display:flex;flex-wrap:wrap;gap:8px}
 .tags span{font:700 .78rem var(--f-body);letter-spacing:.08em;text-transform:uppercase;padding:8px 14px;border-radius:var(--r-pill);border:1px solid var(--gold);color:var(--gold-text)}
@@ -411,6 +418,52 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--gold);bo
 .specs dt{font:700 .8rem/1.9 var(--f-body);letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
 .specs dd{margin:0}
 @media (min-width:900px){.pdp{grid-template-columns:1.05fr .95fr;gap:64px;align-items:start}.gallery{position:sticky;top:96px}}
+
+/* status badge on product images */
+.p-img{position:relative}
+.p-img .status{position:absolute;left:12px;top:12px;z-index:2;box-shadow:var(--shadow-sm)}
+.p-img .status.available{background:var(--gold);color:#1A130C}
+.p-img .status.soon{background:var(--paper);color:var(--blush-ink)}
+
+/* reset room: jump links */
+.jump{border-block:1px solid var(--line);background:var(--paper);padding-block:12px}
+.jump-row{display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;padding-block:2px;min-width:0}
+.jump-row::-webkit-scrollbar{display:none}
+.jump-row .chip{white-space:nowrap;text-decoration:none;display:inline-flex;align-items:center;flex:none}
+
+/* challenge of the month: week tick boxes */
+.week-done{display:inline-flex;align-items:center;gap:10px;min-height:44px;margin-top:6px;cursor:pointer;font:700 .78rem var(--f-body);letter-spacing:.1em;text-transform:uppercase;color:var(--on-noir);width:fit-content}
+.week-done input{appearance:none;-webkit-appearance:none;width:26px;height:26px;min-height:0;padding:0;margin:0;border-radius:50%;border:1.5px solid var(--gold);background:transparent;cursor:pointer;flex:none}
+.week-done input:checked{background:var(--gold) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cpath d='M5.5 10.5l3 3 6-7' fill='none' stroke='%231A130C' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center/100% no-repeat}
+.week:has(input:checked){border-color:var(--gold)}
+.band-noir .progress{color:color-mix(in srgb,var(--on-noir) 78%,transparent)}
+.band-noir .progress-bar{background:color-mix(in srgb,var(--on-noir) 18%,transparent)}
+.band-noir .link-arrow{color:var(--on-noir)}
+
+/* weekly money date prompts */
+.prompt-card{background:var(--paper);border-radius:var(--r-lg);padding:clamp(22px,4vw,32px);box-shadow:var(--shadow-sm);display:flex;flex-direction:column;gap:14px}
+.prompt-card q{font-family:var(--f-display);font-style:italic;font-size:clamp(1.3rem,4vw,1.65rem);line-height:1.35;quotes:"“" "”";min-height:3.9em;transition:opacity .25s}
+.prompt-sets{display:grid;gap:16px;grid-template-columns:1fr}
+@media (min-width:700px){.prompt-sets{grid-template-columns:repeat(2,1fr)}}
+.prompt-set{border:1px solid var(--line);border-radius:var(--r-md);padding:20px 22px;background:var(--cream);display:flex;flex-direction:column;gap:8px;min-width:0}
+.prompt-set .script{font-size:2rem;line-height:1}
+.prompt-set ul{margin:0;padding-left:1.1em;display:grid;gap:6px}
+.prompt-set li::marker{color:var(--gold)}
+
+/* savings + wins */
+.mini-card{background:var(--paper);border-radius:var(--r-lg);padding:24px;border:1px solid var(--line);display:flex;flex-direction:column;gap:10px;min-width:0}
+.mini-card h3{font-size:1.3rem;font-weight:600}
+.mini-card p{color:var(--muted)}
+.level{font:700 .74rem var(--f-body);letter-spacing:.12em;text-transform:uppercase;color:var(--gold-text)}
+.sample-note{display:block;padding:16px 20px;border-radius:var(--r-md);border:1.5px dashed var(--gold);background:color-mix(in srgb,var(--gold) 8%,transparent);margin-bottom:24px}
+.sample-note b{margin-right:.3em}
+.win{background:var(--paper);border-radius:var(--r-lg);padding:24px;box-shadow:var(--shadow-sm);display:flex;flex-direction:column;gap:12px;min-width:0}
+.win blockquote{margin:0;font-family:var(--f-display);font-style:italic;font-size:1.2rem;line-height:1.45}
+.win-meta{display:flex;flex-wrap:wrap;justify-content:space-between;gap:6px 12px;font:700 .74rem var(--f-body);letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.sample-tag{display:inline-flex;align-self:flex-start;font:700 .7rem var(--f-body);letter-spacing:.12em;text-transform:uppercase;padding:6px 12px;border-radius:var(--r-pill);background:var(--blush);color:var(--blush-ink)}
+.consent{display:flex;gap:12px;align-items:flex-start;cursor:pointer;min-height:44px}
+.consent input{appearance:none;-webkit-appearance:none;width:24px;height:24px;min-height:0;padding:0;margin:2px 0 0;border-radius:6px;border:1.5px solid var(--gold);background:var(--paper);flex:none;cursor:pointer}
+.consent input:checked{background:var(--gold) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cpath d='M5.5 10.5l3 3 6-7' fill='none' stroke='%231A130C' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center/100% no-repeat}
 
 @media (prefers-reduced-motion:reduce){
   *,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}
@@ -693,6 +746,16 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--gold);bo
     <div class="photo" data-art="reset" data-tone="blush" data-label="A candle, a latte, and a Sunday Reset checklist"></div>
   </section>
 
+  <nav class="jump" aria-label="On this page"><div class="wrap"><div class="jump-row">
+    <a class="chip" href="#reset-room" data-scroll="#monthly-reset">Monthly Reset</a>
+    <a class="chip" href="#reset-room" data-scroll="#challenge">Challenge of the Month</a>
+    <a class="chip" href="#reset-room" data-scroll="#money-dates">Money Date prompts</a>
+    <a class="chip" href="#reset-room" data-scroll="#savings">Savings</a>
+    <a class="chip" href="#reset-room" data-scroll="#debt">Debt payoff</a>
+    <a class="chip" href="#reset-room" data-scroll="#wins">Community wins</a>
+    <a class="chip" href="#reset-room" data-scroll="#join">Join free</a>
+  </div></div></nav>
+
   <section class="section band-blush" id="monthly-reset">
     <div class="wrap ritual">
       <div class="welcome-copy">
@@ -709,9 +772,9 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--gold);bo
     <div class="wrap">
       <div class="sec-head"><span class="eyebrow">Inside The Reset Room</span><h2 class="h-1">How we show up <em class="gold">for you.</em></h2></div>
       <div class="rr-grid">
-        <article class="rr-card"><span class="script">Sundays</span><h3 class="h-3">Weekly Money Date</h3><p>A standing date with your money. Fifteen minutes to check balances, look at the week ahead, and set one intention.</p><p class="inbox"><b>In your inbox</b>A short prompt every Sunday morning with the Sunday Reset checklist.</p><a class="link-arrow" href="#home" data-scroll="#sunday-reset">Try the Sunday Reset <span>→</span></a></article>
-        <article class="rr-card"><span class="script">Save</span><h3 class="h-3">Savings Challenges</h3><p>Playful challenges that turn saving into a habit, from no-spend weekends to the 52-week challenge.</p><p class="inbox"><b>In your inbox</b>A new challenge idea each month, with tips to make it fit your budget.</p><a class="link-arrow" href="#product-savings-challenges">See Savings Challenges <span>→</span></a></article>
-        <article class="rr-card"><span class="script">Pay it down</span><h3 class="h-3">Debt Payoff Accountability</h3><p>Paying off debt is easier with someone in your corner. Track every balance you shrink and celebrate each win.</p><p class="inbox"><b>In your inbox</b>A monthly check-in email with a progress prompt. Reply any time to share a win.</p><a class="link-arrow" href="#product-debt-repayment-tracker">See the Debt Repayment Tracker <span>→</span></a></article>
+        <article class="rr-card"><span class="script">Sundays</span><h3 class="h-3">Weekly Money Date</h3><p>A standing date with your money. Fifteen minutes to check balances, look at the week ahead, and set one intention.</p><p class="inbox"><b>In your inbox</b>A short prompt every Sunday morning with the Sunday Reset checklist.</p><a class="link-arrow" href="#reset-room" data-scroll="#money-dates">See the Money Date prompts <span>→</span></a></article>
+        <article class="rr-card"><span class="script">Save</span><h3 class="h-3">Savings Challenges</h3><p>Playful challenges that turn saving into a habit, from no-spend weekends to the 52-week challenge.</p><p class="inbox"><b>In your inbox</b>A new challenge idea each month, with tips to make it fit your budget.</p><a class="link-arrow" href="#reset-room" data-scroll="#savings">Explore savings challenges <span>→</span></a></article>
+        <article class="rr-card"><span class="script">Pay it down</span><h3 class="h-3">Debt Payoff Accountability</h3><p>Paying off debt is easier with someone in your corner. Track every balance you shrink and celebrate each win.</p><p class="inbox"><b>In your inbox</b>A monthly check-in email with a progress prompt. Reply any time to share a win.</p><a class="link-arrow" href="#reset-room" data-scroll="#debt">Start your debt check-in <span>→</span></a></article>
         <article class="rr-card"><span class="script">Dream</span><h3 class="h-3">Financial Goal Setting</h3><p>Turn big dreams into clear money goals, with a number, a date, and a plan you can follow.</p><p class="inbox"><b>In your inbox</b>A goal-setting worksheet each season and gentle reminders to check in.</p><a class="link-arrow" href="#free-resources">Browse free worksheets <span>→</span></a></article>
       </div>
     </div>
@@ -720,21 +783,117 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--gold);bo
   <section class="section band-noir" id="challenge">
     <div class="wrap challenge">
       <div class="sec-head" style="margin:0">
-        <span class="eyebrow">This month’s community challenge</span>
+        <span class="eyebrow">Challenge of the Month</span>
         <h2 class="h-1">The Holiday <span class="script" style="color:var(--gold);font-size:1.3em;line-height:.8">Calm Fund</span></h2>
         <p class="lede" style="max-width:48ch">Build a small cushion for holiday spending so January starts calm. One step each week, with an email to guide you.</p>
       </div>
-      <div class="weeks">
-        <div class="week"><span>Week 1</span><b>Make your list</b><p>Write down every gift, event, and trip you expect this season.</p></div>
-        <div class="week"><span>Week 2</span><b>Set your number</b><p>Add it up and choose a realistic amount to set aside.</p></div>
-        <div class="week"><span>Week 3</span><b>Find the money</b><p>Pause one subscription or skip two takeout meals, and move the difference.</p></div>
-        <div class="week"><span>Week 4</span><b>Spend with a plan</b><p>Shop from your list and track every purchase. No January regret.</p></div>
+      <div class="stack" data-steps-mount="challenge" data-static>
+        <div class="progress"><span data-prog-label>0 of 4 weeks done</span><span class="progress-bar"><i></i></span></div>
+        <div class="weeks">
+          <div class="week"><span>Week 1</span><b>Make your list</b><p>Write down every gift, event, and trip you expect this season.</p><label class="week-done" for="challenge-0"><input type="checkbox" id="challenge-0" data-step>Mark week done</label></div>
+          <div class="week"><span>Week 2</span><b>Set your number</b><p>Add it up and choose a realistic amount to set aside.</p><label class="week-done" for="challenge-1"><input type="checkbox" id="challenge-1" data-step>Mark week done</label></div>
+          <div class="week"><span>Week 3</span><b>Find the money</b><p>Pause one subscription or skip two takeout meals, and move the difference.</p><label class="week-done" for="challenge-2"><input type="checkbox" id="challenge-2" data-step>Mark week done</label></div>
+          <div class="week"><span>Week 4</span><b>Spend with a plan</b><p>Shop from your list and track every purchase. No January regret.</p><label class="week-done" for="challenge-3"><input type="checkbox" id="challenge-3" data-step>Mark week done</label></div>
+        </div>
+        <div class="steps-foot"><button class="link-arrow" type="button" data-reset-steps>Start over <span>↺</span></button></div>
       </div>
       <div class="btn-row"><a class="btn btn-light" href="#reset-room" data-scroll="#join" data-pick="r-i-5">Join this month’s challenge</a></div>
     </div>
   </section>
 
-  <section class="section">
+  <section class="section band-sand" id="money-dates">
+    <div class="wrap ritual">
+      <div class="welcome-copy">
+        <span class="eyebrow">Weekly Money Date</span>
+        <h2 class="h-1">Prompts for your <em class="gold">Sunday money date.</em></h2>
+        <p class="lede">Pick one prompt each week or draw one at random. Members get a fresh prompt by email every Sunday.</p>
+        <div class="prompt-card">
+          <span class="eyebrow">This week’s prompt</span>
+          <q data-prompt aria-live="polite">What is one money win from this week, big or small?</q>
+          <div class="btn-row"><button class="btn btn-primary btn-sm" type="button" data-draw-prompt>Draw another prompt</button><a class="btn btn-ghost btn-sm" href="#home" data-scroll="#sunday-reset">Sunday Reset checklist</a></div>
+        </div>
+      </div>
+      <div class="prompt-sets">
+        <div class="prompt-set"><span class="script">Check in</span><ul><li>What did I spend this week that I feel good about?</li><li>Which purchase surprised me?</li><li>Which bill is coming up next?</li></ul></div>
+        <div class="prompt-set"><span class="script">Reflect</span><ul><li>How did money make me feel this week, in one word?</li><li>Where did I spend on autopilot?</li><li>What would I do differently next week?</li></ul></div>
+        <div class="prompt-set"><span class="script">Plan</span><ul><li>What expense can I plan for now?</li><li>How much will I move to savings this week?</li><li>Which day this week will be a no-spend day?</li></ul></div>
+        <div class="prompt-set"><span class="script">Celebrate</span><ul><li>What is one money win, big or small?</li><li>Which habit am I proud of keeping?</li><li>How will I treat myself within my budget?</li></ul></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="savings">
+    <div class="wrap">
+      <div class="sec-head"><span class="eyebrow">Savings challenges</span><h2 class="h-1">Make saving feel like <em class="gold">a game.</em></h2><p class="lede">Choose a challenge that fits your month. Every Reset Room email includes a new idea to try.</p></div>
+      <div class="rr-grid">
+        <article class="mini-card"><span class="level">Easy start</span><h3>No-Spend Weekend</h3><p>Two days with zero spending on extras. Plan free fun before Saturday arrives.</p></article>
+        <article class="mini-card"><span class="level">Easy start</span><h3>Round-Up Challenge</h3><p>Round each purchase up to the next dollar and move the difference to savings.</p></article>
+        <article class="mini-card"><span class="level">Steady habit</span><h3>52-Week Challenge</h3><p>Save a little more each week, or color in whichever amount fits that week.</p></article>
+        <article class="mini-card"><span class="level">Steady habit</span><h3>Emergency Fund Starter</h3><p>Pick a first milestone and automate a small transfer every payday.</p></article>
+      </div>
+      <div class="ritual" style="margin-top:clamp(40px,6vw,64px)">
+        <div class="welcome-copy">
+          <span class="eyebrow">Try it now</span>
+          <h3 class="h-2">Your No-Spend Weekend tracker</h3>
+          <p class="muted">Tick off each weekend you complete this month. Your progress is saved on this device.</p>
+          <div><a class="link-arrow" href="#product-savings-challenges">See the Savings Challenges download <span>→</span></a></div>
+        </div>
+        <div class="stack" data-steps-mount="savings"></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section band-blush" id="debt">
+    <div class="wrap ritual">
+      <div class="welcome-copy">
+        <span class="eyebrow">Debt payoff accountability</span>
+        <h2 class="h-1">Pay it down, <em class="gold">together.</em></h2>
+        <p class="lede">Debt feels lighter when someone is cheering you on. Once a month, members get a check-in email with three simple questions.</p>
+        <ul class="checklist">
+          <li>Which balance did I shrink this month?</li>
+          <li>Did I make every minimum payment?</li>
+          <li>Which debt is my focus next month?</li>
+        </ul>
+        <div style="display:flex;flex-direction:column;gap:14px;align-items:flex-start">
+          <a class="link-arrow" href="#edit-snowball-avalanche">Snowball or avalanche? Read the guide <span>→</span></a>
+          <a class="link-arrow" href="#product-debt-repayment-tracker">See the Debt Repayment Tracker <span>→</span></a>
+        </div>
+      </div>
+      <div class="stack">
+        <span class="eyebrow">This month’s debt check-in</span>
+        <div class="stack" data-steps-mount="debt"></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="wins">
+    <div class="wrap">
+      <div class="sec-head"><span class="eyebrow">Community wins</span><h2 class="h-1">Small wins, <em class="gold">big energy.</em></h2></div>
+      <div class="sample-note"><b>Sample content.</b><span>These wins are examples written by Money &amp; Grace Co. to show how this space will look. Real member wins will appear here only after members share them and give permission.</span></div>
+      <div class="rr-grid">
+        <article class="win"><span class="sample-tag">Sample win</span><blockquote>Paid off my smallest credit card and rolled that payment into the next one.</blockquote><div class="win-meta"><span>Debt payoff</span><span>Sample member</span></div></article>
+        <article class="win"><span class="sample-tag">Sample win</span><blockquote>Finished my first no-spend weekend and moved the savings into my travel fund.</blockquote><div class="win-meta"><span>Savings</span><span>Sample member</span></div></article>
+        <article class="win"><span class="sample-tag">Sample win</span><blockquote>Planned my whole month’s budget on the first, before a single bill arrived.</blockquote><div class="win-meta"><span>Budgeting</span><span>Sample member</span></div></article>
+        <article class="win"><span class="sample-tag">Sample win</span><blockquote>Opened a separate emergency fund account and set up an automatic transfer.</blockquote><div class="win-meta"><span>Goals</span><span>Sample member</span></div></article>
+      </div>
+      <div class="join-card" style="margin-top:clamp(40px,6vw,64px)">
+        <span class="eyebrow">Share your win</span>
+        <h3 class="h-2">Tell us what you are proud of.</h3>
+        <form class="contact-form" id="win-form" novalidate>
+          <div class="two">
+            <div class="field"><label for="w-name">First name (optional)</label><input id="w-name" name="first_name" autocomplete="given-name" placeholder="Your first name"></div>
+            <div class="field"><label for="w-email">Email</label><input id="w-email" name="email" type="email" autocomplete="email" required placeholder="you@email.com"></div>
+          </div>
+          <div class="field"><label for="w-text">Your win</label><textarea id="w-text" name="win" required placeholder="Big or small, it counts."></textarea></div>
+          <label class="consent" for="w-ok"><input type="checkbox" id="w-ok" name="permission"><span>Money &amp; Grace Co. may share my win and first name on the website.</span></label>
+          <div><button class="btn btn-primary" type="submit">Share my win</button></div>
+          <p class="form-msg" id="win-msg" aria-live="polite"></p>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <section class="section band-sand">
     <div class="wrap">
       <div class="sec-head"><span class="eyebrow">How it works</span><h2 class="h-1">Three steps to <em class="gold">settle in.</em></h2></div>
       <div class="how">
@@ -745,10 +904,10 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--gold);bo
     </div>
   </section>
 
-  <section class="section band-sand" id="join">
+  <section class="section band-blush" id="join">
     <div class="wrap">
       <div class="join-card">
-        <span class="eyebrow">Join the free community</span>
+        <span class="eyebrow">Join the free Money &amp; Grace community</span>
         <h2 class="h-1">Pull up a chair, <em class="gold">bestie.</em></h2>
         <p class="muted">Choose what you would like help with and we will send the emails that fit.</p>
         <form class="contact-form" id="reset-form" novalidate>
@@ -767,7 +926,7 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--gold);bo
               <label class="pick" for="r-i-5"><input type="checkbox" id="r-i-5" value="This month’s challenge"><span>This month’s challenge</span></label>
             </div>
           </fieldset>
-          <div><button class="btn btn-primary" type="submit">Join The Reset Room</button></div>
+          <div><button class="btn btn-primary" type="submit">Join the community</button></div>
           <p class="form-msg" id="reset-msg" aria-live="polite"></p>
           <p class="fine">Free. By joining you agree to receive emails from Money &amp; Grace Co. Unsubscribe anytime.</p>
         </form>
@@ -1114,9 +1273,9 @@ const GRACE=`<svg viewBox="0 0 240 280" role="img" aria-label="Grace, the Money 
 const $=(s,r=document)=>r.querySelector(s), $$=(s,r=document)=>[...r.querySelectorAll(s)];
 const isAvail=p=>p.status==='available';
 function productCard(p){const href=`#product-${p.id}`;return `<article class="p-card">
-  <a class="p-img" href="${href}" tabindex="-1" aria-hidden="true">${photo(p.art,p.tone,'')}</a>
-  <div class="p-body"><div class="p-meta"><span>${p.cat}</span><span class="${isAvail(p)?'':'soon'}">${isAvail(p)?'Available now':'Coming soon'}</span></div><h3><a href="${href}">${p.name}</a></h3><p>${p.short}</p></div>
-  <div class="p-actions"><span class="price-note">${isAvail(p)?'Digital download':'Price coming soon'}</span><a class="btn btn-ghost btn-sm" href="${href}">View details</a></div></article>`}
+  <a class="p-img" href="${href}" tabindex="-1" aria-hidden="true"><span class="status ${isAvail(p)?'available':'soon'}">${isAvail(p)?'Available now':'Coming soon'}</span>${photo(p.art,p.tone,'')}</a>
+  <div class="p-body"><div class="p-meta"><span>${p.cat}</span><span>Digital download</span></div><h3><a href="${href}">${p.name}</a></h3><p>${p.short}</p></div>
+  <div class="p-actions"><span class="price-note">${isAvail(p)?'Ready to download':'Price coming soon'}</span><a class="btn ${isAvail(p)?'btn-primary':'btn-ghost'} btn-sm" href="${href}">${isAvail(p)?'View &amp; buy':'View details'}</a></div></article>`}
 function renderProduct(id){const p=PRODUCTS.find(x=>x.id===id);if(!p)return false;const av=isAvail(p);
   $('[data-pdp]').innerHTML=`<div class="page-head" style="padding-bottom:28px"><a class="crumb" href="#shop">← The Shop</a></div>
   <div class="pdp">
@@ -1191,18 +1350,24 @@ function renderStatic(){
 /* ---------- ritual checklists (saved per device) ---------- */
 const STEPS={
   sunday:[['Check your balances','Peek at checking, savings, and card balances.','2 min'],['Review last week','Skim your spending. Any surprises?','4 min'],['Look at the week ahead','Bills due, plans, and anything that costs money.','3 min'],['Pay yourself first','Move something to savings, even if it is small.','3 min'],['Set one money intention','One sentence for the week. Keep it kind.','3 min']],
+  savings:[['Weekend one','Plan free fun before Saturday arrives.','Week 1'],['Weekend two','Eat from the pantry and skip takeout.','Week 2'],['Weekend three','Invite a friend for a no-cost hangout.','Week 3'],['Weekend four','Move what you saved into savings.','Week 4']],
+  debt:[['List every balance','Balance, rate, and minimum for each debt.','10 min'],['Choose your method','Snowball for momentum or avalanche for less interest.','5 min'],['Pay every minimum','Set reminders or autopay so nothing slips.','5 min'],['Send extra to your focus debt','Even a small amount moves the needle.','2 min'],['Color in your progress','Update your tracker and celebrate.','3 min']],
   monthly:[['Close out last month','Compare what you planned with what you spent.','10 min'],['Celebrate one win','Write down a money win, no matter how small.','2 min'],['Plan this month’s budget','Give every dollar a job before the month starts.','15 min'],['Update your goals','Check savings and debt progress. Color in your trackers.','5 min'],['Book your money dates','Put four Sunday check-ins on your calendar.','3 min']]
 };
 const store={get(k){try{return JSON.parse(localStorage.getItem('mg-'+k))||[]}catch(e){return[]}},set(k,v){try{localStorage.setItem('mg-'+k,JSON.stringify(v))}catch(e){}}};
 function mountSteps(el){const k=el.dataset.stepsMount,items=STEPS[k],saved=store.get(k);
+  if(el.hasAttribute('data-static')){$$('input[data-step]',el).forEach((c,i)=>c.checked=!!saved[i]);updSteps(el);return}
   el.innerHTML=`<div class="progress"><span data-prog-label>0 of ${items.length} done</span><span class="progress-bar"><i></i></span></div>
   <ol class="steps">${items.map((it,i)=>`<li class="step"><label for="${k}-${i}"><input type="checkbox" id="${k}-${i}" data-step ${saved[i]?'checked':''}><span><b>${it[0]}</b><small>${it[1]}</small></span><span class="mins">${it[2]}</span></label></li>`).join('')}</ol>
   <div class="steps-foot"><button class="link-arrow" type="button" data-reset-steps>Start over <span>↺</span></button></div>`;
   updSteps(el)}
-function updSteps(el){const cs=$$('input',el),n=cs.filter(c=>c.checked).length;$('[data-prog-label]',el).textContent=`${n} of ${cs.length} done`;$('.progress-bar i',el).style.width=(n/cs.length*100)+'%';return n===cs.length}
+function updSteps(el){const cs=$$('input[data-step]',el),n=cs.filter(c=>c.checked).length;$('[data-prog-label]',el).textContent=`${n} of ${cs.length} ${el.dataset.stepsMount==='challenge'?'weeks ':''}done`;$('.progress-bar i',el).style.width=(n/cs.length*100)+'%';return n===cs.length}
 document.addEventListener('change',e=>{const c=e.target;if(!c.hasAttribute('data-step'))return;const el=c.closest('[data-steps-mount]'),k=el.dataset.stepsMount;
-  store.set(k,$$('input',el).map(x=>x.checked));if(updSteps(el)&&c.checked)toast(k==='sunday'?'Sunday Reset done. Have a lovely week.':'Monthly reset done. Grace is proud of you.')});
+  store.set(k,$$('input[data-step]',el).map(x=>x.checked));if(updSteps(el)&&c.checked)toast(DONE_MSG[k])});
+const DONE_MSG={sunday:'Sunday Reset done. Have a lovely week.',monthly:'Monthly reset done. Grace is proud of you.',challenge:'Challenge complete. Your Calm Fund is ready.',savings:'Four no-spend weekends. Look at you go.',debt:'Debt check-in done. Every payment counts.'};
 
+const PROMPTS=[...document.querySelectorAll('.prompt-set li')].map(li=>li.textContent);
+let promptIdx=-1;
 /* ---------- router ---------- */
 const PAGES=['home','money-edit','shop','reset-room','free-resources','about','contact'];
 let pendingScroll=null;
@@ -1216,7 +1381,7 @@ function route(){
   $$('.nav a,.drawer nav a').forEach(a=>{if(a.hasAttribute('aria-current'))a.setAttribute('aria-current','page')});
   closeMenu();
   if(pendingScroll){const t=$(pendingScroll);pendingScroll=null;if(t){setTimeout(()=>t.scrollIntoView({behavior:'smooth'}),60);return}}
-  window.scrollTo({top:0,behavior:'instant'in window?'instant':'auto'});
+  const de=document.documentElement;de.style.scrollBehavior='auto';window.scrollTo(0,0);de.style.scrollBehavior='';
 }
 window.addEventListener('hashchange',route);
 
@@ -1238,6 +1403,7 @@ let tip=0;function showTip(){const el=$('[data-tip]');el.parentElement.style.opa
 document.addEventListener('click',e=>{
   const t=e.target.closest('button,a');if(!t)return;
   if(t.closest('#drawer')&&t.tagName==='A')closeMenu();
+  if(t.tagName==='A'&&!t.dataset.scroll&&/^#[\w-]+$/.test(t.getAttribute('href')||'')&&t.getAttribute('href')===(location.hash||'#home')){e.preventDefault();window.scrollTo({top:0,behavior:'smooth'})}
   if(t.dataset.filter){shopFilter=t.dataset.filter;renderShop()}
   if(t.matches('.nav a[href="#shop"],.drawer a[href="#shop"],.foot-col a[href="#shop"]')){shopFilter='All';renderShop()}
   if(t.dataset.shopcat){shopFilter=t.dataset.shopcat;renderShop()}
@@ -1245,7 +1411,8 @@ document.addEventListener('click',e=>{
   if(t.dataset.preview){const g=t.closest('.gallery'),p=PRODUCTS.find(x=>location.hash==='#product-'+x.id),v=p.previews[+t.dataset.preview];
     $('[data-gallery-main]',g).innerHTML=photo(v[0],v[1],`${p.name}: ${v[2]}`);$$('.thumb',g).forEach(b=>b.setAttribute('aria-pressed',b===t));$('[data-preview-cap]',g).textContent='Preview: '+v[2]}
   if(t.hasAttribute('data-checkout')&&t.getAttribute('href').includes('REPLACE-WITH')){e.preventDefault();toast('Checkout is not connected yet. Add this product’s Payhip link to turn on Buy Now.')}
-  if(t.hasAttribute('data-reset-steps')){const el=t.closest('[data-steps-mount]');$$('input',el).forEach(c=>c.checked=false);store.set(el.dataset.stepsMount,[]);updSteps(el)}
+  if(t.hasAttribute('data-reset-steps')){const el=t.closest('[data-steps-mount]');$$('input[data-step]',el).forEach(c=>c.checked=false);store.set(el.dataset.stepsMount,[]);updSteps(el);toast('Checklist cleared. Fresh start.')}
+  if(t.hasAttribute('data-draw-prompt')){const q=$('[data-prompt]');let i;do{i=Math.floor(Math.random()*PROMPTS.length)}while(PROMPTS.length>1&&(i===promptIdx||PROMPTS[i]===q.textContent));promptIdx=i;q.style.opacity=0;setTimeout(()=>{q.textContent=PROMPTS[i];q.style.opacity=1},200)}
   if(t.dataset.pick){const c=document.getElementById(t.dataset.pick);if(c)c.checked=true}
   if(t.hasAttribute('data-next-tip')){tip=(tip+1)%TIPS.length;showTip()}
   if(t.dataset.scroll){const here=(location.hash||'#home')===t.getAttribute('href');if(here){e.preventDefault();const el=$(t.dataset.scroll);el&&el.scrollIntoView({behavior:'smooth'})}else pendingScroll=t.dataset.scroll}
@@ -1264,7 +1431,13 @@ document.addEventListener('submit',e=>{
     const msg=$('#reset-msg'),em=$('#r-email'),nm=$('#r-name').value.trim();
     if(!validEmail(em.value)){msg.className='form-msg err';msg.textContent='Please enter a valid email address, like you@email.com.';em.focus();return}
     const picks=$$('.pick input:checked',f).map(c=>c.value);
-    f.innerHTML=`<div class="success" role="status"><b>Welcome to The Reset Room${nm?', '+nm:''}.</b><span>${picks.length?`You picked: ${picks.join(', ')}.`:'You will get our general Reset Room emails.'} Your welcome kit will go to ${em.value.trim()}.</span><span class="fine">Prototype preview: no email was sent yet. Connect your email platform to make this live.</span></div>`;
+    f.innerHTML=`<div class="success" role="status"><b>Welcome to the Money &amp; Grace community${nm?', '+nm:''}.</b><span>${picks.length?`You picked: ${picks.join(', ')}.`:'You will get our general Reset Room emails.'} Your welcome kit will go to ${em.value.trim()}.</span><span class="fine">Prototype preview: no email was sent yet. Connect your email platform to make this live.</span></div>`;
+    return}
+  if(f.id==='win-form'){
+    const msg=$('#win-msg'),em=$('#w-email'),tx=$('#w-text');
+    const bad=!validEmail(em.value)?[em,'Please enter a valid email address, like you@email.com.']:!tx.value.trim()?[tx,'Please tell us your win. Big or small, it counts.']:null;
+    if(bad){msg.className='form-msg err';msg.textContent=bad[1];bad[0].focus();return}
+    f.innerHTML=`<div class="success" role="status"><b>That is a beautiful win.</b><span>${$('#w-ok').checked?'Thank you for letting us share it.':'We will keep it just between us.'}</span><span class="fine">Prototype preview: wins are not sent or published yet. Connect a form service before launch.</span></div>`;
     return}
   if(f.id==='contact-form'){
     const msg=$('#contact-msg'),n=$('#c-name'),em=$('#c-email'),m=$('#c-msg');
