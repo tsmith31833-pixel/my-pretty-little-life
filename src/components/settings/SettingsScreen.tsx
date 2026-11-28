@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { AppShell, useShell, type Theme } from "../shell/AppShell";
 import { CardHeader } from "../home/CardHeader";
-import { DEFAULT_PROFILE, saveProfile, useProfile, type Profile } from "@/lib/settings";
+import { DEFAULT_PROFILE, greetingOf, saveProfile, useProfile, type Profile } from "@/lib/settings";
 import { downloadEverything, downloadSpendingCsv } from "@/lib/export";
 import { supabase } from "@/lib/supabase/client";
 import { MONTHS } from "@/lib/dates";
@@ -51,21 +51,22 @@ function ProfileCard({ initial }: { initial: Profile }) {
         e.preventDefault();
         const f = new FormData(e.currentTarget);
         const p: Profile = {
-          name: String(f.get("name")).trim() || DEFAULT_PROFILE.name,
+          name: initial.name || DEFAULT_PROFILE.name,
+          greeting: String(f.get("greeting")).trim() || "Hello gorgeous",
           sleepGoalHours: Math.min(12, Math.max(4, Number(f.get("sleep")) || 8)),
           stepGoal: Math.min(50000, Math.max(1000, Math.round(Number(String(f.get("steps")).replace(/[^\d]/g, "")) || 8000))),
         };
         setBusy(true);
         try {
           await saveProfile(p);
-          toast("Saved. Your Today page will greet you by this name.");
+          toast("Saved. Your Today page will greet you with it.");
         } catch {
           toast("Your profile didn't save. If this is your first time here, run supabase/phase5.sql in Supabase.");
         }
         setBusy(false);
       }}>
-        <label className="full">Greeting name <small>(Today says “Hello, …”)</small>
-          <input id="profile-name" name="name" defaultValue={initial.name} maxLength={40} />
+        <label className="full">Today&apos;s greeting <small>(the big script line on your Today page)</small>
+          <input id="profile-greeting" name="greeting" defaultValue={greetingOf(initial)} maxLength={40} />
         </label>
         <label>Sleep goal (hours)<input id="profile-sleep" name="sleep" type="number" min={4} max={12} step={0.5} defaultValue={initial.sleepGoalHours} /></label>
         <label>Daily step goal<input id="profile-steps" name="steps" inputMode="numeric" defaultValue={initial.stepGoal} /></label>

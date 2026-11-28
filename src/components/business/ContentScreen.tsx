@@ -15,6 +15,7 @@ import { heartBurst } from "@/lib/hearts";
 import { newId } from "@/lib/settings";
 import { useTemplates, type ContentTemplate } from "@/lib/templates";
 import { mergeTags, parseTags, useHashtagSets, type HashtagSet } from "@/lib/hashtags";
+import { CompetitorsPanel, InsightsPanel } from "./InsightsPanels";
 
 export function ContentScreen({ now }: { now: Date }) {
   return (
@@ -36,7 +37,7 @@ type Editing = { item?: ContentItem; day?: string; template?: ContentTemplate } 
 function ContentBody({ now }: { now: Date }) {
   const { toast } = useShell();
   const items = useRows(listContent, []);
-  const [view, setView] = useState<"bank" | "calendar" | "templates" | "hashtags">("bank");
+  const [view, setView] = useState<"bank" | "calendar" | "insights" | "competitors" | "templates" | "hashtags">("bank");
   const { sets, update: updateSets } = useHashtagSets(() =>
     toast("Hashtag sets didn't save. If this is your first time, run supabase/phase8.sql in Supabase."),
   );
@@ -109,6 +110,8 @@ function ContentBody({ now }: { now: Date }) {
           <div className="seg" role="tablist" aria-label="View">
             <button type="button" role="tab" aria-selected={view === "bank"} className={view === "bank" ? "on" : ""} onClick={() => setView("bank")}>Ideas</button>
             <button type="button" role="tab" aria-selected={view === "calendar"} className={view === "calendar" ? "on" : ""} onClick={() => setView("calendar")}>Calendar</button>
+            <button type="button" role="tab" aria-selected={view === "insights"} className={view === "insights" ? "on" : ""} onClick={() => setView("insights")}>Insights</button>
+            <button type="button" role="tab" aria-selected={view === "competitors"} className={view === "competitors" ? "on" : ""} onClick={() => setView("competitors")}>Competitors</button>
             <button type="button" role="tab" aria-selected={view === "templates"} className={view === "templates" ? "on" : ""} onClick={() => setView("templates")}>Templates</button>
             <button type="button" role="tab" aria-selected={view === "hashtags"} className={view === "hashtags" ? "on" : ""} onClick={() => setView("hashtags")}>Hashtags</button>
           </div>
@@ -125,7 +128,11 @@ function ContentBody({ now }: { now: Date }) {
         <div className="stat hl"><small>Posted in {MONTHS[now.getMonth()]}</small><b>{counts.posted}</b></div>
       </div>
 
-      {view === "hashtags" ? (
+      {view === "insights" ? (
+        <InsightsPanel now={now} toast={toast} onIdeasSaved={items.reload} />
+      ) : view === "competitors" ? (
+        <CompetitorsPanel toast={toast} />
+      ) : view === "hashtags" ? (
         <HashtagsPanel sets={sets} onChange={updateSets} toast={toast} />
       ) : view === "templates" ? (
         <TemplatesPanel

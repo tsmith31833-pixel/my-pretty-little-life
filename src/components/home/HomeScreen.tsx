@@ -12,8 +12,11 @@ import { BusinessSnapshot } from "./BusinessSnapshot";
 import { WellnessTracker } from "./WellnessTracker";
 import { DailyWins } from "./DailyWins";
 import { usePlannerStore } from "@/lib/planner-store";
-import { useProfile, useSettings } from "@/lib/settings";
+import { greetingOf, useProfile, useSettings } from "@/lib/settings";
 import { listEvents, type PlannerEvent } from "@/lib/data";
+import { WEEKS, currentWeek, getArc, type Arc } from "@/lib/arc";
+import Link from "next/link";
+import { Icon } from "../Icon";
 import { MONTHS, addDays, isoDate } from "@/lib/dates";
 
 export function HomeScreen({ now }: { now: Date }) {
@@ -43,6 +46,15 @@ function HomeBody({ now }: { now: Date }) {
   const to = isoDate(in30 > monthEnd ? in30 : monthEnd);
   const [events, setEvents] = useState<PlannerEvent[] | null>(null);
   const [eventsFailed, setEventsFailed] = useState(false);
+  const [arc, setArc] = useState<Arc | null>(null);
+
+  useEffect(() => {
+    let live = true;
+    getArc().then((a) => live && setArc(a)).catch(() => {});
+    return () => {
+      live = false;
+    };
+  }, []);
 
   useEffect(() => {
     let live = true;
@@ -71,7 +83,10 @@ function HomeBody({ now }: { now: Date }) {
     <>
       <WelcomeBanner
         now={now}
-        name={profile.name}
+        greeting={greetingOf(profile)}
+        arcChip={arc && currentWeek(arc, now) >= 0 && currentWeek(arc, now) < WEEKS ? (
+          <Link className="arc-chip" href="/arc"><Icon name="sparkle" /><b>Week {currentWeek(arc, now) + 1}</b> of your {arc.name}</Link>
+        ) : undefined}
         eventsAhead={agendaLeft(todays, nowMinutes)}
         prioritiesLeft={prioritiesLeft}
         habitsLeft={habitsLeftToday(habits, week, todayIdx)}

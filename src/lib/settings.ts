@@ -52,8 +52,11 @@ export function useSettings(onSaveError: () => void) {
 
 // ---------- Profile (phase 5): greeting name and personal goals ----------
 
-export type Profile = { name: string; sleepGoalHours: number; stepGoal: number };
-export const DEFAULT_PROFILE: Profile = { name: "Mrs. Presberry", sleepGoalHours: 8, stepGoal: 8000 };
+export type Profile = { name: string; greeting?: string; sleepGoalHours: number; stepGoal: number };
+export const DEFAULT_PROFILE: Profile = { name: "Mrs. Presberry", greeting: "Hello gorgeous", sleepGoalHours: 8, stepGoal: 8000 };
+
+/** The banner line on Today. Falls back to "Hello gorgeous". */
+export const greetingOf = (p: Profile) => p.greeting?.trim() || "Hello gorgeous";
 
 export async function getProfile(): Promise<Profile> {
   const res = await supabase().from("settings").select("profile").maybeSingle();

@@ -10,6 +10,7 @@ const NAV: (string | NavItem)[] = [
   { label: "Calendar", icon: "calendar", href: "/calendar" },
   { label: "Wellness", icon: "heart", href: "/wellness" },
   { label: "Journal", icon: "journal", href: "/journal" },
+  { label: "Winter Arc", icon: "sparkle", href: "/arc" },
   "Money",
   { label: "Personal finance", icon: "coin", href: "/money" },
   { label: "Money & Grace Co.", icon: "gem", href: "/business" },
