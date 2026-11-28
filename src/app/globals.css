@@ -976,3 +976,17 @@ textarea.p-text::placeholder{color:var(--muted);opacity:.8;font-style:italic}
 .rhythm{display:grid;gap:8px}
 .rhythm-text{font-family:var(--f-display);font-size:1.05rem;line-height:1.5}
 @media (max-width:760px){.plan-areas{grid-template-columns:minmax(0,1fr)}}
+/* Money import review */
+.mi-sheet{width:min(760px,100%)}
+.mi-section{display:grid;gap:8px}
+.mi-row{display:grid;gap:8px;padding:10px 12px;border-radius:14px;border:1px solid var(--line);background:var(--cream)}
+.mi-row.exists{opacity:.75}
+.mi-check{display:flex;align-items:center;gap:10px;flex-wrap:wrap;font-size:.92rem}
+.mi-check input,.mi-auto input{accent-color:var(--hot);width:18px;height:18px}
+.mi-fields{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
+.mi-fields label{display:grid;gap:3px;font-size:.62rem;letter-spacing:.14em;text-transform:uppercase;color:var(--gold-text);min-width:0}
+.mi-fields input:not([type=checkbox]){font:inherit;font-size:.9rem;letter-spacing:normal;text-transform:none;padding:7px 9px;border-radius:10px;border:1px solid var(--line);background:var(--card);color:var(--ink);width:100%;min-width:0}
+.mi-fields .mi-auto{display:flex;align-items:center;gap:6px;align-self:end;padding-bottom:8px;letter-spacing:normal;text-transform:none;font-size:.86rem;color:var(--ink)}
+.mi-actions{position:sticky;bottom:-22px;background:var(--card);padding-block:12px;align-items:center;flex-wrap:wrap}
+.mi-actions .hint-sm{margin-right:auto}
+@media (max-width:760px){.mi-fields{grid-template-columns:repeat(2,minmax(0,1fr))}}

@@ -5,6 +5,7 @@ import { Icon } from "../Icon";
 import { AppShell, useShell } from "../shell/AppShell";
 import { CardHeader } from "../home/CardHeader";
 import { PaychecksCard } from "./PaychecksCard";
+import { MoneyImportButton } from "./MoneyImport";
 import { DeleteButton, MonthNav, Progress, parseMoney } from "../ui";
 import {
   addBill, addDebt, addSaving, addTxn, deleteBill, deleteDebt, deleteSaving, deleteTxn, getBudget, listBills, listDebts,
@@ -86,7 +87,10 @@ function MoneyBody({ now }: { now: Date }) {
           <span className="eyebrow">Personal finance</span>
           <h2 className="page-title">Money, honey</h2>
         </div>
-        <MonthNav month={month} current={now} onChange={setMonth} />
+        <div className="cal-ctrls">
+          <MoneyImportButton debts={debts.data ?? []} bills={bills.data ?? []} toast={toast} onDone={() => { debts.reload(); bills.reload(); }} />
+          <MonthNav month={month} current={now} onChange={setMonth} />
+        </div>
       </div>
 
       {failed && <p className="auth-err">Some of your money details couldn&apos;t load. Check your internet connection, then refresh. If this is your first time here, run <b>supabase/phase4.sql</b> in Supabase.</p>}
