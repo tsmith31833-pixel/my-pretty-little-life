@@ -7,6 +7,16 @@ import { addDays, isoDate } from "./dates";
 
 export type Check = { id: string; text: string; done: boolean };
 export type ArcHabit = { id: string; name: string };
+/** What the spreadsheet's 12-Week Plan and Content tabs say for one week. */
+export type WeekPlan = {
+  tasks?: string;
+  business?: string;
+  money?: string;
+  fitness?: string;
+  home?: string;
+  ignore?: string;
+  video?: { idea: string; hook?: string; published?: boolean };
+};
 export type ArcWeek = {
   theme: string;
   focus: string;
@@ -15,8 +25,14 @@ export type ArcWeek = {
   wins: string;
   lessons: string;
   rating: number; // 0–5
+  plan?: WeekPlan;
+  actuals?: Record<string, number | null>; // scoreboard measure id → what you actually did
 };
-export type ArcData = { goals: Check[]; habits: ArcHabit[]; weeks: ArcWeek[] };
+/** A Scoreboard row: one lead measure with a weekly target. */
+export type Measure = { id: string; area: string; name: string; target: number };
+export type RhythmDay = { day: string; theme: string; min: string; full: string };
+export type ArcMeta = { tagline?: string; theme?: string; weeklyNonNegotiables?: string; milestones?: string; bareMinimum?: string; importedFrom?: string; importedAt?: string };
+export type ArcData = { goals: Check[]; habits: ArcHabit[]; weeks: ArcWeek[]; measures?: Measure[]; rhythm?: RhythmDay[]; meta?: ArcMeta };
 export type Arc = { id: string; name: string; start_day: string; data: ArcData };
 
 export const WEEKS = 12;
@@ -64,10 +80,25 @@ export function currentWeek(arc: Pick<Arc, "start_day">, now: Date) {
   return Math.min(WEEKS, Math.floor(days / 7));
 }
 
-/** Share of the week done: daily check-ins (only days so far) plus weekly goals. */
+/** Scoreboard score for a week, like the spreadsheet: done ÷ target, each capped at 100%, averaged.
+ *  null when nothing has been entered for that week yet. */
+export function weekScore(arc: Arc, i: number): number | null {
+  const ms = arc.data.measures ?? [];
+  const a = arc.data.weeks[i]?.actuals ?? {};
+  if (!ms.length || !ms.some((m) => a[m.id] != null)) return null;
+  return ms.reduce((sum, m) => sum + Math.min(1, (a[m.id] ?? 0) / (m.target || 1)), 0) / ms.length;
+}
+
+export function scoreStatus(score: number) {
+  return score >= 0.85 ? "Excellent" : score >= 0.7 ? "On track" : score >= 0.5 ? "Needs adjustment" : "Simplify";
+}
+
+/** Share of the week done. With a Scoreboard, it's the Scoreboard score;
+ *  otherwise daily check-ins (only days so far) plus weekly goals. */
 export function weekProgress(arc: Arc, i: number, now: Date) {
   const w = arc.data.weeks[i];
   if (!w) return 0;
+  if (arc.data.measures?.length) return weekScore(arc, i) ?? 0;
   const today = isoDate(now);
   const days = weekDates(arc, i).filter((d) => isoDate(d) <= today).length;
   let total = 0;

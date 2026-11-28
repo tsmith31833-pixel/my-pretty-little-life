@@ -85,7 +85,7 @@ function HomeBody({ now }: { now: Date }) {
         now={now}
         greeting={greetingOf(profile)}
         arcChip={arc && currentWeek(arc, now) >= 0 && currentWeek(arc, now) < WEEKS ? (
-          <Link className="arc-chip" href="/arc"><Icon name="sparkle" /><b>Week {currentWeek(arc, now) + 1}</b> of your {arc.name}</Link>
+          <Link className="arc-chip" href="/arc"><Icon name="sparkle" /><b>Week {currentWeek(arc, now) + 1}</b> · {arc.data.weeks[currentWeek(arc, now)]?.theme ?? arc.name}</Link>
         ) : undefined}
         eventsAhead={agendaLeft(todays, nowMinutes)}
         prioritiesLeft={prioritiesLeft}
